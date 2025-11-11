@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vòng Lặp Trong Java</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --info: #4895ef;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            height: 90vh;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 320px;
+            background: linear-gradient(to bottom, var(--secondary), var(--accent));
+            color: white;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .sidebar-header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 20px 0;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-links::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .nav-links::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        .nav-links li {
+            margin-bottom: 5px;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 15px 25px;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--success);
+            padding-left: 30px;
+        }
+
+        .nav-links a.active {
+            background: rgba(255, 255, 255, 0.15);
+            border-left: 4px solid var(--success);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-links i {
+            margin-right: 12px;
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-submenu {
+            list-style: none;
+            padding-left: 20px;
+            margin-top: 5px;
+            display: none;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-submenu.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .nav-submenu a {
+            padding: 12px 25px;
+            font-size: 0.9rem;
+            color: #d1d8e0;
+            border-left: 2px solid transparent;
+        }
+
+        .nav-submenu a:hover {
+            border-left: 2px solid var(--info);
+        }
+
+        .nav-submenu a.active {
+            border-left: 2px solid var(--info);
+            color: white;
+        }
+
+        .nav-toggle {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-toggle.active {
+            transform: rotate(90deg);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px 40px;
+            border-bottom: 5px solid var(--accent);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 30px 40px;
+            overflow-y: auto;
+            flex: 1;
+            background: var(--light);
+        }
+
+        .content-section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--primary);
+            scroll-margin-top: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e9ecef;
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        h2 i {
+            margin-right: 12px;
+            color: var(--accent);
+        }
+
+        h3 {
+            color: var(--primary);
+            margin: 20px 0 12px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        h3 i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        p {
+            margin-bottom: 16px;
+            text-align: justify;
+        }
+
+        .definition-box {
+            background: linear-gradient(to right, #e3f2fd, #f0f7ff);
+            border-left: 4px solid var(--info);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .purpose-list {
+            background: linear-gradient(to right, #e8f5e9, #f1f8e9);
+            padding: 22px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #4caf50;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .code-container {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 22px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border-left: 4px solid var(--accent);
+        }
+
+        .code-comment {
+            color: #6a9955;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-method {
+            color: #dcdcaa;
+        }
+
+        .code-class {
+            color: #4ec9b0;
+        }
+
+        .explanation-box {
+            background: linear-gradient(to right, #fff3e0, #fff8e1);
+            border-left: 4px solid var(--warning);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .comparison-table tr:hover {
+            background: #e3f2fd;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .flowchart {
+            text-align: center;
+            margin: 25px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .flowchart-box {
+            display: inline-block;
+            padding: 15px 25px;
+            margin: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+            min-width: 160px;
+            font-weight: 500;
+        }
+
+        .flowchart-arrow {
+            font-size: 24px;
+            color: var(--primary);
+            margin: 8px 0;
+        }
+
+        .flowchart-condition {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+
+        .flowchart-process {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+
+        .flowchart-start {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .flowchart-end {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .caption {
+            font-style: italic;
+            color: #6c757d;
+            margin-top: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .example-box {
+            background: linear-gradient(to right, #e8f5e9, #f1f8e9);
+            border-left: 4px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .note {
+            background: linear-gradient(to right, #fff3e0, #fff8e1);
+            border-left: 4px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--dark);
+            color: white;
+            border-top: 5px solid var(--accent);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .sidebar {
+                width: 100%;
+                max-height: 40vh;
+            }
+            
+            .main-content {
+                width: 100%;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .content-section {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 15px;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.4rem;
+            }
+            
+            .content {
+                padding: 15px;
+            }
+            
+            .content-section {
+                padding: 15px;
+            }
+            
+            .flowchart-box {
+                min-width: 130px;
+                padding: 12px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>VÒNG LẶP JAVA</h2>
+                <p>Hướng dẫn toàn diện</p>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#section-2-1" class="active" data-section="section-2-1">
+                    <i class="fas fa-play-circle"></i> 2.1 Khái niệm và mục đích
+                </a></li>
+                <li>
+                    <a href="#section-2-2" data-section="section-2-2">
+                        <i class="fas fa-redo"></i> 2.2 Vòng lặp for 
+                        <span class="nav-toggle"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <ul class="nav-submenu active">
+                        <li><a href="#for-definition" data-section="for-definition">Định nghĩa</a></li>
+                        <li><a href="#for-syntax" data-section="for-syntax">Cú pháp</a></li>
+                        <li><a href="#for-example1" data-section="for-example1">Ví dụ 1</a></li>
+                        <li><a href="#for-example2" data-section="for-example2">Ví dụ 2</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#section-2-3" data-section="section-2-3">
+                        <i class="fas fa-sync"></i> 2.3 Vòng lặp while 
+                        <span class="nav-toggle"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <ul class="nav-submenu">
+                        <li><a href="#while-definition" data-section="while-definition">Định nghĩa</a></li>
+                        <li><a href="#while-syntax" data-section="while-syntax">Cú pháp</a></li>
+                        <li><a href="#while-example" data-section="while-example">Ví dụ</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#section-2-4" data-section="section-2-4">
+                        <i class="fas fa-retweet"></i> 2.4 Vòng lặp do-while 
+                        <span class="nav-toggle"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <ul class="nav-submenu">
+                        <li><a href="#dowhile-definition" data-section="dowhile-definition">Định nghĩa</a></li>
+                        <li><a href="#dowhile-syntax" data-section="dowhile-syntax">Cú pháp</a></li>
+                        <li><a href="#dowhile-example" data-section="dowhile-example">Ví dụ</a></li>
+                    </ul>
+                </li>
+                <li><a href="#section-2-5" data-section="section-2-5">
+                    <i class="fas fa-balance-scale"></i> 2.5 So sánh vòng lặp
+                </a></li>
+                <li><a href="#section-2-6" data-section="section-2-6">
+                    <i class="fas fa-laptop-code"></i> 2.6 Bài tập thực hành
+                </a></li>
+                <li>
+                    <a href="#section-2-7" data-section="section-2-7">
+                        <i class="fas fa-forward"></i> 2.7 Break và Continue 
+                        <span class="nav-toggle"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <ul class="nav-submenu">
+                        <li><a href="#break-section" data-section="break-section">Từ khóa break</a></li>
+                        <li><a href="#continue-section" data-section="continue-section">Từ khóa continue</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <header>
+                <h1>VÒNG LẶP (LOOPS) TRONG JAVA</h1>
+                <p class="subtitle">Hướng dẫn toàn diện về các cấu trúc vòng lặp trong Java</p>
+            </header>
+
+            <div class="content">
+                <!-- Section 2.1 -->
+                <section id="section-2-1" class="content-section active">
+                    <h2><i class="fas fa-play-circle"></i> 2.1 Khái niệm và mục đích của vòng lặp</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>Định nghĩa:</strong></p>
+                        <p>Vòng lặp là cấu trúc điều khiển cho phép thực thi một khối lệnh nhiều lần dựa trên một điều kiện nhất định.</p>
+                    </div>
+                    
+                    <div class="purpose-list">
+                        <p><strong>Mục đích của vòng lặp:</strong></p>
+                        <ul>
+                            <li>Tự động hóa: Thực hiện các tác vụ lặp đi lặp lại</li>
+                            <li>Xử lý tập hợp: Duyệt qua mảng, danh sách, collection</li>
+                            <li>Tính toán lặp: Tính giai thừa, tổng dãy số,...</li>
+                            <li>Kiểm tra liên tục: Đợi sự kiện, kiểm tra trạng thái</li>
+                        </ul>
+                    </div>
+                    
+                    <p><strong>Các loại vòng lặp trong Java:</strong></p>
+                    <ul>
+                        <li>for - Biết trước số lần lặp</li>
+                        <li>while - Không biết trước số lần lặp, kiểm tra điều kiện trước</li>
+                        <li>do-while - Không biết trước số lần lặp, thực hiện ít nhất 1 lần</li>
+                        <li>for-each - Duyệt qua mảng và collection</li>
+                    </ul>
+                </section>
+
+                <!-- Section 2.2 -->
+                <section id="section-2-2" class="content-section">
+                    <h2><i class="fas fa-redo"></i> 2.2 Vòng lặp for</h2>
+                    
+                    <div class="definition-box" id="for-definition">
+                        <p><strong>Định nghĩa:</strong></p>
+                        <p>Vòng lặp for được sử dụng khi biết trước số lần lặp.</p>
+                    </div>
+                    
+                    <div class="flowchart">
+                        <p><strong>Lưu đồ thuật toán:</strong></p>
+                        <div class="flowchart-box flowchart-start">BẮT ĐẦU</div>
+                        <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-box">Khởi tạo biến đếm</div>
+                        <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-box flowchart-condition">Kiểm tra điều kiện</div>
+                        <div class="flowchart-arrow">↓</div>
+                        <div style="display: inline-block; text-align: center; margin: 0 20px;">
+                            <div class="flowchart-box flowchart-process" style="background: #d1ecf1;">Điều kiện ĐÚNG</div>
+                            <div class="flowchart-arrow">↓</div>
+                            <div class="flowchart-box flowchart-process">Thực thi khối lệnh</div>
+                            <div class="flowchart-arrow">↓</div>
+                            <div class="flowchart-box flowchart-process">Cập nhật biến đếm</div>
+                        </div>
+                        <div style="display: inline-block; text-align: center; margin: 0 20px; vertical-align: top;">
+                            <div class="flowchart-box flowchart-process" style="background: #f8d7da;">Điều kiện SAI</div>
+                            <div class="flowchart-arrow">↓</div>
+                            <div class="flowchart-box flowchart-end">KẾT THÚC</div>
+                        </div>
+                        <p class="caption">Lưu đồ mô tả hoạt động của vòng lặp for</p>
+                    </div>
+                    
+                    <h3 id="for-syntax"><i class="fas fa-code"></i> Cú pháp:</h3>
+                    <div class="code-container">
+                        <pre><code><span class="code-keyword">for</span> (khởi_tạo; điều_kiện; cập_nhật) {
+    <span class="code-comment">// Khối lệnh thực thi</span>
+}</code></pre>
+                    </div>
+                    
+                    <h3><i class="fas fa-info-circle"></i> Giải thích các thành phần:</h3>
+                    <ul>
+                        <li><strong>khởi_tạo:</strong> Khai báo và khởi tạo biến đếm (chạy 1 lần duy nhất)</li>
+                        <li><strong>điều_kiện:</strong> Kiểm tra trước mỗi lần lặp, nếu true thì tiếp tục</li>
+                        <li><strong>cập_nhật:</strong> Thay đổi biến đếm sau mỗi lần lặp</li>
+                        <li><strong>khối lệnh:</strong> Các câu lệnh được thực thi trong mỗi vòng lặp</li>
+                    </ul>
+                    
+                    <h3 id="for-example1"><i class="fas fa-laptop-code"></i> Ví dụ 1: In các số từ 1 đến 5</h3>
+                    <div class="code-container">
+                        <pre><code><span class="code-keyword">public class</span> <span class="code-class">ForLoopBasic</span> {
+    <span class="code-keyword">public static void</span> <span class="code-method">main</span>(String[] args) {
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"=== VÒNG LẶP FOR CƠ BẢN ==="</span>);
+        
+        <span class="code-keyword">for</span> (<span class="code-keyword">int</span> i = 1; i <= 5; i++) {
+            System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"Lần lặp thứ: "</span> + i);
+        } 
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"Kết thúc vòng lặp"</span>);
+    }
+}</code></pre>
+                    </div>
+                    
+                    <div class="explanation-box">
+                        <p><strong>Giải thích chi tiết luồng thực thi:</strong></p>
+                        <ol>
+                            <li>BƯỚC 1: Khởi tạo - int i = 1 (chạy 1 lần)</li>
+                            <li>BƯỚC 2: Kiểm tra điều kiện - i <= 5 → 1 <= 5 → TRUE</li>
+                            <li>BƯỚC 3: Thực thi khối lệnh - in "Lần lặp thứ: 1"</li>
+                            <li>BƯỚC 4: Cập nhật - i++ → i = 2</li>
+                            <li>BƯỚC 5: Kiểm tra điều kiện - i <= 5 → 2 <= 5 → TRUE</li>
+                            <li>BƯỚC 6: Thực thi khối lệnh - in "Lần lặp thứ: 2"</li>
+                            <li>BƯỚC 7: Cập nhật - i++ → i = 3</li>
+                            <li>...</li>
+                            <li>BƯỚC n: Khi i = 6 → điều kiện 6 <= 5 → FALSE → thoát vòng lặp</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="example-box">
+                        <p><strong>Kết quả:</strong></p>
+                        <div class="code-container">
+                            <pre><code>=== VÒNG LẶP FOR CƠ BẢN ===
+Lần lặp thứ: 1
+Lần lặp thứ: 2
+Lần lặp thứ: 3
+Lần lặp thứ: 4
+Lần lặp thứ: 5
+Kết thúc vòng lặp</code></pre>
+                        </div>
+                    </div>
+                    
+                    <h3 id="for-example2"><i class="fas fa-laptop-code"></i> Ví dụ 2: Tính tổng các số từ 1 đến 10</h3>
+                    <div class="code-container">
+                        <pre><code><span class="code-keyword">public class</span> <span class="code-class">ForLoopSum</span> {
+    <span class="code-keyword">public static void</span> <span class="code-method">main</span>(String[] args) {
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"=== TÍNH TỔNG DÃY SỐ ==="</span>);
+        
+        <span class="code-keyword">int</span> sum = 0;
+        
+        <span class="code-keyword">for</span> (<span class="code-keyword">int</span> i = 1; i <= 10; i++) {
+            sum = sum + i;  <span class="code-comment">// Hoặc sum += i;</span>
+            System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"Số hiện tại: "</span> + i + <span class="code-string">" - Tổng tạm thời: "</span> + sum);
+        }
+        
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"Tổng cuối cùng từ 1 đến 10 là: "</span> + sum);
+    }
+}</code></pre>
+                    </div>
+                    
+                    <div class="explanation-box">
+                        <p><strong>Giải thích chi tiết:</strong></p>
+                        <ul>
+                            <li>VÒNG LẶP 1: i = 1, sum = 0 + 1 = 1</li>
+                            <li>VÒNG LẶP 2: i = 2, sum = 1 + 2 = 3</li>
+                            <li>VÒNG LẶP 3: i = 3, sum = 3 + 3 = 6</li>
+                            <li>VÒNG LẶP 4: i = 4, sum = 6 + 4 = 10</li>
+                            <li>...</li>
+                            <li>VÒNG LẶP 10: i = 10, sum = 45 + 10 = 55</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="example-box">
+                        <p><strong>Kết quả:</strong></p>
+                        <div class="code-container">
+                            <pre><code>=== TÍNH TỔNG DÃY SỐ ===
+Số hiện tại: 1 - Tổng tạm thời: 1
+Số hiện tại: 2 - Tổng tạm thời: 3
+Số hiện tại: 3 - Tổng tạm thời: 6
+Số hiện tại: 4 - Tổng tạm thời: 10
+….
+Số hiện tại: 10 - Tổng tạm thời: 55
+Tổng cuối cùng từ 1 đến 10 là: 55</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Các phần còn lại sẽ được thêm ở đây -->
+                <section id="section-2-3" class="content-section">
+                    <h2><i class="fas fa-sync"></i> 2.3 Vòng lặp while</h2>
+                    <p>Nội dung cho phần vòng lặp while sẽ được hiển thị ở đây...</p>
+                </section>
+
+                <section id="section-2-4" class="content-section">
+                    <h2><i class="fas fa-retweet"></i> 2.4 Vòng lặp do-while</h2>
+                    <p>Nội dung cho phần vòng lặp do-while sẽ được hiển thị ở đây...</p>
+                </section>
+
+                <section id="section-2-5" class="content-section">
+                    <h2><i class="fas fa-balance-scale"></i> 2.5 So sánh các loại vòng lặp</h2>
+                    <p>Nội dung cho phần so sánh sẽ được hiển thị ở đây...</p>
+                </section>
+
+                <section id="section-2-6" class="content-section">
+                    <h2><i class="fas fa-laptop-code"></i> 2.6 Bài tập thực hành vòng lặp</h2>
+                    <p>Nội dung cho phần bài tập sẽ được hiển thị ở đây...</p>
+                </section>
+
+                <section id="section-2-7" class="content-section">
+                    <h2><i class="fas fa-forward"></i> 2.7 Break và Continue trong Java</h2>
+                    <p>Nội dung cho phần break và continue sẽ được hiển thị ở đây...</p>
+                </section>
+            </div>
+
+            <footer>
+                <p>© 2023 Hướng Dẫn Vòng Lặp Trong Java - Tài liệu học tập toàn diện</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Lấy tất cả các liên kết điều hướng
+            const navLinks = document.querySelectorAll('.nav-links a, .nav-submenu a');
+            
+            // Lấy tất cả các phần nội dung
+            const contentSections = document.querySelectorAll('.content-section');
+            
+            // Xử lý sự kiện click trên menu
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Lấy ID phần nội dung cần hiển thị
+                    const targetSectionId = this.getAttribute('data-section');
+                    
+                    // Ẩn tất cả các phần nội dung
+                    contentSections.forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Hiển thị phần nội dung được chọn
+                    const targetSection = document.getElementById(targetSectionId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                    }
+                    
+                    // Cập nhật trạng thái active cho menu
+                    navLinks.forEach(navLink => {
+                        navLink.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Xử lý toggle submenu
+                    const parentLi = this.parentElement.parentElement;
+                    if (parentLi && parentLi.classList.contains('nav-submenu')) {
+                        const mainLink = parentLi.previousElementSibling;
+                        if (mainLink) {
+                            mainLink.classList.add('active');
+                        }
+                    }
+                });
+            });
+            
+            // Xử lý toggle submenu
+            const navToggles = document.querySelectorAll('.nav-toggle');
+            
+            navToggles.forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const parent = this.parentElement;
+                    const submenu = parent.nextElementSibling;
+                    
+                    // Đóng tất cả các submenu khác
+                    document.querySelectorAll('.nav-submenu').forEach(menu => {
+                        if (menu !== submenu) {
+                            menu.classList.remove('active');
+                            menu.previousElementSibling.querySelector('.nav-toggle').classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle submenu hiện tại
+                    submenu.classList.toggle('active');
+                    this.classList.toggle('active');
+                });
+            });
+            
+            // Hiển thị phần đầu tiên khi tải trang
+            if (contentSections.length > 0) {
+                contentSections[0].classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
