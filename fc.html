@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIÁO TRÌNH HÀM TRONG JAVA CHO NGƯỜI MỚI BẮT ĐẦU</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            min-height: 85vh;
+        }
+
+        .sidebar {
+            background: var(--light);
+            padding: 20px;
+            border-right: 3px solid var(--secondary);
+            overflow-y: auto;
+            max-height: 85vh;
+        }
+
+        .nav-list {
+            list-style: none;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            font-size: 0.95rem;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 85vh;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h4 {
+            color: var(--info);
+            margin: 20px 0 10px;
+        }
+
+        h5 {
+            color: var(--dark);
+            margin: 15px 0 8px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.4;
+            border: 2px solid #444;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #666;
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .method {
+            color: #dcdcaa;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid var(--info);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .interactive-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-run {
+            background: var(--success);
+        }
+
+        .btn-run:hover {
+            background: #229954;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid var(--warning);
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .method-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .method-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s;
+        }
+
+        .method-card:hover {
+            border-color: var(--secondary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .method-name {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .method-desc {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .comparison-table {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .highlight {
+            background: #fff8e1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .example-nav {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .example-btn {
+            background: #e9ecef;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .example-btn:hover {
+            background: #dee2e6;
+        }
+
+        .example-btn.active {
+            background: var(--secondary);
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 992px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                border-right: none;
+                border-bottom: 3px solid var(--secondary);
+                max-height: 300px;
+            }
+            
+            .method-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .code-block {
+                padding: 15px;
+                font-size: 0.9rem;
+            }
+        }
+
+        .syntax {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-family: 'Consolas', monospace;
+            border-left: 4px solid var(--info);
+        }
+
+        .param {
+            color: #e74c3c;
+        }
+
+        .return {
+            color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-code"></i> GIÁO TRÌNH HÀM TRONG JAVA</h1>
+            <!-- <p class="subtitle">Hướng dẫn toàn diện về hàm trong Java với ví dụ thực tế</p> -->
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#phan1" class="nav-link active"><i class="fas fa-question-circle"></i> Phần 1: Hàm là gì?</a></li>
+                    <li class="nav-item"><a href="#phan2" class="nav-link"><i class="fas fa-cogs"></i> Phần 2: Cấu trúc hàm</a></li>
+                    <li class="nav-item"><a href="#phan3" class="nav-link"><i class="fas fa-phone"></i> Phần 3: Gọi hàm</a></li>
+                    <li class="nav-item"><a href="#phan4" class="nav-link"><i class="fas fa-th"></i> Phần 4: Loại hàm phổ biến</a></li>
+                    <li class="nav-item"><a href="#phan5" class="nav-link"><i class="fas fa-exchange-alt"></i> Phần 5: Tham số đặc biệt</a></li>
+                    <li class="nav-item"><a href="#phan6" class="nav-link"><i class="fas fa-layer-group"></i> Phần 6: Nạp chồng hàm</a></li>
+                    <li class="nav-item"><a href="#phan7" class="nav-link"><i class="fas fa-infinity"></i> Phần 7: Đệ quy</a></li>
+                    <li class="nav-item"><a href="#phan8" class="nav-link"><i class="fas fa-exclamation-triangle"></i> Phần 8: Lỗi thường gặp</a></li>
+                    <li class="nav-item"><a href="#phan9" class="nav-link"><i class="fas fa-dumbbell"></i> Phần 9: Bài tập thực hành</a></li>
+                    <!-- <li class="nav-item"><a href="#phan10" class="nav-link"><i class="fas fa-project-diagram"></i> Phần 10: Thực hành tổng hợp</a></li> -->
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- PHẦN 1: HÀM LÀ GÌ -->
+                <section id="phan1" class="section active">
+                    <h2><i class="fas fa-question-circle"></i> PHẦN 1: HÀM LÀ GÌ VÀ TẠI SAO CẦN HÀM?</h2>
+                    
+                    <div class="info-box">
+                        <h4><i class="fas fa-utensils"></i> 1.1. Hàm (Method) là gì? - Ví dụ đầu bếp</h4>
+                        <p><strong>Không có hàm:</strong> Mỗi lần nấu mì, bạn phải làm từ A-Z: đun nước, cho mì, nêm gia vị...</p>
+                        <p><strong>Có hàm:</strong> Bạn tạo ra "công thức nấu mì" (hàm). Khi cần, chỉ cần gọi "nấu mì" là xong!</p>
+                    </div>
+                    
+                    <h4>Trong lập trình:</h4>
+                    <ul>
+                        <li>Hàm là một khối lệnh thực hiện một công việc cụ thể</li>
+                        <li>Được đặt tên để gọi lại nhiều lần</li>
+                    </ul>
+                    
+                    <h3>1.2. Tại sao cần hàm?</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ: Tính tổng 2 số</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// KHÔNG dùng hàm:</span><br>
+                        <span class="keyword">int</span> a = 5, b = 3;<br>
+                        <span class="keyword">int</span> tong1 = a + b;  <span class="comment">// Lần 1</span><br>
+                        System.out.println(<span class="string">"Tổng 1: "</span> + tong1);<br>
+                        <br>
+                        <span class="keyword">int</span> c = 10, d = 7;<br>
+                        <span class="keyword">int</span> tong2 = c + d;  <span class="comment">// Lần 2 - phải viết lại phép cộng</span><br>
+                        System.out.println(<span class="string">"Tổng 2: "</span> + tong2);<br>
+                        <br>
+                        <span class="comment">// DÙNG hàm:</span><br>
+                        <span class="keyword">public static int</span> tinhTong(<span class="keyword">int</span> x, <span class="keyword">int</span> y) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> x + y;<br>
+                        }<br>
+                        <br>
+                        <span class="comment">// Sử dụng:</span><br>
+                        <span class="keyword">int</span> tong1 = tinhTong(5, 3);    <span class="comment">// Gọi hàm</span><br>
+                        <span class="keyword">int</span> tong2 = tinhTong(10, 7);   <span class="comment">// Gọi lại hàm</span>
+                    </div>
+                    
+                    <div class="success-box">
+                        <h4><i class="fas fa-check-circle"></i> Lợi ích của hàm:</h4>
+                        <ul>
+                            <li><strong>Tái sử dụng:</strong> Viết 1 lần, dùng nhiều lần</li>
+                            <li><strong>Dễ đọc:</strong> tinhTong(5, 3) dễ hiểu hơn 5 + 3</li>
+                            <li><strong>Dễ sửa:</strong> Sửa 1 chỗ, áp dụng mọi nơi</li>
+                            <li><strong>Chia nhỏ công việc:</strong> Chương trình lớn thành các phần nhỏ</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm: So sánh có và không có hàm</h4>
+                        <button class="btn" onclick="demoTinhTong()">
+                            <i class="fas fa-play"></i> Chạy ví dụ tính tổng
+                        </button>
+                        <div class="result" id="demoTongResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="demoTongResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 2: CẤU TRÚC HÀM -->
+                <section id="phan2" class="section">
+                    <h2><i class="fas fa-cogs"></i> PHẦN 2: CẤU TRÚC CƠ BẢN CỦA HÀM</h2>
+                    
+                    <h3>2.1. Các phần của một hàm</h3>
+                    
+                    <div class="syntax">
+                        [phạm vi] [từ khóa] kiểu-trả-về tên-hàm([thông số]) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Thân hàm - nơi viết code</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;[lệnh 1]<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;[lệnh 2]<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;...<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;[return giá-trị;]  <span class="comment">// nếu có kiểu trả về</span><br>
+                        }
+                    </div>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ đầy đủ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public static int</span> tinhBinhPhuong(<span class="keyword">int</span> so) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> ketQua = so * so;  <span class="comment">// Tính bình phương</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> ketQua;         <span class="comment">// Trả về kết quả</span><br>
+                        }
+                    </div>
+                    
+                    <h3>2.2. Phân tích chi tiết từng phần</h3>
+                    
+                    <h4>Phần 1: Phạm vi truy cập (Access Modifier)</h4>
+                    <p>Quyết định ai được phép sử dụng hàm này</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>ViDuPhamVi.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">ViDuPhamVi</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 1. private - Chỉ dùng trong class này</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private void</span> hamRiengTu() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Chỉ tôi dùng được!"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 4. public - Ai cũng dùng được</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> hamCongKhai() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Mời cả thế giới dùng!"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Phạm vi</th>
+                                    <th>Trong class</th>
+                                    <th>Trong package</th>
+                                    <th>Lớp con ngoài package</th>
+                                    <th>Ngoài package</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>private</strong></td>
+                                    <td>✓</td>
+                                    <td>✗</td>
+                                    <td>✗</td>
+                                    <td>✗</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>default</strong></td>
+                                    <td>✓</td>
+                                    <td>✓</td>
+                                    <td>✗</td>
+                                    <td>✗</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>protected</strong></td>
+                                    <td>✓</td>
+                                    <td>✓</td>
+                                    <td>✓</td>
+                                    <td>✗</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>public</strong></td>
+                                    <td>✓</td>
+                                    <td>✓</td>
+                                    <td>✓</td>
+                                    <td>✓</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h4>Phần 2: Từ khóa (Non-access Modifier)</h4>
+                    <p>Bổ sung tính chất đặc biệt cho hàm</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ từ khóa</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">TuKhoa</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 1. static - Thuộc về lớp, không cần tạo đối tượng</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">static void</span> xinChao() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Xin chào!"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 2. final - Không cho phép ghi đè</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">final void</span> khongThayDoi() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Tôi không đổi!"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm: Hàm static vs non-static</h4>
+                        <button class="btn" onclick="demoStaticMethod()">
+                            <i class="fas fa-play"></i> Chạy ví dụ
+                        </button>
+                        <div class="result" id="staticResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="staticResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 3: GỌI HÀM -->
+                <section id="phan3" class="section">
+                    <h2><i class="fas fa-phone"></i> PHẦN 3: CÁCH GỌI HÀM</h2>
+                    
+                    <h3>3.1. Gọi hàm trong cùng lớp</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>CungLop.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">CungLop</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> hamA() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Đây là hàm A"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> hamB() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Gọi hàm A từ hàm B</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hamA();  <span class="comment">// Gọi trực tiếp</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Đây là hàm B"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    
+                    <h3>3.2. Gọi hàm từ lớp khác</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Gọi hàm từ lớp khác</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Lớp Toán Học</span><br>
+                        <span class="keyword">public class</span> <span class="class-name">ToanHoc</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public int</span> cong(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> a + b;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }<br>
+                        <br>
+                        <span class="comment">// Lớp chính</span><br>
+                        <span class="keyword">public class</span> <span class="class-name">Main</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Gọi hàm non-static từ lớp khác</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ToanHoc toan = <span class="keyword">new</span> ToanHoc();  <span class="comment">// 1. Tạo đối tượng</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> ketQuaCong = toan.cong(5, 3);  <span class="comment">// 2. Gọi qua đối tượng</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Cộng: "</span> + ketQuaCong);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    
+                    <h3>3.3. Gọi hàm từ package khác</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Gọi hàm từ package khác</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Package: com.utils</span><br>
+                        <span class="keyword">package</span> com.utils;<br>
+                        <br>
+                        <span class="keyword">public class</span> <span class="class-name">TienIch</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static double</span> tinhDienTichHinhTron(<span class="keyword">double</span> r) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> Math.PI * r * r;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }<br>
+                        <br>
+                        <span class="comment">// Package: com.main (khác package)</span><br>
+                        <span class="keyword">package</span> com.main;<br>
+                        <span class="keyword">import</span> com.utils.TienIch;  <span class="comment">// Nhập lớp cần dùng</span><br>
+                        <br>
+                        <span class="keyword">public class</span> <span class="class-name">ChuongTrinh</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> dienTich = TienIch.tinhDienTichHinhTron(5);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Diện tích: "</span> + dienTich);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm gọi hàm</h4>
+                        <div class="example-nav">
+                            <button class="example-btn active" onclick="showCallMethod('sameClass')">Cùng lớp</button>
+                            <button class="example-btn" onclick="showCallMethod('diffClass')">Khác lớp</button>
+                            <button class="example-btn" onclick="showCallMethod('staticCall')">Gọi static</button>
+                        </div>
+                        <button class="btn" onclick="demoCallMethod()">
+                            <i class="fas fa-play"></i> Chạy ví dụ
+                        </button>
+                        <div class="result" id="callMethodResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="callMethodResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 4: LOẠI HÀM PHỔ BIẾN -->
+                <section id="phan4" class="section">
+                    <h2><i class="fas fa-th"></i> PHẦN 4: CÁC LOẠI HÀM PHỔ BIẾN</h2>
+                    
+                    <h3>4.1. Getter và Setter</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>SinhVien.java - Getter/Setter</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">SinhVien</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String ten;  <span class="comment">// private - không cho truy cập trực tiếp</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private int</span> tuoi;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Getter - lấy giá trị</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String getTen() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> ten;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Setter - gán giá trị</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> setTen(String ten) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Có thể kiểm tra trước khi gán</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (ten != <span class="keyword">null</span> && !ten.trim().isEmpty()) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.ten = ten;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    
+                    <h3>4.2. Hàm tiện ích (Utility)</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>TienIchChuoi.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">TienIchChuoi</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Hàm đếm số từ</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static int</span> demSoTu(String chuoi) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (chuoi == <span class="keyword">null</span> || chuoi.trim().isEmpty()) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> 0;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String[] tu = chuoi.trim().split(<span class="string">"\\s+"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> tu.length;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    
+                    <h3>4.3. Hàm kiểm tra (Validation)</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>KiemTra.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">KiemTra</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Kiểm tra email hợp lệ</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static boolean</span> laEmailHopLe(String email) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (email == <span class="keyword">null</span>) <span class="keyword">return false</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String pattern = <span class="string">"^[A-Za-z0-9+_.-]+@(.+)$"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> email.matches(pattern);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm các loại hàm</h4>
+                        <div class="example-nav">
+                            <button class="example-btn active" onclick="showFunctionType('getter')">Getter/Setter</button>
+                            <button class="example-btn" onclick="showFunctionType('utility')">Hàm tiện ích</button>
+                            <button class="example-btn" onclick="showFunctionType('validation')">Hàm kiểm tra</button>
+                        </div>
+                        <button class="btn" onclick="demoFunctionType()">
+                            <i class="fas fa-play"></i> Chạy ví dụ
+                        </button>
+                        <div class="result" id="functionTypeResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="functionTypeResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 5: THAM SỐ ĐẶC BIỆT -->
+                <section id="phan5" class="section">
+                    <h2><i class="fas fa-exchange-alt"></i> PHẦN 5: THAM SỐ ĐẶC BIỆT</h2>
+                    
+                    <h3>5.1. Varargs - Tham số biến đổi</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Varargs.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">Varargs</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Tính tổng nhiều số</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static int</span> tinhTong(<span class="keyword">int</span>... cacSo) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> tong = 0;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> so : cacSo) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tong += so;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> tong;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    
+                    <h3>5.2. Truyền tham số: Giá trị vs Tham chiếu</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>TruyenThamSo.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">TruyenThamSo</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Truyền giá trị (primitive types)</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> tangGiaTri(<span class="keyword">int</span> x) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x = x + 10;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Truyền tham chiếu (reference types)</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> tangPhanTu(<span class="keyword">int</span>[] mang) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (mang.length > 0) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mang[0] = mang[0] + 10;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    
+                    <div class="comparison-table">
+                        <h4>Giải thích:</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Kiểu dữ liệu</th>
+                                    <th>Cách truyền</th>
+                                    <th>Hàm có thay đổi biến gốc?</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Nguyên thủy</strong></td>
+                                    <td>Giá trị (value)</td>
+                                    <td>Không</td>
+                                    <td>int, double, boolean...</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tham chiếu</strong></td>
+                                    <td>Tham chiếu (reference)</td>
+                                    <td>Có thể</td>
+                                    <td>Mảng, đối tượng</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>String</strong></td>
+                                    <td>Tham chiếu đặc biệt</td>
+                                    <td>Không</td>
+                                    <td>String là immutable</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- PHẦN 6: NẠP CHỒNG HÀM -->
+                <section id="phan6" class="section">
+                    <h2><i class="fas fa-layer-group"></i> PHẦN 6: NẠP CHỒNG HÀM (METHOD OVERLOADING)</h2>
+                    
+                    <h3>6.1. Khái niệm</h3>
+                    <p>Cùng tên hàm, khác tham số</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>NapChong.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">NapChong</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Phiên bản 1: Không tham số</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> chao() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Xin chào!"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Phiên bản 2: 1 tham số String</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> chao(String ten) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Xin chào "</span> + ten + <span class="string">"!"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Phiên bản 3: 2 tham số</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> chao(String ten, <span class="keyword">int</span> gio) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String loiChao;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (gio < 12) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loiChao = <span class="string">"Chào buổi sáng"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">else if</span> (gio < 18) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loiChao = <span class="string">"Chào buổi chiều"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loiChao = <span class="string">"Chào buổi tối"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(loiChao + <span class="string">" "</span> + ten + <span class="string">"!"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    
+                    <h3>6.2. Quy tắc nạp chồng</h3>
+                    <ul>
+                        <li>Phải khác số lượng tham số HOẶC</li>
+                        <li>Phải khác kiểu tham số HOẶC</li>
+                        <li>Phải khác thứ tự tham số</li>
+                        <li><strong>SAI:</strong> Chỉ khác kiểu trả về</li>
+                        <li><strong>SAI:</strong> Chỉ khác tên tham số</li>
+                    </ul>
+                    
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm nạp chồng hàm</h4>
+                        <div class="input-group">
+                            <label for="overloadName">Tên:</label>
+                            <input type="text" id="overloadName" value="Mai" placeholder="Nhập tên">
+                        </div>
+                        <div class="input-group">
+                            <label for="overloadHour">Giờ (0-23):</label>
+                            <input type="number" id="overloadHour" value="15" min="0" max="23">
+                        </div>
+                        <button class="btn" onclick="demoOverloading()">
+                            <i class="fas fa-play"></i> Gọi hàm nạp chồng
+                        </button>
+                        <div class="result" id="overloadResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="overloadResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 7: ĐỆ QUY -->
+                <section id="phan7" class="section">
+                    <h2><i class="fas fa-infinity"></i> PHẦN 7: ĐỆ QUY (RECURSION)</h2>
+                    
+                    <h3>7.1. Khái niệm</h3>
+                    <p>Hàm gọi lại chính nó</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>DeQuy.java - Tính giai thừa</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">DeQuy</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Tính giai thừa: n! = n * (n-1)!</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static long</span> giaiThua(<span class="keyword">int</span> n) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Điều kiện dừng</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (n <= 1) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> 1;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Bước đệ quy</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> n * giaiThua(n - 1);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    
+                    <h3>7.2. Cấu trúc hàm đệ quy</h3>
+                    <p>Mọi hàm đệ quy đều có:</p>
+                    <ul>
+                        <li><strong>Phần cơ sở:</strong> Điều kiện dừng</li>
+                        <li><strong>Phần đệ quy:</strong> Gọi lại chính hàm</li>
+                    </ul>
+                    
+                    <div class="warning-box">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Lưu ý quan trọng</h4>
+                        <ul>
+                            <li><strong>Phải có điều kiện dừng</strong> - nếu không sẽ gây StackOverflow</li>
+                            <li><strong>Điều kiện dừng phải đạt được</strong> - không được vô hạn</li>
+                            <li><strong>Tránh đệ quy sâu</strong> - có thể gây chậm hoặc lỗi bộ nhớ</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm đệ quy</h4>
+                        <div class="input-group">
+                            <label for="recursionNumber">Nhập số n:</label>
+                            <input type="number" id="recursionNumber" value="5" min="0" max="20">
+                        </div>
+                        <div class="example-nav">
+                            <button class="example-btn active" onclick="showRecursionType('factorial')">Giai thừa</button>
+                            <button class="example-btn" onclick="showRecursionType('sum')">Tổng 1-n</button>
+                            <button class="example-btn" onclick="showRecursionType('fibonacci')">Fibonacci</button>
+                        </div>
+                        <button class="btn" onclick="demoRecursion()">
+                            <i class="fas fa-play"></i> Tính đệ quy
+                        </button>
+                        <div class="result" id="recursionResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="recursionResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 8: LỖI THƯỜNG GẶP -->
+                <section id="phan8" class="section">
+                    <h2><i class="fas fa-exclamation-triangle"></i> PHẦN 8: LỖI THƯỜNG GẶP VÀ CÁCH SỬA</h2>
+                    
+                    <h3>8.1. Lỗi biên dịch</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Lỗi biên dịch thường gặp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// LỖI 1: Thiếu return</span><br>
+                        <span class="keyword">public int</span> tinhTong(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> tong = a + b;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Thiếu: return tong;</span><br>
+                        }<br>
+                        <br>
+                        <span class="comment">// LỖI 2: Không đến được code sau return</span><br>
+                        <span class="keyword">public void</span> inThongTin() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Xin chào"</span>);  <span class="comment">// Không đến được!</span><br>
+                        }<br>
+                        <br>
+                        <span class="comment">// LỖI 3: Kiểu trả về không khớp</span><br>
+                        <span class="keyword">public</span> String laySo() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> 123;  <span class="comment">// Lỗi: int không thể thành String</span><br>
+                        }
+                    </div>
+                    
+                    <h3>8.2. Lỗi thời gian chạy</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Lỗi runtime và cách sửa</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// LỖI 1: NullPointerException</span><br>
+                        <span class="keyword">public int</span> doDaiChuoi(String s) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> s.length();  <span class="comment">// Lỗi nếu s là null</span><br>
+                        }<br>
+                        <br>
+                        <span class="comment">// SỬA: Kiểm tra null</span><br>
+                        <span class="keyword">public int</span> doDaiChuoiFixed(String s) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (s == <span class="keyword">null</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> 0;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> s.length();<br>
+                        }
+                    </div>
+                    
+                    <h3>8.3. Lỗi logic</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Lỗi logic thường gặp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Hàm tính trung bình SAI</span><br>
+                        <span class="keyword">public double</span> trungBinhSai(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> a + b / 2;  <span class="comment">// SAI: Thiếu ngoặc</span><br>
+                        }<br>
+                        <br>
+                        <span class="comment">// Hàm tính trung bình ĐÚNG</span><br>
+                        <span class="keyword">public double</span> trungBinhDung(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> (a + b) / 2.0;  <span class="comment">// Dùng 2.0 để ra số thực</span><br>
+                        }
+                    </div>
+                </section>
+
+                <!-- PHẦN 9: BÀI TẬP THỰC HÀNH -->
+                <section id="phan9" class="section">
+                    <h2><i class="fas fa-dumbbell"></i> PHẦN 9: BÀI TẬP THỰC HÀNH</h2>
+                    
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Hướng dẫn làm bài tập</h4>
+                        <p>Giải quyết từng bài tập dưới đây để củng cố kiến thức về hàm trong Java.</p>
+                    </div>
+                    
+                    <h3>Bài tập 1: Hàm cơ bản</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>BaiTap1.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">BaiTap1</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 1. Viết hàm in bảng cửu chương</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> inBangCuuChuong(<span class="keyword">int</span> n) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Bảng cửu chương "</span> + n + <span class="string">":"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> i = 1; i <= 10; i++) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.printf(<span class="string">"%d x %d = %d\n"</span>, n, i, n * i);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 2. Viết hàm đổi độ C sang độ F</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static double</span> doiCSangF(<span class="keyword">double</span> doC) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> doC * 1.8 + 32;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm bài tập 1</h4>
+                        <div class="input-group">
+                            <label for="exercise1Number">Nhập số cho bảng cửu chương:</label>
+                            <input type="number" id="exercise1Number" value="5" min="1" max="10">
+                        </div>
+                        <div class="input-group">
+                            <label for="exercise1Celsius">Nhiệt độ (°C):</label>
+                            <input type="number" id="exercise1Celsius" value="25" step="0.1">
+                        </div>
+                        <button class="btn" onclick="demoExercise1()">
+                            <i class="fas fa-play"></i> Chạy bài tập 1
+                        </button>
+                        <div class="result" id="exercise1Result">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="exercise1ResultContent"></div>
+                        </div>
+                    </div>
+                    
+                    <h3>Bài tập 2: Hàm với mảng</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>BaiTap2.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">BaiTap2</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 1. Viết hàm tìm giá trị lớn nhất trong mảng</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static int</span> timMax(<span class="keyword">int</span>[] mang) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (mang == <span class="keyword">null</span> || mang.length == 0) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> -1;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> max = mang[0];<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> i = 1; i < mang.length; i++) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (mang[i] > max) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;max = mang[i];<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> max;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                </section>
+
+                <!-- PHẦN 10: THỰC HÀNH TỔNG HỢP -->
+                <section id="phan10" class="section">
+                    <h2><i class="fas fa-project-diagram"></i> PHẦN 10: THỰC HÀNH TỔNG HỢP</h2>
+                    
+                    <h3>Project nhỏ: Quản lý sinh viên</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>QuanLySinhVien.java - Project tổng hợp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">import</span> java.util.ArrayList;<br>
+                        <span class="keyword">import</span> java.util.List;<br>
+                        <br>
+                        <span class="keyword">public class</span> <span class="class-name">QuanLySinhVien</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> List&lt;SinhVien&gt; danhSach = <span class="keyword">new</span> ArrayList&lt;&gt;();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Lớp SinhVien nhúng bên trong</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">class</span> <span class="class-name">SinhVien</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String maSV;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String ten;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> diem;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 1. Thêm sinh viên</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> themSinhVien(String ma, String ten, <span class="keyword">double</span> diem) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Kiểm tra mã không trùng</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (SinhVien sv : danhSach) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (sv.maSV.equals(ma)) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Mã sinh viên đã tồn tại!"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SinhVien sv = <span class="keyword">new</span> SinhVien();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sv.maSV = ma;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sv.ten = ten;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sv.diem = diem;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;danhSach.add(sv);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Thêm thành công!"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    
+                    <div class="success-box">
+                        <h4><i class="fas fa-check-circle"></i> TỔNG KẾT - 10 điều cần nhớ về hàm trong Java:</h4>
+                        <ol>
+                            <li><strong>Mỗi hàm làm một việc:</strong> Hàm càng nhỏ, càng dễ hiểu, dễ sửa</li>
+                            <li><strong>Đặt tên có ý nghĩa:</strong> tinhDiemTrungBinh() tốt hơn tinh()</li>
+                            <li><strong>Hạn chế tham số:</strong> Tối ưu 0-3 tham số, dùng đối tượng nếu nhiều</li>
+                            <li><strong>Tránh side effect:</strong> Hàm không nên thay đổi bất ngờ</li>
+                            <li><strong>Kiểm tra đầu vào:</strong> Luôn kiểm tra null và giá trị hợp lệ</li>
+                            <li><strong>Xử lý lỗi:</strong> Dùng return đặc biệt hoặc ném ngoại lệ</li>
+                            <li><strong>Comment rõ ràng:</strong> Giải thích hàm phức tạp, tham số đặc biệt</li>
+                            <li><strong>Tránh đệ quy sâu:</strong> Có thể gây StackOverflow</li>
+                            <li><strong>Tái sử dụng:</strong> Nếu code lặp 3 lần, hãy tạo hàm</li>
+                            <li><strong>Test kỹ:</strong> Test với các trường hợp biên</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Demo quản lý sinh viên</h4>
+                        <div class="input-group">
+                            <label for="studentId">Mã sinh viên:</label>
+                            <input type="text" id="studentId" value="SV001" placeholder="Nhập mã SV">
+                        </div>
+                        <div class="input-group">
+                            <label for="studentName">Tên sinh viên:</label>
+                            <input type="text" id="studentName" value="Nguyễn Văn A" placeholder="Nhập tên">
+                        </div>
+                        <div class="input-group">
+                            <label for="studentScore">Điểm (0-10):</label>
+                            <input type="number" id="studentScore" value="8.5" step="0.1" min="0" max="10">
+                        </div>
+                        <button class="btn" onclick="demoStudentManagement()">
+                            <i class="fas fa-play"></i> Thêm sinh viên
+                        </button>
+                        <div class="result" id="studentResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="studentResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>Giáo trình Hàm trong Java cho người mới bắt đầu &copy; 2024 | Tổng hợp và biên soạn</p>
+        </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+            
+            // Kích hoạt section đầu tiên
+            sections[0].classList.add('active');
+            navLinks[0].classList.add('active');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    // Xóa class active từ tất cả
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+                    
+                    // Thêm class active cho link được click
+                    this.classList.add('active');
+                    
+                    // Hiển thị section tương ứng
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+                    
+                    // Cuộn lên đầu section
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            });
+        });
+        
+        // Hàm copy code
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Đã copy!';
+                button.style.background = '#27ae60';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                }, 2000);
+            });
+        }
+        
+        // =========== PHẦN 1: HÀM LÀ GÌ ===========
+        function demoTinhTong() {
+            const result = document.getElementById('demoTongResult');
+            const output = document.getElementById('demoTongResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = '=== KHÔNG DÙNG HÀM ===\n';
+            outputText += 'int a = 5, b = 3;\n';
+            outputText += 'int tong1 = a + b;\n';
+            outputText += 'System.out.println("Tổng 1: " + tong1);\n\n';
+            
+            outputText += 'int c = 10, d = 7;\n';
+            outputText += 'int tong2 = c + d;\n';
+            outputText += 'System.out.println("Tổng 2: " + tong2);\n\n';
+            
+            outputText += 'Kết quả:\n';
+            outputText += 'Tổng 1: 8\n';
+            outputText += 'Tổng 2: 17\n\n';
+            
+            outputText += '=== DÙNG HÀM ===\n';
+            outputText += 'public static int tinhTong(int x, int y) {\n';
+            outputText += '    return x + y;\n';
+            outputText += '}\n\n';
+            
+            outputText += '// Sử dụng:\n';
+            outputText += 'int tong1 = tinhTong(5, 3);\n';
+            outputText += 'int tong2 = tinhTong(10, 7);\n\n';
+            
+            outputText += 'Kết quả:\n';
+            outputText += 'Tổng 1: 8\n';
+            outputText += 'Tổng 2: 17\n\n';
+            
+            outputText += '✅ Lợi ích: Code ngắn gọn, dễ bảo trì, tái sử dụng';
+            
+            output.textContent = outputText;
+        }
+        
+        // =========== PHẦN 2: CẤU TRÚC HÀM ===========
+        function demoStaticMethod() {
+            const result = document.getElementById('staticResult');
+            const output = document.getElementById('staticResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = '=== HÀM STATIC ===\n';
+            outputText += 'public class TienIch {\n';
+            outputText += '    // Hàm static\n';
+            outputText += '    public static double tinhChuVi(double r) {\n';
+            outputText += '        return 2 * Math.PI * r;\n';
+            outputText += '    }\n';
+            outputText += '    \n';
+            outputText += '    // Hàm non-static\n';
+            outputText += '    public void gioiThieu() {\n';
+            outputText += '        System.out.println("Tôi là tiện ích");\n';
+            outputText += '    }\n';
+            outputText += '}\n\n';
+            
+            outputText += '=== CÁCH SỬ DỤNG ===\n';
+            outputText += '// Gọi hàm static KHÔNG cần tạo đối tượng:\n';
+            outputText += 'double chuVi = TienIch.tinhChuVi(5);\n';
+            outputText += 'System.out.println("Chu vi: " + chuVi);\n\n';
+            
+            outputText += '// Gọi hàm non-static CẦN tạo đối tượng:\n';
+            outputText += 'TienIch util = new TienIch();\n';
+            outputText += 'util.gioiThieu();\n\n';
+            
+            outputText += 'Kết quả:\n';
+            outputText += 'Chu vi: 31.41592653589793\n';
+            outputText += 'Tôi là tiện ích';
+            
+            output.textContent = outputText;
+        }
+        
+        // =========== PHẦN 3: GỌI HÀM ===========
+        let currentCallMethod = 'sameClass';
+        
+        function showCallMethod(method) {
+            currentCallMethod = method;
+            document.querySelectorAll('#phan3 .example-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        
+        function demoCallMethod() {
+            const result = document.getElementById('callMethodResult');
+            const output = document.getElementById('callMethodResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = '';
+            
+            switch (currentCallMethod) {
+                case 'sameClass':
+                    outputText = '=== GỌI HÀM TRONG CÙNG LỚP ===\n\n';
+                    outputText += 'public class CungLop {\n';
+                    outputText += '    public void hamA() {\n';
+                    outputText += '        System.out.println("Hàm A");\n';
+                    outputText += '    }\n';
+                    outputText += '    \n';
+                    outputText += '    public void hamB() {\n';
+                    outputText += '        hamA(); // Gọi trực tiếp\n';
+                    outputText += '        System.out.println("Hàm B");\n';
+                    outputText += '    }\n';
+                    outputText += '}\n\n';
+                    outputText += 'Kết quả khi gọi hamB():\n';
+                    outputText += 'Hàm A\n';
+                    outputText += 'Hàm B';
+                    break;
+                    
+                case 'diffClass':
+                    outputText = '=== GỌI HÀM TỪ LỚP KHÁC ===\n\n';
+                    outputText += '// Lớp ToánHọc\n';
+                    outputText += 'public class ToanHoc {\n';
+                    outputText += '    public int cong(int a, int b) {\n';
+                    outputText += '        return a + b;\n';
+                    outputText += '    }\n';
+                    outputText += '}\n\n';
+                    outputText += '// Lớp Main\n';
+                    outputText += 'public class Main {\n';
+                    outputText += '    public static void main(String[] args) {\n';
+                    outputText += '        // 1. Tạo đối tượng\n';
+                    outputText += '        ToanHoc toan = new ToanHoc();\n';
+                    outputText += '        \n';
+                    outputText += '        // 2. Gọi hàm qua đối tượng\n';
+                    outputText += '        int ketQua = toan.cong(5, 3);\n';
+                    outputText += '        System.out.println("Kết quả: " + ketQua);\n';
+                    outputText += '    }\n';
+                    outputText += '}\n\n';
+                    outputText += 'Kết quả: 8';
+                    break;
+                    
+                case 'staticCall':
+                    outputText = '=== GỌI HÀM STATIC ===\n\n';
+                    outputText += 'public class TienIch {\n';
+                    outputText += '    public static int tinhBinhPhuong(int n) {\n';
+                    outputText += '        return n * n;\n';
+                    outputText += '    }\n';
+                    outputText += '}\n\n';
+                    outputText += '// Cách gọi:\n';
+                    outputText += '1. Từ lớp khác: TienIch.tinhBinhPhuong(5)\n';
+                    outputText += '2. Trong cùng lớp: tinhBinhPhuong(5)\n';
+                    outputText += '3. Qua đối tượng (không khuyến khích):\n';
+                    outputText += '   TienIch t = new TienIch();\n';
+                    outputText += '   t.tinhBinhPhuong(5);\n\n';
+                    outputText += 'Kết quả tinhBinhPhuong(5): 25';
+                    break;
+            }
+            
+            output.textContent = outputText;
+        }
+        
+        // =========== PHẦN 4: LOẠI HÀM PHỔ BIẾN ===========
+        let currentFunctionType = 'getter';
+        
+        function showFunctionType(type) {
+            currentFunctionType = type;
+            document.querySelectorAll('#phan4 .example-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        
+        function demoFunctionType() {
+            const result = document.getElementById('functionTypeResult');
+            const output = document.getElementById('functionTypeResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = '';
+            
+            switch (currentFunctionType) {
+                case 'getter':
+                    outputText = '=== GETTER VÀ SETTER ===\n\n';
+                    outputText += 'public class SinhVien {\n';
+                    outputText += '    private String ten;\n';
+                    outputText += '    private int tuoi;\n';
+                    outputText += '    \n';
+                    outputText += '    // Getter\n';
+                    outputText += '    public String getTen() {\n';
+                    outputText += '        return ten;\n';
+                    outputText += '    }\n';
+                    outputText += '    \n';
+                    outputText += '    // Setter với kiểm tra\n';
+                    outputText += '    public void setTen(String ten) {\n';
+                    outputText += '        if (ten != null && !ten.trim().isEmpty()) {\n';
+                    outputText += '            this.ten = ten;\n';
+                    outputText += '        }\n';
+                    outputText += '    }\n';
+                    outputText += '}\n\n';
+                    outputText += '// Sử dụng:\n';
+                    outputText += 'SinhVien sv = new SinhVien();\n';
+                    outputText += 'sv.setTen("Mai");\n';
+                    outputText += 'System.out.println("Tên: " + sv.getTen());';
+                    break;
+                    
+                case 'utility':
+                    outputText = '=== HÀM TIỆN ÍCH ===\n\n';
+                    outputText += 'public class TienIchChuoi {\n';
+                    outputText += '    // Đếm số từ trong chuỗi\n';
+                    outputText += '    public static int demSoTu(String chuoi) {\n';
+                    outputText += '        if (chuoi == null || chuoi.trim().isEmpty()) {\n';
+                    outputText += '            return 0;\n';
+                    outputText += '        }\n';
+                    outputText += '        String[] tu = chuoi.trim().split("\\\\s+");\n';
+                    outputText += '        return tu.length;\n';
+                    outputText += '    }\n';
+                    outputText += '}\n\n';
+                    outputText += '// Sử dụng:\n';
+                    outputText += 'String text = "Java là ngôn ngữ lập trình";\n';
+                    outputText += 'int soTu = TienIchChuoi.demSoTu(text);\n';
+                    outputText += 'System.out.println("Số từ: " + soTu);\n\n';
+                    outputText += 'Kết quả: 5';
+                    break;
+                    
+                case 'validation':
+                    outputText = '=== HÀM KIỂM TRA ===\n\n';
+                    outputText += 'public class KiemTra {\n';
+                    outputText += '    // Kiểm tra email hợp lệ\n';
+                    outputText += '    public static boolean laEmailHopLe(String email) {\n';
+                    outputText += '        if (email == null) return false;\n';
+                    outputText += '        String pattern = "^[A-Za-z0-9+_.-]+@(.+)$";\n';
+                    outputText += '        return email.matches(pattern);\n';
+                    outputText += '    }\n';
+                    outputText += '}\n\n';
+                    outputText += '// Sử dụng:\n';
+                    outputText += 'System.out.println("test@example.com: " + \n';
+                    outputText += '    KiemTra.laEmailHopLe("test@example.com"));\n';
+                    outputText += 'System.out.println("invalid-email: " + \n';
+                    outputText += '    KiemTra.laEmailHopLe("invalid-email"));\n\n';
+                    outputText += 'Kết quả:\n';
+                    outputText += 'test@example.com: true\n';
+                    outputText += 'invalid-email: false';
+                    break;
+            }
+            
+            output.textContent = outputText;
+        }
+        
+        // =========== PHẦN 6: NẠP CHỒNG HÀM ===========
+        function demoOverloading() {
+            const name = document.getElementById('overloadName').value || "Mai";
+            const hour = parseInt(document.getElementById('overloadHour').value) || 15;
+            
+            const result = document.getElementById('overloadResult');
+            const output = document.getElementById('overloadResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = '=== NẠP CHỒNG HÀM CHAO() ===\n\n';
+            
+            // Mô phỏng các phiên bản hàm chao()
+            outputText += '1. chao() -> "Xin chào!"\n';
+            outputText += '2. chao("' + name + '") -> "Xin chào ' + name + '!"\n';
+            
+            let greeting = '';
+            if (hour < 12) {
+                greeting = 'Chào buổi sáng';
+            } else if (hour < 18) {
+                greeting = 'Chào buổi chiều';
+            } else {
+                greeting = 'Chào buổi tối';
+            }
+            
+            outputText += '3. chao("' + name + '", ' + hour + ') -> "' + greeting + ' ' + name + '!"\n\n';
+            
+            outputText += '=== QUY TẮC NẠP CHỒNG ===\n';
+            outputText += '✓ Khác số lượng tham số: chao() vs chao(String)\n';
+            outputText += '✓ Khác kiểu tham số: chao(String) vs chao(int)\n';
+            outputText += '✓ Khác thứ tự: chao(String, int) vs chao(int, String)\n';
+            outputText += '✗ SAI: Chỉ khác kiểu trả về\n';
+            outputText += '✗ SAI: Chỉ khác tên tham số';
+            
+            output.textContent = outputText;
+        }
+        
+        // =========== PHẦN 7: ĐỆ QUY ===========
+        let currentRecursionType = 'factorial';
+        
+        function showRecursionType(type) {
+            currentRecursionType = type;
+            document.querySelectorAll('#phan7 .example-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        
+        function demoRecursion() {
+            const n = parseInt(document.getElementById('recursionNumber').value) || 5;
+            
+            const result = document.getElementById('recursionResult');
+            const output = document.getElementById('recursionResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = '';
+            let resultValue = 0;
+            
+            switch (currentRecursionType) {
+                case 'factorial':
+                    outputText = '=== TÍNH GIAI THỪA ĐỆ QUY ===\n\n';
+                    outputText += 'Công thức: n! = n × (n-1)!\n';
+                    outputText += 'Điều kiện dừng: 0! = 1, 1! = 1\n\n';
+                    outputText += 'Mã nguồn:\n';
+                    outputText += 'public static long giaiThua(int n) {\n';
+                    outputText += '    if (n <= 1) return 1;\n';
+                    outputText += '    return n * giaiThua(n - 1);\n';
+                    outputText += '}\n\n';
+                    
+                    // Tính giai thừa
+                    resultValue = 1;
+                    let factorialSteps = n + '! = ';
+                    for (let i = n; i >= 1; i--) {
+                        resultValue *= i;
+                        factorialSteps += i;
+                        if (i > 1) factorialSteps += ' × ';
+                    }
+                    factorialSteps += ' = ' + resultValue;
+                    
+                    outputText += 'Tính ' + n + '!:\n';
+                    outputText += factorialSteps + '\n\n';
+                    outputText += 'Kết quả: ' + n + '! = ' + resultValue;
+                    break;
+                    
+                case 'sum':
+                    outputText = '=== TÍNH TỔNG 1-n ĐỆ QUY ===\n\n';
+                    outputText += 'Công thức: sum(n) = n + sum(n-1)\n';
+                    outputText += 'Điều kiện dừng: sum(0) = 0\n\n';
+                    outputText += 'Mã nguồn:\n';
+                    outputText += 'public static int tong(int n) {\n';
+                    outputText += '    if (n <= 0) return 0;\n';
+                    outputText += '    return n + tong(n - 1);\n';
+                    outputText += '}\n\n';
+                    
+                    // Tính tổng
+                    resultValue = 0;
+                    let sumSteps = 'Tổng từ 1 đến ' + n + ' = ';
+                    for (let i = 1; i <= n; i++) {
+                        resultValue += i;
+                        sumSteps += i;
+                        if (i < n) sumSteps += ' + ';
+                    }
+                    sumSteps += ' = ' + resultValue;
+                    
+                    outputText += sumSteps + '\n\n';
+                    outputText += 'Kết quả: ' + resultValue;
+                    break;
+                    
+                case 'fibonacci':
+                    outputText = '=== DÃY FIBONACCI ĐỆ QUY ===\n\n';
+                    outputText += 'Công thức: F(n) = F(n-1) + F(n-2)\n';
+                    outputText += 'Điều kiện dừng: F(0) = 0, F(1) = 1\n\n';
+                    outputText += 'Mã nguồn:\n';
+                    outputText += 'public static int fibonacci(int n) {\n';
+                    outputText += '    if (n <= 1) return n;\n';
+                    outputText += '    return fibonacci(n-1) + fibonacci(n-2);\n';
+                    outputText += '}\n\n';
+                    
+                    // Tính Fibonacci
+                    let fibSequence = 'Dãy Fibonacci: ';
+                    let fibValues = [];
+                    for (let i = 0; i <= n; i++) {
+                        let fib;
+                        if (i <= 1) {
+                            fib = i;
+                        } else {
+                            fib = fibValues[i-1] + fibValues[i-2];
+                        }
+                        fibValues.push(fib);
+                        fibSequence += fib;
+                        if (i < n) fibSequence += ', ';
+                    }
+                    
+                    outputText += fibSequence + '\n\n';
+                    outputText += 'F(' + n + ') = ' + fibValues[n];
+                    break;
+            }
+            
+            output.textContent = outputText;
+        }
+        
+        // =========== PHẦN 9: BÀI TẬP THỰC HÀNH ===========
+        function demoExercise1() {
+            const number = parseInt(document.getElementById('exercise1Number').value) || 5;
+            const celsius = parseFloat(document.getElementById('exercise1Celsius').value) || 25;
+            
+            const result = document.getElementById('exercise1Result');
+            const output = document.getElementById('exercise1ResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = '=== BÀI TẬP 1: HÀM CƠ BẢN ===\n\n';
+            
+            // Bảng cửu chương
+            outputText += '1. Bảng cửu chương ' + number + ':\n';
+            for (let i = 1; i <= 10; i++) {
+                outputText += number + ' × ' + i + ' = ' + (number * i) + '\n';
+            }
+            
+            // Chuyển đổi nhiệt độ
+            const fahrenheit = celsius * 1.8 + 32;
+            outputText += '\n2. Chuyển đổi nhiệt độ:\n';
+            outputText += celsius + '°C = ' + fahrenheit.toFixed(1) + '°F\n\n';
+            
+            // Tính BMI
+            const bmi = 65 / (1.7 * 1.7); // 65kg, 1.7m
+            outputText += '3. Tính BMI (65kg, 1.7m):\n';
+            outputText += 'BMI = ' + bmi.toFixed(1) + '\n';
+            
+            let classification = '';
+            if (bmi < 18.5) classification = 'Thiếu cân';
+            else if (bmi < 23) classification = 'Bình thường';
+            else if (bmi < 25) classification = 'Thừa cân';
+            else classification = 'Béo phì';
+            
+            outputText += 'Phân loại: ' + classification;
+            
+            output.textContent = outputText;
+        }
+        
+        // =========== PHẦN 10: THỰC HÀNH TỔNG HỢP ===========
+        let studentList = [];
+        
+        function demoStudentManagement() {
+            const id = document.getElementById('studentId').value || "SV001";
+            const name = document.getElementById('studentName').value || "Nguyễn Văn A";
+            const score = parseFloat(document.getElementById('studentScore').value) || 8.5;
+            
+            const result = document.getElementById('studentResult');
+            const output = document.getElementById('studentResultContent');
+            
+            result.classList.add('active');
+            
+            // Kiểm tra điểm hợp lệ
+            if (score < 0 || score > 10) {
+                output.textContent = 'LỖI: Điểm phải từ 0 đến 10!';
+                return;
+            }
+            
+            // Kiểm tra mã trùng
+            const existingStudent = studentList.find(s => s.id === id);
+            if (existingStudent) {
+                output.textContent = 'LỖI: Mã sinh viên "' + id + '" đã tồn tại!';
+                return;
+            }
+            
+            // Thêm sinh viên
+            studentList.push({
+                id: id,
+                name: name,
+                score: score
+            });
+            
+            let outputText = '=== QUẢN LÝ SINH VIÊN ===\n\n';
+            outputText += '✅ Đã thêm sinh viên thành công!\n\n';
+            outputText += 'Thông tin sinh viên vừa thêm:\n';
+            outputText += '- Mã SV: ' + id + '\n';
+            outputText += '- Tên: ' + name + '\n';
+            outputText += '- Điểm: ' + score + '\n\n';
+            
+            outputText += '=== DANH SÁCH SINH VIÊN ===\n';
+            outputText += 'Mã SV\t\tTên\t\t\tĐiểm\n';
+            outputText += '------------------------------------------------\n';
+            
+            let totalScore = 0;
+            let excellentCount = 0;
+            
+            studentList.forEach(student => {
+                outputText += student.id + '\t\t';
+                outputText += (student.name.length > 15 ? student.name.substring(0, 12) + '...' : student.name.padEnd(15)) + '\t\t';
+                outputText += student.score + '\n';
+                
+                totalScore += student.score;
+                if (student.score >= 8) excellentCount++;
+            });
+            
+            if (studentList.length > 0) {
+                const averageScore = totalScore / studentList.length;
+                
+                outputText += '\n=== THỐNG KÊ ===\n';
+                outputText += 'Tổng số sinh viên: ' + studentList.length + '\n';
+                outputText += 'Điểm trung bình: ' + averageScore.toFixed(2) + '\n';
+                outputText += 'Số sinh viên giỏi (điểm ≥ 8): ' + excellentCount;
+            }
+            
+            output.textContent = outputText;
+        }
+    </script>
+</body>
+</html>
