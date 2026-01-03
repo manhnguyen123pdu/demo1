@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUỔI 12: ENCAPSULATION & ACCESS MODIFIERS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --purple: #9b59b6;
+            --orange: #e67e22;
+            --green: #2ecc71;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "🔒";
+            position: absolute;
+            font-size: 300px;
+            opacity: 0.05;
+            right: -50px;
+            top: -50px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 80vh;
+        }
+
+        .sidebar {
+            background: var(--light);
+            padding: 20px;
+            border-right: 3px solid var(--secondary);
+            position: relative;
+        }
+
+        .nav-list {
+            list-style: none;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h4 {
+            color: var(--info);
+            margin: 20px 0 10px;
+            padding-left: 10px;
+            border-left: 3px solid var(--info);
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.5;
+            border: 2px solid #444;
+            tab-size: 4;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: var(--secondary);
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .method {
+            color: #dcdcaa;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid var(--info);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .danger-box {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .interactive-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-run {
+            background: var(--success);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid var(--warning);
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 3px solid var(--secondary);
+            }
+        }
+
+        .concept-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .example-box {
+            background: #f0f7ff;
+            border: 2px dashed var(--secondary);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .important-note {
+            background: #fff3e0;
+            border: 2px solid var(--orange);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .important-note::before {
+            content: "⚠️ QUAN TRỌNG";
+            display: block;
+            font-weight: bold;
+            color: var(--orange);
+            margin-bottom: 10px;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 5px 15px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 0 5px;
+        }
+
+        .pill.purple {
+            background: var(--purple);
+        }
+
+        .pill.orange {
+            background: var(--orange);
+        }
+
+        .pill.green {
+            background: var(--green);
+        }
+
+        .pill.red {
+            background: var(--accent);
+        }
+
+        .access-modifier {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin: 0 2px;
+        }
+
+        .public { background: #d4edda; color: #155724; }
+        .private { background: #f8d7da; color: #721c24; }
+        .protected { background: #fff3cd; color: #856404; }
+        .default { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-lock"></i> BUỔI 12: ENCAPSULATION & ACCESS MODIFIERS</h1>
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#encapsulation" class="nav-link active"><i class="fas fa-box"></i> Đóng gói (Encapsulation)</a></li>
+                    <li class="nav-item"><a href="#access-modifiers" class="nav-link"><i class="fas fa-key"></i> Access Modifiers</a></li>
+                    <li class="nav-item"><a href="#comparison" class="nav-link"><i class="fas fa-balance-scale"></i> Bảng so sánh</a></li>
+                    <li class="nav-item"><a href="#getter-setter" class="nav-link"><i class="fas fa-exchange-alt"></i> Getter & Setter</a></li>
+                    <li class="nav-item"><a href="#common-mistakes" class="nav-link"><i class="fas fa-exclamation-triangle"></i> Lỗi thường gặp</a></li>
+                    <li class="nav-item"><a href="#practice" class="nav-link"><i class="fas fa-dumbbell"></i> Bài tập thực hành</a></li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- PHẦN ENCAPSULATION -->
+                <section id="encapsulation" class="section active">
+                    <h2><i class="fas fa-box"></i> 12.1 ĐÓNG GÓI (ENCAPSULATION)</h2>
+
+                    <div class="concept-box">
+                        📌 Đóng gói là kỹ thuật: Gói gọn dữ liệu và phương thức xử lý vào trong một đơn vị duy nhất (class) và ẩn thông tin
+                    </div>
+
+                    <h3><i class="fas fa-question-circle"></i> Khái niệm</h3>
+                    <p><strong>Đóng gói (Encapsulation)</strong> là một trong 4 tính chất cơ bản của OOP, là kỹ thuật:</p>
+                    <ul>
+                        <li>Gói gọn dữ liệu (fields) và phương thức (methods) xử lý dữ liệu đó vào trong một đơn vị duy nhất (class)</li>
+                        <li>Ẩn thông tin (information hiding) bằng cách hạn chế truy cập trực tiếp vào dữ liệu từ bên ngoài</li>
+                        <li>Kiểm soát truy cập thông qua các phương thức công khai (public methods)</li>
+                    </ul>
+
+                    <h3><i class="fas fa-exclamation-triangle"></i> Vì sao cần đóng gói?</h3>
+                    
+                    <h4>1. Bảo vệ dữ liệu</h4>
+                    <p>Ngăn chặn việc gán giá trị không hợp lệ từ bên ngoài.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ không đóng gói</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="keyword">class</span> <span class="class-name">Student</span> {
+    <span class="keyword">public</span> <span class="keyword">int</span> age;  <span class="comment">// Public - ai cũng truy cập được</span>
+}
+
+<span class="comment">// Sử dụng</span>
+<span class="class-name">Student</span> s = <span class="keyword">new</span> <span class="class-name">Student</span>();
+s.age = -<span class="number">10</span>;  <span class="comment">// Tuổi âm? KHÔNG HỢP LỆ!</span></pre>
+                    </div>
+
+                    <h4>2. Tính toàn vẹn dữ liệu</h4>
+                    <p>Đảm bảo dữ liệu luôn ở trạng thái hợp lệ.</p>
+
+                    <h4>3. Dễ bảo trì</h4>
+                    <p>Khi thay đổi cách lưu trữ dữ liệu, chỉ cần thay đổi bên trong class, không ảnh hưởng code bên ngoài.</p>
+
+                    <h4>4. Linh hoạt trong thay đổi</h4>
+                    <p>Có thể thay đổi cách triển khai bên trong mà không làm hỏng code sử dụng class.</p>
+
+                    <div class="important-note">
+                        <h4><i class="fas fa-lightbulb"></i> Nguyên tắc thiết kế chuẩn</h4>
+                        <p>"Ẩn dữ liệu, công khai hành vi"</p>
+                        <ul>
+                            <li>Tất cả thuộc tính (fields) nên là <span class="pill red">private</span></li>
+                            <li>Cung cấp phương thức <span class="pill green">public</span> để truy cập (getter) và thay đổi (setter) dữ liệu</li>
+                            <li>Kiểm tra tính hợp lệ của dữ liệu trong setter</li>
+                            <li>Ẩn chi tiết triển khai, chỉ cho thấy những gì cần thiết</li>
+                        </ul>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm Encapsulation</h4>
+                        <div class="input-group">
+                            <label for="studentAgeInput">Nhập tuổi sinh viên:</label>
+                            <input type="number" id="studentAgeInput" value="-5">
+                        </div>
+                        <button class="btn" onclick="testNoEncapsulation()">
+                            <i class="fas fa-play"></i> Không có Encapsulation
+                        </button>
+                        <button class="btn btn-run" onclick="testWithEncapsulation()">
+                            <i class="fas fa-shield-alt"></i> Có Encapsulation
+                        </button>
+                        <div class="result" id="encapsulationResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="encapsulationResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN ACCESS MODIFIERS -->
+                <section id="access-modifiers" class="section">
+                    <h2><i class="fas fa-key"></i> 12.2 ACCESS MODIFIERS</h2>
+
+                    <div class="concept-box">
+                        Access Modifiers (các từ khóa xác định phạm vi truy cập) trong Java
+                    </div>
+
+                    <h3><i class="fas fa-globe"></i> 1. <span class="public access-modifier">public</span></h3>
+                    <p>Có thể truy cập từ bất kỳ đâu (cùng class, cùng package, khác package, class con)</p>
+                    <p><strong>Sử dụng khi muốn:</strong> method, class, field được truy cập rộng rãi</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ public</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">Student</span> {
+    <span class="keyword">public</span> <span class="keyword">String</span> name;  <span class="comment">// Ai cũng truy cập được</span>
+    
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">display</span>() {
+        System.out.println(name);
+    }
+}</pre>
+                    </div>
+
+                    <h3><i class="fas fa-lock"></i> 2. <span class="private access-modifier">private</span></h3>
+                    <p>Chỉ truy cập được từ bên trong cùng class</p>
+                    <p>Không truy cập được từ class khác, package khác, hay class con</p>
+                    <p><strong>Dùng cho tất cả fields</strong> để đảm bảo đóng gói</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ private</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">Student</span> {
+    <span class="keyword">private</span> <span class="keyword">String</span> name;  <span class="comment">// Chỉ Student mới truy cập được</span>
+    <span class="keyword">private</span> <span class="keyword">int</span> age;
+    
+    <span class="comment">// Chỉ các method trong Student mới truy cập được name, age</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">setName</span>(<span class="keyword">String</span> name) {
+        <span class="keyword">this</span>.name = name;
+    }
+}</pre>
+                    </div>
+
+                    <h3><i class="fas fa-shield-alt"></i> 3. <span class="protected access-modifier">protected</span></h3>
+                    <p>Truy cập được từ:</p>
+                    <ul>
+                        <li>Cùng class</li>
+                        <li>Cùng package</li>
+                        <li>Class con (kế thừa) - kể cả ở package khác</li>
+                    </ul>
+                    <p><strong>Thường dùng cho:</strong> các thuộc tính, phương thức muốn class con có thể truy cập</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ protected</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">Person</span> {
+    <span class="keyword">protected</span> <span class="keyword">String</span> id;  <span class="comment">// Class con có thể truy cập</span>
+}
+
+<span class="keyword">class</span> <span class="class-name">Student</span> <span class="keyword">extends</span> <span class="class-name">Person</span> {
+    <span class="keyword">void</span> <span class="method">display</span>() {
+        System.out.println(id);  <span class="comment">// OK - vì Student là class con</span>
+    }
+}</pre>
+                    </div>
+
+                    <h3><i class="fas fa-box"></i> 4. <span class="default access-modifier">default</span> (không ghi gì)</h3>
+                    <p>Truy cập được từ:</p>
+                    <ul>
+                        <li>Cùng class</li>
+                        <li>Cùng package</li>
+                    </ul>
+                    <p>Không truy cập được từ package khác, kể cả class con ở package khác</p>
+                    <p><strong>Còn gọi là package-private</strong></p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ default</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="keyword">class</span> <span class="class-name">Student</span> {  <span class="comment">// default class - chỉ package này dùng được</span>
+    <span class="keyword">String</span> name;  <span class="comment">// default - chỉ package này truy cập được</span>
+}</pre>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Kiểm tra Access Modifiers</h4>
+                        <div class="input-group">
+                            <label for="modifierType">Chọn Access Modifier:</label>
+                            <select id="modifierType">
+                                <option value="public">public</option>
+                                <option value="private">private</option>
+                                <option value="protected">protected</option>
+                                <option value="default">default</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="testAccessModifier()">
+                            <i class="fas fa-search"></i> Kiểm tra phạm vi
+                        </button>
+                        <div class="result" id="modifierResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="modifierResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN BẢNG SO SÁNH -->
+                <section id="comparison" class="section">
+                    <h2><i class="fas fa-balance-scale"></i> 12.3 PHẠM VI TRUY CẬP (BẢNG SO SÁNH)</h2>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Modifier</th>
+                                    <th>Trong class</th>
+                                    <th>Cùng package</th>
+                                    <th>Khác package</th>
+                                    <th>Class con (kế thừa)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="private access-modifier">private</span></td>
+                                    <td>✅ Có</td>
+                                    <td>❌ Không</td>
+                                    <td>❌ Không</td>
+                                    <td>❌ Không</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="default access-modifier">default</span></td>
+                                    <td>✅ Có</td>
+                                    <td>✅ Có</td>
+                                    <td>❌ Không</td>
+                                    <td>❌ Không*</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="protected access-modifier">protected</span></td>
+                                    <td>✅ Có</td>
+                                    <td>✅ Có</td>
+                                    <td>❌ Không**</td>
+                                    <td>✅ Có</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="public access-modifier">public</span></td>
+                                    <td>✅ Có</td>
+                                    <td>✅ Có</td>
+                                    <td>✅ Có</td>
+                                    <td>✅ Có</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Ghi chú:</h4>
+                        <ul>
+                            <li><strong>*</strong>: Class con trong cùng package thì được, nhưng class con ở package khác thì không</li>
+                            <li><strong>**</strong>: Class con ở package khác thì được truy cập protected, nhưng class không kế thừa thì không</li>
+                        </ul>
+                    </div>
+
+                    <h3><i class="fas fa-code"></i> Ví dụ minh họa</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ đầy đủ về Access Modifiers</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="comment">// File: package1/ClassA.java</span>
+<span class="keyword">package</span> package1;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">ClassA</span> {
+    <span class="keyword">private</span> <span class="keyword">String</span> privateField = <span class="string">"private"</span>;
+    <span class="keyword">String</span> defaultField = <span class="string">"default"</span>;
+    <span class="keyword">protected</span> <span class="keyword">String</span> protectedField = <span class="string">"protected"</span>;
+    <span class="keyword">public</span> <span class="keyword">String</span> publicField = <span class="string">"public"</span>;
+}
+
+<span class="comment">// File: package1/ClassB.java (cùng package)</span>
+<span class="keyword">package</span> package1;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">ClassB</span> {
+    <span class="keyword">void</span> <span class="method">test</span>() {
+        <span class="class-name">ClassA</span> a = <span class="keyword">new</span> <span class="class-name">ClassA</span>();
+        <span class="comment">// a.privateField;  // LỖI - private</span>
+        a.defaultField;      <span class="comment">// OK - cùng package</span>
+        a.protectedField;    <span class="comment">// OK - cùng package</span>
+        a.publicField;       <span class="comment">// OK - public</span>
+    }
+}
+
+<span class="comment">// File: package2/ClassC.java (package khác)</span>
+<span class="keyword">package</span> package2;
+<span class="keyword">import</span> package1.ClassA;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">ClassC</span> {
+    <span class="keyword">void</span> <span class="method">test</span>() {
+        <span class="class-name">ClassA</span> a = <span class="keyword">new</span> <span class="class-name">ClassA</span>();
+        <span class="comment">// a.privateField;    // LỖI</span>
+        <span class="comment">// a.defaultField;    // LỖI - khác package</span>
+        <span class="comment">// a.protectedField;  // LỖI - không kế thừa</span>
+        a.publicField;       <span class="comment">// OK - public</span>
+    }
+}
+
+<span class="comment">// File: package2/ClassD.java (class con ở package khác)</span>
+<span class="keyword">package</span> package2;
+<span class="keyword">import</span> package1.ClassA;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">ClassD</span> <span class="keyword">extends</span> <span class="class-name">ClassA</span> {
+    <span class="keyword">void</span> <span class="method">test</span>() {
+        <span class="comment">// privateField;      // LỖI</span>
+        <span class="comment">// defaultField;      // LỖI - khác package</span>
+        protectedField;      <span class="comment">// OK - class con</span>
+        publicField;         <span class="comment">// OK - public</span>
+    }
+}</pre>
+                    </div>
+                </section>
+
+                <!-- PHẦN GETTER & SETTER -->
+                <section id="getter-setter" class="section">
+                    <h2><i class="fas fa-exchange-alt"></i> 12.4 GETTER & SETTER</h2>
+
+                    <div class="concept-box">
+                        📝 Quy tắc viết getter/setter: Ẩn dữ liệu private, cung cấp phương thức public để truy cập
+                    </div>
+
+                    <h3><i class="fas fa-ruler"></i> Quy tắc viết getter/setter</h3>
+                    
+                    <h4>1. Getter</h4>
+                    <ul>
+                        <li>Là phương thức <span class="public access-modifier">public</span> để lấy giá trị của thuộc tính <span class="private access-modifier">private</span></li>
+                        <li>Tên: <code>get + TênThuộcTính</code> (viết hoa chữ cái đầu)</li>
+                        <li>Không có tham số</li>
+                        <li>Trả về kiểu dữ liệu của thuộc tính</li>
+                    </ul>
+
+                    <h4>2. Setter</h4>
+                    <ul>
+                        <li>Là phương thức <span class="public access-modifier">public</span> để gán giá trị cho thuộc tính <span class="private access-modifier">private</span></li>
+                        <li>Tên: <code>set + TênThuộcTính</code> (viết hoa chữ cái đầu)</li>
+                        <li>Có 1 tham số cùng kiểu với thuộc tính</li>
+                        <li>Không trả về giá trị (void) hoặc có thể trả về this để chain method</li>
+                    </ul>
+
+                    <h4>3. Ví dụ cơ bản</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ cơ bản về Getter/Setter</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">Person</span> {
+    <span class="keyword">private</span> <span class="keyword">String</span> name;
+    <span class="keyword">private</span> <span class="keyword">int</span> age;
+    <span class="keyword">private</span> <span class="keyword">boolean</span> active;
+    
+    <span class="comment">// Getter cho name</span>
+    <span class="keyword">public</span> <span class="keyword">String</span> <span class="method">getName</span>() {
+        <span class="keyword">return</span> name;
+    }
+    
+    <span class="comment">// Setter cho name</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">setName</span>(<span class="keyword">String</span> name) {
+        <span class="keyword">this</span>.name = name;
+    }
+    
+    <span class="comment">// Getter cho age</span>
+    <span class="keyword">public</span> <span class="keyword">int</span> <span class="method">getAge</span>() {
+        <span class="keyword">return</span> age;
+    }
+    
+    <span class="comment">// Setter cho age</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">setAge</span>(<span class="keyword">int</span> age) {
+        <span class="keyword">this</span>.age = age;
+    }
+    
+    <span class="comment">// Getter cho boolean (thường dùng "is" thay vì "get")</span>
+    <span class="keyword">public</span> <span class="keyword">boolean</span> <span class="method">isActive</span>() {
+        <span class="keyword">return</span> active;
+    }
+    
+    <span class="comment">// Setter cho boolean</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">setActive</span>(<span class="keyword">boolean</span> active) {
+        <span class="keyword">this</span>.active = active;
+    }
+}</pre>
+                    </div>
+
+                    <h3><i class="fas fa-shield-alt"></i> Kiểm soát dữ liệu đầu vào trong setter</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Setter với validation</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">Student</span> {
+    <span class="keyword">private</span> <span class="keyword">String</span> name;
+    <span class="keyword">private</span> <span class="keyword">int</span> age;
+    <span class="keyword">private</span> <span class="keyword">double</span> gpa;
+    
+    <span class="comment">// Setter với validation</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">setName</span>(<span class="keyword">String</span> name) {
+        <span class="keyword">if</span> (name == <span class="keyword">null</span> || name.trim().isEmpty()) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="class-name">IllegalArgumentException</span>(<span class="string">"Tên không được để trống"</span>);
+        }
+        <span class="keyword">if</span> (name.length() < <span class="number">2</span> || name.length() > <span class="number">50</span>) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="class-name">IllegalArgumentException</span>(<span class="string">"Tên phải từ 2-50 ký tự"</span>);
+        }
+        <span class="keyword">this</span>.name = name;
+    }
+    
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">setAge</span>(<span class="keyword">int</span> age) {
+        <span class="keyword">if</span> (age < <span class="number">0</span> || age > <span class="number">150</span>) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="class-name">IllegalArgumentException</span>(<span class="string">"Tuổi phải từ 0-150"</span>);
+        }
+        <span class="keyword">this</span>.age = age;
+    }
+    
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">setGpa</span>(<span class="keyword">double</span> gpa) {
+        <span class="keyword">if</span> (gpa < <span class="number">0.0</span> || gpa > <span class="number">4.0</span>) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="class-name">IllegalArgumentException</span>(<span class="string">"GPA phải từ 0.0-4.0"</span>);
+        }
+        <span class="keyword">this</span>.gpa = gpa;
+    }
+    
+    <span class="comment">// Các getter</span>
+    <span class="keyword">public</span> <span class="keyword">String</span> <span class="method">getName</span>() { <span class="keyword">return</span> name; }
+    <span class="keyword">public</span> <span class="keyword">int</span> <span class="method">getAge</span>() { <span class="keyword">return</span> age; }
+    <span class="keyword">public</span> <span class="keyword">double</span> <span class="method">getGpa</span>() { <span class="keyword">return</span> gpa; }
+}</pre>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm Getter/Setter với validation</h4>
+                        <div class="input-group">
+                            <label for="inputName">Nhập tên:</label>
+                            <input type="text" id="inputName" value="A">
+                        </div>
+                        <div class="input-group">
+                            <label for="inputAge">Nhập tuổi:</label>
+                            <input type="number" id="inputAge" value="-5">
+                        </div>
+                        <div class="input-group">
+                            <label for="inputGPA">Nhập GPA:</label>
+                            <input type="number" id="inputGPA" value="5.0" step="0.1">
+                        </div>
+                        <button class="btn" onclick="testValidation()">
+                            <i class="fas fa-check-circle"></i> Kiểm tra validation
+                        </button>
+                        <div class="result" id="validationResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="validationResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN LỖI THƯỜNG GẶP -->
+                <section id="common-mistakes" class="section">
+                    <h2><i class="fas fa-exclamation-triangle"></i> LỖI THƯỜNG GẶP KHI VIẾT GETTER/SETTER</h2>
+
+                    <h3><i class="fas fa-times-circle"></i> 1. Viết không đúng quy ước</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>SAI vs ĐÚNG</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="comment">// SAI</span>
+<span class="keyword">public</span> <span class="keyword">String</span> <span class="method">Name</span>() { <span class="keyword">return</span> name; }  <span class="comment">// Thiếu "get"</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Name</span>(<span class="keyword">String</span> n) { name = n; }  <span class="comment">// Thiếu "set"</span>
+
+<span class="comment">// ĐÚNG</span>
+<span class="keyword">public</span> <span class="keyword">String</span> <span class="method">getName</span>() { <span class="keyword">return</span> name; }
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="method">setName</span>(<span class="keyword">String</span> name) { <span class="keyword">this</span>.name = name; }</pre>
+                    </div>
+
+                    <h3><i class="fas fa-shield-alt"></i> 2. Không kiểm tra dữ liệu trong setter</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>SAI vs ĐÚNG</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="comment">// SAI - Không kiểm tra</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="method">setAge</span>(<span class="keyword">int</span> age) {
+    <span class="keyword">this</span>.age = age;  <span class="comment">// Có thể gán tuổi âm</span>
+}
+
+<span class="comment">// ĐÚNG - Có kiểm tra</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="method">setAge</span>(<span class="keyword">int</span> age) {
+    <span class="keyword">if</span> (age >= <span class="number">0</span>) {
+        <span class="keyword">this</span>.age = age;
+    }
+}</pre>
+                    </div>
+
+                    <h3><i class="fas fa-list"></i> 3. Trả về đối tượng có thể thay đổi trực tiếp</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>SAI vs ĐÚNG</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">Department</span> {
+    <span class="keyword">private</span> <span class="class-name">List</span>&lt;<span class="keyword">String</span>&gt; employees = <span class="keyword">new</span> <span class="class-name">ArrayList</span>&lt;&gt;();
+    
+    <span class="comment">// SAI - Trả về list gốc</span>
+    <span class="keyword">public</span> <span class="class-name">List</span>&lt;<span class="keyword">String</span>&gt; <span class="method">getEmployees</span>() {
+        <span class="keyword">return</span> employees;  <span class="comment">// Người dùng có thể sửa list trực tiếp</span>
+    }
+    
+    <span class="comment">// ĐÚNG - Trả về bản sao</span>
+    <span class="keyword">public</span> <span class="class-name">List</span>&lt;<span class="keyword">String</span>&gt; <span class="method">getEmployees</span>() {
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="class-name">ArrayList</span>&lt;&gt;(employees);  <span class="comment">// An toàn</span>
+    }
+    
+    <span class="comment">// HOẶC - Chỉ cung cấp phương thức an toàn</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">addEmployee</span>(<span class="keyword">String</span> emp) {
+        employees.add(emp);
+    }
+    
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">removeEmployee</span>(<span class="keyword">String</span> emp) {
+        employees.remove(emp);
+    }
+}</pre>
+                    </div>
+
+                    <h3><i class="fas fa-ban"></i> 4. Tạo setter cho thuộc tính không nên thay đổi</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>SAI vs ĐÚNG</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">Account</span> {
+    <span class="keyword">private</span> <span class="keyword">String</span> accountNumber;  <span class="comment">// Số tài khoản KHÔNG thay đổi</span>
+    
+    <span class="comment">// SAI - Không nên có setter</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">setAccountNumber</span>(<span class="keyword">String</span> num) {
+        <span class="keyword">this</span>.accountNumber = num;
+    }
+    
+    <span class="comment">// ĐÚNG - Chỉ có getter</span>
+    <span class="keyword">public</span> <span class="keyword">String</span> <span class="method">getAccountNumber</span>() {
+        <span class="keyword">return</span> accountNumber;
+    }
+    
+    <span class="comment">// Constructor để khởi tạo</span>
+    <span class="keyword">public</span> <span class="class-name">Account</span>(<span class="keyword">String</span> accountNumber) {
+        <span class="keyword">this</span>.accountNumber = accountNumber;
+    }
+}</pre>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-bug"></i> Phát hiện lỗi trong code</h4>
+                        <div class="input-group">
+                            <label for="codeSnippet">Chọn đoạn code có lỗi:</label>
+                            <select id="codeSnippet">
+                                <option value="1">Lỗi 1: Viết sai quy ước getter/setter</option>
+                                <option value="2">Lỗi 2: Không kiểm tra dữ liệu trong setter</option>
+                                <option value="3">Lỗi 3: Trả về đối tượng có thể thay đổi trực tiếp</option>
+                                <option value="4">Lỗi 4: Setter cho thuộc tính không nên thay đổi</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="detectBug()">
+                            <i class="fas fa-search"></i> Phát hiện lỗi
+                        </button>
+                        <div class="result" id="bugResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="bugResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN BÀI TẬP THỰC HÀNH -->
+                <section id="practice" class="section">
+                    <h2><i class="fas fa-dumbbell"></i> BÀI TẬP THỰC HÀNH</h2>
+
+                    <h3><i class="fas fa-laptop-code"></i> Bài tập 1: Tạo class BankAccount</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>BankAccount.java - Yêu cầu</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="comment">// Tạo class BankAccount với các thuộc tính:
+// - accountNumber (String): Số tài khoản (không thay đổi)
+// - ownerName (String): Tên chủ tài khoản
+// - balance (double): Số dư
+// - isActive (boolean): Trạng thái tài khoản
+
+// Yêu cầu:
+// 1. Tất cả thuộc tính phải là private
+// 2. Viết constructor có tham số cho accountNumber, ownerName
+// 3. Viết getter/setter đúng chuẩn
+// 4. Không có setter cho accountNumber
+// 5. Trong setter cho balance: không cho phép số dư âm
+// 6. Phương thức deposit(double amount): gửi tiền (tăng balance)
+// 7. Phương thức withdraw(double amount): rút tiền (giảm balance, kiểm tra đủ tiền)
+// 8. Phương thức displayInfo(): hiển thị thông tin tài khoản</span></pre>
+                    </div>
+
+                    <h3><i class="fas fa-laptop-code"></i> Bài tập 2: Tạo class Product</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Product.java - Yêu cầu</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="comment">// Tạo class Product với các thuộc tính:
+// - id (String): mã sản phẩm (không thay đổi)
+// - name (String): tên sản phẩm
+// - price (double): giá sản phẩm
+// - quantity (int): số lượng tồn kho
+// - category (String): danh mục sản phẩm
+
+// Yêu cầu:
+// 1. Đóng gói tất cả thuộc tính
+// 2. Viết getter/setter đúng chuẩn
+// 3. Validation trong setter:
+//    - name: không rỗng, 2-100 ký tự
+//    - price: > 0
+//    - quantity: >= 0
+//    - category: không rỗng
+// 4. Phương thức calculateTotalValue(): trả về tổng giá trị = price * quantity
+// 5. Phương thức applyDiscount(double percent): giảm giá sản phẩm
+// 6. Phương thức displayInfo(): hiển thị thông tin sản phẩm</span></pre>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-check-circle"></i> Kiểm tra bài tập</h4>
+                        <div class="input-group">
+                            <label for="exerciseChoice">Chọn bài tập:</label>
+                            <select id="exerciseChoice">
+                                <option value="bank">Bài tập 1: BankAccount</option>
+                                <option value="product">Bài tập 2: Product</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="checkExercise()">
+                            <i class="fas fa-check"></i> Kiểm tra giải pháp
+                        </button>
+                        <div class="result" id="exerciseResult">
+                            <strong>Giải pháp mẫu:</strong>
+                            <div class="result-content" id="exerciseResultContent"></div>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <h4><i class="fas fa-trophy"></i> Tóm tắt kiến thức quan trọng</h4>
+                        <ul>
+                            <li>Luôn đặt thuộc tính là <span class="private access-modifier">private</span></li>
+                            <li>Sử dụng <span class="public access-modifier">public</span> getter/setter để truy cập</li>
+                            <li>Kiểm tra dữ liệu trong setter để đảm bảo tính hợp lệ</li>
+                            <li>Không tạo setter cho thuộc tính không nên thay đổi</li>
+                            <li>Trả về bản sao cho các đối tượng có thể thay đổi (List, Array, etc.)</li>
+                            <li>Tuân thủ quy ước đặt tên: getXxx(), setXxx(), isXxx() (cho boolean)</li>
+                        </ul>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>Giáo trình Java - GV: Nguyễn Đình Mạnh</p>
+        </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // Xóa class active từ tất cả các link và section
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    // Thêm class active cho link được click
+                    this.classList.add('active');
+
+                    // Hiển thị section tương ứng
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+                    
+                    // Cuộn lên đầu section
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            });
+        });
+
+        // Hàm copy code
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '✓ Đã copy!';
+                button.style.background = '#27ae60';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                }, 2000);
+            });
+        }
+
+        // Thử nghiệm Encapsulation
+        function testNoEncapsulation() {
+            const age = parseInt(document.getElementById('studentAgeInput').value) || -5;
+
+            const result = document.getElementById('encapsulationResult');
+            const output = document.getElementById('encapsulationResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== KHÔNG CÓ ENCAPSULATION ===\n\n`;
+            outputText += `class Student {\n`;
+            outputText += `    public int age;  // Public field\n`;
+            outputText += `}\n\n`;
+            outputText += `Student s = new Student();\n`;
+            outputText += `s.age = ${age};  // Gán trực tiếp\n\n`;
+            
+            if (age < 0) {
+                outputText += `⚠️ LỖI: Tuổi âm không hợp lệ!\n`;
+                outputText += `Dữ liệu không được bảo vệ.\n`;
+            } else {
+                outputText += `✅ Tuổi hợp lệ: ${age}\n`;
+            }
+
+            output.textContent = outputText;
+        }
+
+        function testWithEncapsulation() {
+            const age = parseInt(document.getElementById('studentAgeInput').value) || -5;
+
+            const result = document.getElementById('encapsulationResult');
+            const output = document.getElementById('encapsulationResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== CÓ ENCAPSULATION ===\n\n`;
+            outputText += `class Student {\n`;
+            outputText += `    private int age;\n\n`;
+            outputText += `    public void setAge(int age) {\n`;
+            outputText += `        if (age >= 0) {\n`;
+            outputText += `            this.age = age;\n`;
+            outputText += `        } else {\n`;
+            outputText += `            System.out.println("Lỗi: Tuổi không hợp lệ!");\n`;
+            outputText += `        }\n`;
+            outputText += `    }\n`;
+            outputText += `}\n\n`;
+            outputText += `Student s = new Student();\n`;
+            outputText += `s.setAge(${age});  // Gán qua setter\n\n`;
+            
+            if (age < 0) {
+                outputText += `✅ Encapsulation đã bảo vệ dữ liệu!\n`;
+                outputText += `Không cho phép gán tuổi âm.\n`;
+                outputText += `Tuổi vẫn giữ giá trị mặc định (0).\n`;
+            } else {
+                outputText += `✅ Tuổi hợp lệ: ${age}\n`;
+                outputText += `Dữ liệu được bảo vệ bởi setter.\n`;
+            }
+
+            output.textContent = outputText;
+        }
+
+        // Kiểm tra Access Modifier
+        function testAccessModifier() {
+            const modifier = document.getElementById('modifierType').value;
+            const result = document.getElementById('modifierResult');
+            const output = document.getElementById('modifierResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== KIỂM TRA ACCESS MODIFIER: ${modifier.toUpperCase()} ===\n\n`;
+            
+            const accessInfo = {
+                'public': {
+                    class: '✅ Có',
+                    samePackage: '✅ Có',
+                    diffPackage: '✅ Có',
+                    subclass: '✅ Có'
+                },
+                'private': {
+                    class: '✅ Có',
+                    samePackage: '❌ Không',
+                    diffPackage: '❌ Không',
+                    subclass: '❌ Không'
+                },
+                'protected': {
+                    class: '✅ Có',
+                    samePackage: '✅ Có',
+                    diffPackage: '❌ Không',
+                    subclass: '✅ Có'
+                },
+                'default': {
+                    class: '✅ Có',
+                    samePackage: '✅ Có',
+                    diffPackage: '❌ Không',
+                    subclass: '❌ Không*'
+                }
+            };
+
+            const info = accessInfo[modifier];
+            
+            outputText += `Phạm vi truy cập:\n`;
+            outputText += `- Trong cùng class: ${info.class}\n`;
+            outputText += `- Cùng package: ${info.samePackage}\n`;
+            outputText += `- Khác package: ${info.diffPackage}\n`;
+            outputText += `- Class con (kế thừa): ${info.subclass}\n\n`;
+            
+            outputText += `Ví dụ:\n`;
+            outputText += `class MyClass {\n`;
+            outputText += `    ${modifier} String field = "value";\n`;
+            outputText += `}\n`;
+
+            output.textContent = outputText;
+        }
+
+        // Kiểm tra validation
+        function testValidation() {
+            const name = document.getElementById('inputName').value || "A";
+            const age = parseInt(document.getElementById('inputAge').value) || -5;
+            const gpa = parseFloat(document.getElementById('inputGPA').value) || 5.0;
+
+            const result = document.getElementById('validationResult');
+            const output = document.getElementById('validationResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== KIỂM TRA VALIDATION TRONG SETTER ===\n\n`;
+            outputText += `Dữ liệu đầu vào:\n`;
+            outputText += `- Tên: "${name}"\n`;
+            outputText += `- Tuổi: ${age}\n`;
+            outputText += `- GPA: ${gpa}\n\n`;
+            outputText += `Kết quả validation:\n`;
+
+            let errors = [];
+
+            // Kiểm tra tên
+            if (!name || name.trim().length === 0) {
+                errors.push("❌ Tên không được để trống");
+            } else if (name.length < 2 || name.length > 50) {
+                errors.push("❌ Tên phải từ 2-50 ký tự");
+            } else {
+                outputText += `✅ Tên hợp lệ\n`;
+            }
+
+            // Kiểm tra tuổi
+            if (age < 0 || age > 150) {
+                errors.push("❌ Tuổi phải từ 0-150");
+            } else {
+                outputText += `✅ Tuổi hợp lệ\n`;
+            }
+
+            // Kiểm tra GPA
+            if (gpa < 0.0 || gpa > 4.0) {
+                errors.push("❌ GPA phải từ 0.0-4.0");
+            } else {
+                outputText += `✅ GPA hợp lệ\n`;
+            }
+
+            if (errors.length > 0) {
+                outputText += `\n⚠️ LỖI VALIDATION:\n`;
+                errors.forEach(error => {
+                    outputText += `${error}\n`;
+                });
+                outputText += `\nSetter sẽ throw IllegalArgumentException!`;
+            } else {
+                outputText += `\n✅ Tất cả dữ liệu hợp lệ!`;
+                outputText += `\nCó thể gán giá trị vào object.`;
+            }
+
+            output.textContent = outputText;
+        }
+
+        // Phát hiện lỗi
+        function detectBug() {
+            const bugType = document.getElementById('codeSnippet').value;
+            const result = document.getElementById('bugResult');
+            const output = document.getElementById('bugResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== PHÁT HIỆN LỖI ===\n\n`;
+
+            switch(bugType) {
+                case '1':
+                    outputText += `LỖI 1: Viết sai quy ước getter/setter\n\n`;
+                    outputText += `Code sai:\n`;
+                    outputText += `public String Name() { return name; }\n`;
+                    outputText += `public void Name(String n) { name = n; }\n\n`;
+                    outputText += `Vấn đề:\n`;
+                    outputText += `- Thiếu "get" trong getter\n`;
+                    outputText += `- Thiếu "set" trong setter\n`;
+                    outputText += `- Không tuân thủ quy ước Java\n\n`;
+                    outputText += `Code đúng:\n`;
+                    outputText += `public String getName() { return name; }\n`;
+                    outputText += `public void setName(String name) { this.name = name; }`;
+                    break;
+                
+                case '2':
+                    outputText += `LỖI 2: Không kiểm tra dữ liệu trong setter\n\n`;
+                    outputText += `Code sai:\n`;
+                    outputText += `public void setAge(int age) {\n`;
+                    outputText += `    this.age = age;  // Có thể gán tuổi âm\n`;
+                    outputText += `}\n\n`;
+                    outputText += `Vấn đề:\n`;
+                    outputText += `- Cho phép gán giá trị không hợp lệ (tuổi âm)\n`;
+                    outputText += `- Vi phạm tính toàn vẹn dữ liệu\n\n`;
+                    outputText += `Code đúng:\n`;
+                    outputText += `public void setAge(int age) {\n`;
+                    outputText += `    if (age >= 0) {\n`;
+                    outputText += `        this.age = age;\n`;
+                    outputText += `    }\n`;
+                    outputText += `}`;
+                    break;
+                
+                case '3':
+                    outputText += `LỖI 3: Trả về đối tượng có thể thay đổi trực tiếp\n\n`;
+                    outputText += `Code sai:\n`;
+                    outputText += `public List<String> getEmployees() {\n`;
+                    outputText += `    return employees;  // Người dùng có thể sửa list\n`;
+                    outputText += `}\n\n`;
+                    outputText += `Vấn đề:\n`;
+                    outputText += `- Người dùng có thể thêm/xóa phần tử trực tiếp\n`;
+                    outputText += `- Vi phạm nguyên tắc đóng gói\n\n`;
+                    outputText += `Code đúng:\n`;
+                    outputText += `public List<String> getEmployees() {\n`;
+                    outputText += `    return new ArrayList<>(employees);  // Trả về bản sao\n`;
+                    outputText += `}\n\n`;
+                    outputText += `HOẶC chỉ cung cấp phương thức an toàn:\n`;
+                    outputText += `public void addEmployee(String emp) {...}\n`;
+                    outputText += `public void removeEmployee(String emp) {...}`;
+                    break;
+                
+                case '4':
+                    outputText += `LỖI 4: Setter cho thuộc tính không nên thay đổi\n\n`;
+                    outputText += `Code sai:\n`;
+                    outputText += `public void setAccountNumber(String num) {\n`;
+                    outputText += `    this.accountNumber = num;  // Số TK không nên thay đổi\n`;
+                    outputText += `}\n\n`;
+                    outputText += `Vấn đề:\n`;
+                    outputText += `- Cho phép thay đổi thông tin cố định\n`;
+                    outputText += `- Có thể gây ra lỗi logic\n\n`;
+                    outputText += `Code đúng:\n`;
+                    outputText += `// Không có setter cho accountNumber\n`;
+                    outputText += `public String getAccountNumber() {\n`;
+                    outputText += `    return accountNumber;\n`;
+                    outputText += `}\n\n`;
+                    outputText += `// Khởi tạo qua constructor\n`;
+                    outputText += `public Account(String accountNumber) {\n`;
+                    outputText += `    this.accountNumber = accountNumber;\n`;
+                    outputText += `}`;
+                    break;
+            }
+
+            output.textContent = outputText;
+        }
+
+        // Kiểm tra bài tập
+        function checkExercise() {
+            const exercise = document.getElementById('exerciseChoice').value;
+            const result = document.getElementById('exerciseResult');
+            const output = document.getElementById('exerciseResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== GIẢI PHÁP MẪU ===\n\n`;
+
+            if (exercise === 'bank') {
+                outputText += `// BankAccount.java\n\n`;
+                outputText += `public class BankAccount {\n`;
+                outputText += `    private String accountNumber;\n`;
+                outputText += `    private String ownerName;\n`;
+                outputText += `    private double balance;\n`;
+                outputText += `    private boolean isActive;\n\n`;
+                outputText += `    // Constructor\n`;
+                outputText += `    public BankAccount(String accountNumber, String ownerName) {\n`;
+                outputText += `        this.accountNumber = accountNumber;\n`;
+                outputText += `        this.ownerName = ownerName;\n`;
+                outputText += `        this.balance = 0.0;\n`;
+                outputText += `        this.isActive = true;\n`;
+                outputText += `    }\n\n`;
+                outputText += `    // Getter/Setter\n`;
+                outputText += `    public String getAccountNumber() { return accountNumber; }\n`;
+                outputText += `    // Không có setter cho accountNumber\n\n`;
+                outputText += `    public String getOwnerName() { return ownerName; }\n`;
+                outputText += `    public void setOwnerName(String ownerName) { this.ownerName = ownerName; }\n\n`;
+                outputText += `    public double getBalance() { return balance; }\n`;
+                outputText += `    public void setBalance(double balance) {\n`;
+                outputText += `        if (balance >= 0) {\n`;
+                outputText += `            this.balance = balance;\n`;
+                outputText += `        }\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public boolean isActive() { return isActive; }\n`;
+                outputText += `    public void setActive(boolean active) { this.isActive = active; }\n\n`;
+                outputText += `    // Phương thức khác\n`;
+                outputText += `    public void deposit(double amount) {\n`;
+                outputText += `        if (amount > 0) {\n`;
+                outputText += `            balance += amount;\n`;
+                outputText += `        }\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public boolean withdraw(double amount) {\n`;
+                outputText += `        if (amount > 0 && amount <= balance) {\n`;
+                outputText += `            balance -= amount;\n`;
+                outputText += `            return true;\n`;
+                outputText += `        }\n`;
+                outputText += `        return false;\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public void displayInfo() {\n`;
+                outputText += `        System.out.println("Số TK: " + accountNumber);\n`;
+                outputText += `        System.out.println("Chủ TK: " + ownerName);\n`;
+                outputText += `        System.out.println("Số dư: " + balance);\n`;
+                outputText += `        System.out.println("Trạng thái: " + (isActive ? "Hoạt động" : "Đã khóa"));\n`;
+                outputText += `    }\n`;
+                outputText += `}`;
+            } else {
+                outputText += `// Product.java\n\n`;
+                outputText += `public class Product {\n`;
+                outputText += `    private String id;\n`;
+                outputText += `    private String name;\n`;
+                outputText += `    private double price;\n`;
+                outputText += `    private int quantity;\n`;
+                outputText += `    private String category;\n\n`;
+                outputText += `    // Constructor\n`;
+                outputText += `    public Product(String id, String name, double price, String category) {\n`;
+                outputText += `        this.id = id;\n`;
+                outputText += `        setName(name);\n`;
+                outputText += `        setPrice(price);\n`;
+                outputText += `        this.quantity = 0;\n`;
+                outputText += `        setCategory(category);\n`;
+                outputText += `    }\n\n`;
+                outputText += `    // Getter/Setter với validation\n`;
+                outputText += `    public String getId() { return id; }\n\n`;
+                outputText += `    public String getName() { return name; }\n`;
+                outputText += `    public void setName(String name) {\n`;
+                outputText += `        if (name == null || name.trim().isEmpty()) {\n`;
+                outputText += `            throw new IllegalArgumentException("Tên không được để trống");\n`;
+                outputText += `        }\n`;
+                outputText += `        if (name.length() < 2 || name.length() > 100) {\n`;
+                outputText += `            throw new IllegalArgumentException("Tên phải từ 2-100 ký tự");\n`;
+                outputText += `        }\n`;
+                outputText += `        this.name = name;\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public double getPrice() { return price; }\n`;
+                outputText += `    public void setPrice(double price) {\n`;
+                outputText += `        if (price <= 0) {\n`;
+                outputText += `            throw new IllegalArgumentException("Giá phải > 0");\n`;
+                outputText += `        }\n`;
+                outputText += `        this.price = price;\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public int getQuantity() { return quantity; }\n`;
+                outputText += `    public void setQuantity(int quantity) {\n`;
+                outputText += `        if (quantity < 0) {\n`;
+                outputText += `            throw new IllegalArgumentException("Số lượng phải >= 0");\n`;
+                outputText += `        }\n`;
+                outputText += `        this.quantity = quantity;\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public String getCategory() { return category; }\n`;
+                outputText += `    public void setCategory(String category) {\n`;
+                outputText += `        if (category == null || category.trim().isEmpty()) {\n`;
+                outputText += `            throw new IllegalArgumentException("Danh mục không được để trống");\n`;
+                outputText += `        }\n`;
+                outputText += `        this.category = category;\n`;
+                outputText += `    }\n\n`;
+                outputText += `    // Phương thức khác\n`;
+                outputText += `    public double calculateTotalValue() {\n`;
+                outputText += `        return price * quantity;\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public void applyDiscount(double percent) {\n`;
+                outputText += `        if (percent > 0 && percent <= 100) {\n`;
+                outputText += `            price = price * (1 - percent/100);\n`;
+                outputText += `        }\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public void displayInfo() {\n`;
+                outputText += `        System.out.println("Mã SP: " + id);\n`;
+                outputText += `        System.out.println("Tên SP: " + name);\n`;
+                outputText += `        System.out.println("Giá: " + price);\n`;
+                outputText += `        System.out.println("Số lượng: " + quantity);\n`;
+                outputText += `        System.out.println("Danh mục: " + category);\n`;
+                outputText += `        System.out.println("Tổng giá trị: " + calculateTotalValue());\n`;
+                outputText += `    }\n`;
+                outputText += `}`;
+            }
+
+            output.textContent = outputText;
+        }
+    </script>
+</body>
+</html>
