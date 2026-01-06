@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUỔI 13: STATIC MEMBERS & OBJECT CLASS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --purple: #9b59b6;
+            --orange: #e67e22;
+            --green: #2ecc71;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "⚡";
+            position: absolute;
+            font-size: 300px;
+            opacity: 0.05;
+            right: -50px;
+            top: -50px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+
+        .intro-box {
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            color: white;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 80vh;
+        }
+
+        .sidebar {
+            background: var(--light);
+            padding: 20px;
+            border-right: 3px solid var(--secondary);
+            position: relative;
+        }
+
+        .nav-list {
+            list-style: none;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h4 {
+            color: var(--info);
+            margin: 20px 0 10px;
+            padding-left: 10px;
+            border-left: 3px solid var(--info);
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.5;
+            border: 2px solid #444;
+            tab-size: 4;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: var(--secondary);
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .method {
+            color: #dcdcaa;
+        }
+
+        .annotation {
+            color: #cc7832;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid var(--info);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .danger-box {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .interactive-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-run {
+            background: var(--success);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid var(--warning);
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 3px solid var(--secondary);
+            }
+        }
+
+        .concept-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .example-box {
+            background: #f0f7ff;
+            border: 2px dashed var(--secondary);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .important-note {
+            background: #fff3e0;
+            border: 2px solid var(--orange);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .important-note::before {
+            content: "⚠️ QUAN TRỌNG";
+            display: block;
+            font-weight: bold;
+            color: var(--orange);
+            margin-bottom: 10px;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 5px 15px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 0 5px;
+        }
+
+        .pill.purple {
+            background: var(--purple);
+        }
+
+        .pill.orange {
+            background: var(--orange);
+        }
+
+        .pill.green {
+            background: var(--green);
+        }
+
+        .pill.red {
+            background: var(--accent);
+        }
+
+        .static-badge {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-bolt"></i> BUỔI 13: STATIC MEMBERS & OBJECT CLASS</h1>
+           
+        </header>
+
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#static-intro" class="nav-link active"><i class="fas fa-question-circle"></i> Static là gì?</a></li>
+                    <li class="nav-item"><a href="#static-variable" class="nav-link"><i class="fas fa-database"></i> Static Variable</a></li>
+                    <li class="nav-item"><a href="#static-method" class="nav-link"><i class="fas fa-cogs"></i> Static Method</a></li>
+                    <li class="nav-item"><a href="#static-block" class="nav-link"><i class="fas fa-code"></i> Static Block</a></li>
+                    <li class="nav-item"><a href="#static-import" class="nav-link"><i class="fas fa-file-import"></i> Static Import</a></li>
+                    <li class="nav-item"><a href="#when-to-use" class="nav-link"><i class="fas fa-balance-scale"></i> Khi nào dùng static?</a></li>
+                    <li class="nav-item"><a href="#object-class" class="nav-link"><i class="fas fa-object-group"></i> Object Class</a></li>
+                    <li class="nav-item"><a href="#equals-vs" class="nav-link"><i class="fas fa-equals"></i> == vs equals()</a></li>
+                    <li class="nav-item"><a href="#exercises" class="nav-link"><i class="fas fa-dumbbell"></i> Bài tập thực hành</a></li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- PHẦN GIỚI THIỆU STATIC -->
+                <section id="static-intro" class="section active">
+                    <h2><i class="fas fa-question-circle"></i> 13.1 Static là gì?</h2>
+
+                    <div class="concept-box">
+                        <span class="static-badge">static</span> là từ khóa trong Java chỉ định rằng một thành phần (biến, phương thức, khối) thuộc về lớp chứ không thuộc về đối tượng
+                    </div>
+
+                    <h3><i class="fas fa-info-circle"></i> Khái niệm cơ bản</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Student.java - Ví dụ cơ bản</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="keyword">class</span> <span class="class-name">Student</span> {
+    <span class="comment">// Instance variables (non-static)</span>
+    <span class="keyword">String</span> name;    <span class="comment">// Mỗi student có tên riêng</span>
+    <span class="keyword">int</span> age;        <span class="comment">// Mỗi student có tuổi riêng</span>
+    
+    <span class="comment">// Static variables</span>
+    <span class="keyword">static</span> <span class="keyword">String</span> schoolName = <span class="string">"Đại học Công nghệ"</span>; <span class="comment">// Tất cả student cùng trường</span>
+    <span class="keyword">static</span> <span class="keyword">int</span> totalStudents = <span class="number">0</span>; <span class="comment">// Đếm tổng số student đã tạo</span>
+}</pre>
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-lightbulb"></i> Đặc điểm chính của static:</h4>
+                        <ul>
+                            <li>Chỉ có một bản sao trong bộ nhớ, dù tạo bao nhiêu đối tượng</li>
+                            <li>Được chia sẻ chung bởi tất cả các đối tượng của lớp</li>
+                            <li>Tồn tại suốt chương trình (từ khi lớp được nạp đến khi kết thúc)</li>
+                            <li>Truy cập trực tiếp thông qua tên lớp mà không cần tạo đối tượng</li>
+                        </ul>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Hiểu về static qua ví dụ</h4>
+                        <div class="input-group">
+                            <label for="numObjects">Số đối tượng muốn tạo:</label>
+                            <input type="number" id="numObjects" value="3" min="1" max="10">
+                        </div>
+                        <button class="btn" onclick="demonstrateStatic()">
+                            <i class="fas fa-play"></i> Chạy ví dụ Counter
+                        </button>
+                        <div class="result" id="staticDemoResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="staticDemoResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN STATIC VARIABLE -->
+                <section id="static-variable" class="section">
+                    <h2><i class="fas fa-database"></i> 1. Static Variable (Biến tĩnh)</h2>
+
+                    <h3><i class="fas fa-code"></i> 1.1 Cú pháp</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp khai báo</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">MyClass</span> {
+    <span class="keyword">static</span> <span class="keyword">int</span> staticVar;  <span class="comment">// Biến tĩnh</span>
+    <span class="keyword">int</span> instanceVar;        <span class="comment">// Biến instance (thông thường)</span>
+}</pre>
+                    </div>
+
+                    <h3><i class="fas fa-play"></i> 1.2 Ví dụ minh họa</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Counter.java - So sánh static vs non-static</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">Counter</span> {
+    <span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">0</span>;  <span class="comment">// Biến tĩnh</span>
+    <span class="keyword">int</span> instanceCount = <span class="number">0</span>;  <span class="comment">// Biến instance</span>
+
+    <span class="keyword">public</span> <span class="class-name">Counter</span>() {
+        count++;          <span class="comment">// Tăng biến tĩnh</span>
+        instanceCount++;  <span class="comment">// Tăng biến instance</span>
+    }
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="class-name">Counter</span> obj1 = <span class="keyword">new</span> <span class="class-name">Counter</span>();
+        System.out.println(<span class="string">"Static count: "</span> + <span class="class-name">Counter</span>.count);      <span class="comment">// 1</span>
+        System.out.println(<span class="string">"Instance count: "</span> + obj1.instanceCount); <span class="comment">// 1</span>
+
+        <span class="class-name">Counter</span> obj2 = <span class="keyword">new</span> <span class="class-name">Counter</span>();
+        System.out.println(<span class="string">"Static count: "</span> + <span class="class-name">Counter</span>.count);      <span class="comment">// 2 (tăng)</span>
+        System.out.println(<span class="string">"Instance count: "</span> + obj2.instanceCount); <span class="comment">// 1 (vẫn là 1)</span>
+    }
+}</pre>
+                    </div>
+
+                    <div class="success-box">
+                        <h4><i class="fas fa-check-circle"></i> Kết quả:</h4>
+                        <pre style="margin: 10px 0; background: white; padding: 10px; border-radius: 5px;">
+Static count: 1
+Instance count: 1
+Static count: 2
+Instance count: 1</pre>
+                        <p><strong>👉 Biến tĩnh count được chia sẻ giữa obj1 và obj2</strong></p>
+                    </div>
+
+                    <h3><i class="fas fa-question"></i> 1.3 Khi nào sử dụng biến tĩnh?</h3>
+                    <ul>
+                        <li>Lưu trữ giá trị chung (ví dụ: số lượng đối tượng được tạo)</li>
+                        <li>Hằng số (kết hợp với final): <code>static final double PI = 3.14159;</code></li>
+                        <li>Chia sẻ dữ liệu giữa các đối tượng (ví dụ: biến đếm, cache, cấu hình)</li>
+                    </ul>
+
+                    <h3><i class="fas fa-exclamation-triangle"></i> 1.4 Lưu ý quan trọng</h3>
+                    <ul>
+                        <li>Không thể truy cập trực tiếp biến tĩnh từ phương thức non-static (trừ khi thông qua đối tượng)</li>
+                        <li>Tránh lạm dụng vì biến tĩnh tồn tại lâu trong bộ nhớ, có thể gây rò rỉ</li>
+                        <li>Không an toàn luồng (non-thread-safe) trong môi trường đa luồng</li>
+                    </ul>
+
+                    <h3><i class="fas fa-balance-scale"></i> 1.5 So sánh biến tĩnh vs biến instance</h3>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Đặc điểm</th>
+                                    <th>Biến tĩnh (static)</th>
+                                    <th>Biến instance (non-static)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Số bản sao</strong></td>
+                                    <td>1 cho cả lớp</td>
+                                    <td>1 cho mỗi đối tượng</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Truy cập</strong></td>
+                                    <td>ClassName.variable</td>
+                                    <td>object.variable</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Bộ nhớ</strong></td>
+                                    <td>Cấp phát khi lớp được nạp</td>
+                                    <td>Cấp phát khi tạo đối tượng</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Phạm vi tồn tại</strong></td>
+                                    <td>Toàn bộ chương trình</td>
+                                    <td>Tồn tại cùng đối tượng</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3><i class="fas fa-building"></i> 1.6 Ví dụ thực tế</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Employee.java - Ứng dụng thực tế</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">Employee</span> {
+    <span class="keyword">static</span> <span class="keyword">String</span> company = <span class="string">"ABC Corp"</span>;  <span class="comment">// Tên công ty chung</span>
+    <span class="keyword">String</span> name;                         <span class="comment">// Tên nhân viên riêng</span>
+
+    <span class="keyword">public</span> <span class="class-name">Employee</span>(<span class="keyword">String</span> name) {
+        <span class="keyword">this</span>.name = name;
+    }
+
+    <span class="keyword">void</span> <span class="method">display</span>() {
+        System.out.println(name + <span class="string">" works at "</span> + company);
+    }
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="class-name">Employee</span> e1 = <span class="keyword">new</span> <span class="class-name">Employee</span>(<span class="string">"Alice"</span>);
+        <span class="class-name">Employee</span> e2 = <span class="keyword">new</span> <span class="class-name">Employee</span>(<span class="string">"Bob"</span>);
+        
+        e1.display();  <span class="comment">// Alice works at ABC Corp</span>
+        e2.display();  <span class="comment">// Bob works at ABC Corp</span>
+        
+        <span class="comment">// Thay đổi biến tĩnh ảnh hưởng đến tất cả</span>
+        <span class="class-name">Employee</span>.company = <span class="string">"XYZ Corp"</span>;
+        e1.display();  <span class="comment">// Alice works at XYZ Corp</span>
+        e2.display();  <span class="comment">// Bob works at XYZ Corp</span>
+    }
+}</pre>
+                    </div>
+                </section>
+
+                <!-- PHẦN STATIC METHOD -->
+                <section id="static-method" class="section">
+                    <h2><i class="fas fa-cogs"></i> 2. Static Method (Phương thức tĩnh)</h2>
+
+                    <div class="concept-box">
+                        Đặc điểm: Thuộc về lớp, không thuộc về đối tượng | Có thể gọi mà không cần tạo đối tượng: ClassName.methodName()
+                    </div>
+
+                    <h3><i class="fas fa-exclamation-circle"></i> Quy tắc sử dụng static method:</h3>
+                    <ul>
+                        <li>Chỉ truy cập được biến static và gọi phương thức static khác</li>
+                        <li>Không thể sử dụng từ khóa <code>this</code></li>
+                        <li>Không thể ghi đè (override)</li>
+                    </ul>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>MathUtils.java - Ví dụ về static method</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">MathUtils</span> {
+    <span class="comment">// Biến static</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> operationCount = <span class="number">0</span>;
+    
+    <span class="comment">// Phương thức static</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="method">add</span>(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {
+        operationCount++;
+        <span class="keyword">return</span> a + b;
+    }
+    
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="method">subtract</span>(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {
+        operationCount++;
+        <span class="keyword">return</span> a - b;
+    }
+    
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="method">getOperationCount</span>() {
+        <span class="keyword">return</span> operationCount;
+    }
+    
+    <span class="comment">// KHÔNG THỂ làm như sau:</span>
+    <span class="comment">// public void instanceMethod() {</span>
+    <span class="comment">//     // Không thể gọi từ static method</span>
+    <span class="comment">// }</span>
+    
+    <span class="comment">// public static void useThis() {</span>
+    <span class="comment">//     System.out.println(this);  // LỖI: không có 'this' trong static</span>
+    <span class="comment">// }</span>
+}
+
+<span class="comment">// Sử dụng</span>
+<span class="keyword">int</span> sum = <span class="class-name">MathUtils</span>.add(<span class="number">5</span>, <span class="number">3</span>);  <span class="comment">// Không cần tạo object</span>
+<span class="keyword">int</span> diff = <span class="class-name">MathUtils</span>.subtract(<span class="number">10</span>, <span class="number">4</span>);
+System.out.println(<span class="string">"Số phép tính: "</span> + <span class="class-name">MathUtils</span>.getOperationCount());</pre>
+                    </div>
+
+                    <h3><i class="fas fa-industry"></i> Factory Pattern với static method</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Car.java - Factory methods</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">Car</span> {
+    <span class="keyword">private</span> <span class="keyword">String</span> brand;
+    <span class="keyword">private</span> <span class="keyword">String</span> model;
+    
+    <span class="comment">// Constructor private</span>
+    <span class="keyword">private</span> <span class="class-name">Car</span>(<span class="keyword">String</span> brand, <span class="keyword">String</span> model) {
+        <span class="keyword">this</span>.brand = brand;
+        <span class="keyword">this</span>.model = model;
+    }
+    
+    <span class="comment">// Factory methods (static)</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class-name">Car</span> <span class="method">createToyota</span>(<span class="keyword">String</span> model) {
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="class-name">Car</span>(<span class="string">"Toyota"</span>, model);
+    }
+    
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class-name">Car</span> <span class="method">createHonda</span>(<span class="keyword">String</span> model) {
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="class-name">Car</span>(<span class="string">"Honda"</span>, model);
+    }
+    
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class-name">Car</span> <span class="method">createBMW</span>(<span class="keyword">String</span> model) {
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="class-name">Car</span>(<span class="string">"BMW"</span>, model);
+    }
+}
+
+<span class="comment">// Sử dụng</span>
+<span class="class-name">Car</span> toyota = <span class="class-name">Car</span>.createToyota(<span class="string">"Camry"</span>);
+<span class="class-name">Car</span> honda = <span class="class-name">Car</span>.createHonda(<span class="string">"Civic"</span>);</pre>
+                    </div>
+                </section>
+
+                <!-- PHẦN STATIC BLOCK -->
+                <section id="static-block" class="section">
+                    <h2><i class="fas fa-code"></i> 3. Static Block (Khối tĩnh)</h2>
+
+                    <div class="concept-box">
+                        Mục đích: Thực thi code khi lớp được tải vào bộ nhớ | Khởi tạo biến static phức tạp | Load cấu hình, tài nguyên
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>DatabaseConfig.java - Ví dụ về static block</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="keyword">import</span> java.util.Properties;
+<span class="keyword">import</span> java.io.FileInputStream;
+<span class="keyword">import</span> java.io.IOException;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">DatabaseConfig</span> {
+    <span class="comment">// Biến static</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class-name">Properties</span> config;
+    
+    <span class="comment">// Static block - chạy khi class được tải</span>
+    <span class="keyword">static</span> {
+        System.out.println(<span class="string">"Đang tải cấu hình database..."</span>);
+        config = <span class="keyword">new</span> <span class="class-name">Properties</span>();
+        
+        <span class="keyword">try</span> {
+            <span class="comment">// Load từ file</span>
+            config.load(<span class="keyword">new</span> <span class="class-name">FileInputStream</span>(<span class="string">"database.properties"</span>));
+            System.out.println(<span class="string">"Đã tải cấu hình thành công"</span>);
+        } <span class="keyword">catch</span> (<span class="class-name">IOException</span> e) {
+            System.out.println(<span class="string">"Không tìm thấy file config, dùng mặc định"</span>);
+            config.setProperty(<span class="string">"url"</span>, <span class="string">"localhost:3306"</span>);
+            config.setProperty(<span class="string">"username"</span>, <span class="string">"root"</span>);
+            config.setProperty(<span class="string">"password"</span>, <span class="string">"123456"</span>);
+        }
+    }
+    
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">String</span> <span class="method">getConfig</span>(<span class="keyword">String</span> key) {
+        <span class="keyword">return</span> config.getProperty(key);
+    }
+}
+
+<span class="comment">// Khi chạy chương trình:</span>
+<span class="comment">// - Khi gọi DatabaseConfig.getConfig() lần đầu</span>
+<span class="comment">// - Class DatabaseConfig được tải</span>
+<span class="comment">// - Static block chạy</span>
+<span class="comment">// - Sau đó mới thực thi getConfig()</span></pre>
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Chú ý:</h4>
+                        <p>Static block được thực thi <strong>chỉ một lần</strong> khi class được tải vào bộ nhớ (JVM). Thứ tự thực thi:</p>
+                        <ol>
+                            <li>Tải class vào memory</li>
+                            <li>Khởi tạo static variables (về 0, null, false)</li>
+                            <li>Thực thi static blocks (theo thứ tự trong code)</li>
+                            <li>Các bước khác của class loading</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- PHẦN STATIC IMPORT -->
+                <section id="static-import" class="section">
+                    <h2><i class="fas fa-file-import"></i> 4. Static Import (Import tĩnh)</h2>
+
+                    <div class="concept-box">
+                        Mục đích: Cho phép sử dụng trực tiếp các thành viên static mà không cần ghi tên class phía trước
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ so sánh có và không có static import</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="comment">// ====== KHÔNG dùng static import ======</span>
+<span class="keyword">double</span> area = <span class="class-name">Math</span>.PI * <span class="class-name">Math</span>.pow(radius, <span class="number">2</span>);
+System.out.println(<span class="string">"Kết quả: "</span> + result);
+
+<span class="comment">// ====== DÙNG static import ======</span>
+<span class="keyword">import</span> <span class="keyword">static</span> java.lang.Math.PI;
+<span class="keyword">import</span> <span class="keyword">static</span> java.lang.Math.pow;
+<span class="keyword">import</span> <span class="keyword">static</span> java.lang.System.out;
+
+<span class="keyword">double</span> area = PI * pow(radius, <span class="number">2</span>);
+out.println(<span class="string">"Kết quả: "</span> + result);  <span class="comment">// Ngắn gọn hơn</span></pre>
+                    </div>
+
+                    <div class="important-note">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Lưu ý khi sử dụng static import:</h4>
+                        <ul>
+                            <li>Chỉ áp dụng cho: static variable, static method, static final (hằng số)</li>
+                            <li>Nên dùng có chừng mực để tránh làm code khó hiểu</li>
+                            <li>Không nên dùng với các method trùng tên từ nhiều class khác nhau</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- PHẦN KHI NÀO DÙNG STATIC -->
+                <section id="when-to-use" class="section">
+                    <h2><i class="fas fa-balance-scale"></i> 13.2 Khi nào dùng / không dùng static</h2>
+
+                    <h3><i class="fas fa-thumbs-up"></i> Ưu điểm của static</h3>
+                    <ul>
+                        <li><strong>Tiết kiệm bộ nhớ:</strong> Chỉ 1 bản sao cho cả lớp</li>
+                        <li><strong>Truy cập nhanh:</strong> Không cần tạo object</li>
+                        <li><strong>Chia sẻ dữ liệu:</strong> Toàn bộ chương trình có thể dùng chung</li>
+                    </ul>
+
+                    <h3><i class="fas fa-thumbs-down"></i> Nhược điểm của static</h3>
+                    <ul>
+                        <li><strong>Khó test:</strong> Không thể mock trong unit test</li>
+                        <li><strong>Gây coupling:</strong> Liên kết chặt với class</li>
+                        <li><strong>Vấn đề đa luồng:</strong> Cần cẩn thận với thread safety</li>
+                    </ul>
+
+                    <h3><i class="fas fa-balance-scale"></i> So sánh static vs non-static</h3>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tiêu chí</th>
+                                    <th>Static</th>
+                                    <th>Non-Static</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Thuộc về</strong></td>
+                                    <td>Lớp</td>
+                                    <td>Đối tượng</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Số bản sao</strong></td>
+                                    <td>1</td>
+                                    <td>Mỗi object 1 bản</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tồn tại</strong></td>
+                                    <td>Khi class được tải</td>
+                                    <td>Khi object được tạo</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Truy cập</strong></td>
+                                    <td>ClassName.member</td>
+                                    <td>object.member</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ghi đè</strong></td>
+                                    <td>Không thể</td>
+                                    <td>Có thể</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Từ khóa this</strong></td>
+                                    <td>Không có</td>
+                                    <td>Có</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3><i class="fas fa-check-circle"></i> Khi nào nên dùng static?</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>✅ NÊN DÙNG static trong các trường hợp sau:</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="comment">// 1. Hằng số</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">double</span> PI = <span class="number">3.14</span>;
+
+<span class="comment">// 2. Utility methods (phương thức tiện ích)</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="method">add</span>(<span class="keyword">int</span> a, <span class="keyword">int</span> b) { <span class="keyword">return</span> a + b; }
+
+<span class="comment">// 3. Factory methods</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="class-name">Car</span> <span class="method">createCar</span>(<span class="keyword">String</span> type) { ... }
+
+<span class="comment">// 4. Singleton pattern</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="class-name">Database</span> <span class="method">getInstance</span>() { ... }</pre>
+                    </div>
+
+                    <h3><i class="fas fa-times-circle"></i> Khi nào KHÔNG nên dùng static?</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>❌ KHÔNG NÊN DÙNG static trong các trường hợp sau:</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="comment">// 1. Trạng thái chia sẻ (dễ gây bug đa luồng)</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="class-name">List</span>&lt;<span class="keyword">String</span>&gt; users = <span class="keyword">new</span> <span class="class-name">ArrayList</span>&lt;&gt;();  <span class="comment">// NGUY HIỂM!</span>
+
+<span class="comment">// 2. Business logic (khó test)</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="method">processOrder</span>(<span class="class-name">Order</span> order) { ... }  <span class="comment">// KHÓ TEST!</span>
+
+<span class="comment">// 3. Khi cần đa hình (không thể override)</span>
+<span class="keyword">class</span> <span class="class-name">Animal</span> {
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="method">makeSound</span>() { ... }  <span class="comment">// KHÔNG thể override</span>
+}</pre>
+                    </div>
+                </section>
+
+                <!-- PHẦN OBJECT CLASS -->
+                <section id="object-class" class="section">
+                    <h2><i class="fas fa-object-group"></i> 13.3 Object Class</h2>
+
+                    <div class="concept-box">
+                        Trong Java, mọi lớp đều kế thừa từ lớp Object. Lớp Object là gốc của tất cả các lớp.
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Mọi class đều extends Object</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="comment">// Mặc định, mọi class đều extends Object</span>
+<span class="keyword">class</span> <span class="class-name">MyClass</span> { 
+    <span class="comment">// Tương đương với: class MyClass extends Object</span>
+}</pre>
+                    </div>
+
+                    <h3><i class="fas fa-font"></i> 1. toString() - Biểu diễn chuỗi</h3>
+                    <p><strong>Mục đích:</strong> Trả về biểu diễn chuỗi của đối tượng.</p>
+                    <p><strong>Mặc định:</strong> getClass().getName() + "@" + Integer.toHexString(hashCode())</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Student.java - So sánh có và không override toString()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">Student</span> {
+    <span class="keyword">private</span> <span class="keyword">String</span> id;
+    <span class="keyword">private</span> <span class="keyword">String</span> name;
+    <span class="keyword">private</span> <span class="keyword">int</span> age;
+    
+    <span class="keyword">public</span> <span class="class-name">Student</span>(<span class="keyword">String</span> id, <span class="keyword">String</span> name, <span class="keyword">int</span> age) {
+        <span class="keyword">this</span>.id = id;
+        <span class="keyword">this</span>.name = name;
+        <span class="keyword">this</span>.age = age;
+    }
+    
+    <span class="comment">// ❌ KHÔNG override toString()</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="class-name">Student</span> s = <span class="keyword">new</span> <span class="class-name">Student</span>(<span class="string">"S001"</span>, <span class="string">"Nguyễn Văn A"</span>, <span class="number">20</span>);
+        System.out.println(s);  <span class="comment">// Student@1b6d3586 - VÔ NGHĨA!</span>
+    }
+    
+    <span class="comment">// ✅ override toString()</span>
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">String</span> <span class="method">toString</span>() {
+        <span class="keyword">return</span> <span class="string">"Student{id='"</span> + id + <span class="string">"', name='"</span> + name + <span class="string">"', age="</span> + age + <span class="string">"}"</span>;
+    }
+    
+    <span class="comment">// Output: Student{id='S001', name='Nguyễn Văn A', age=20}</span>
+}</pre>
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-magic"></i> toString() được tự động gọi khi:</h4>
+<pre><span class="class-name">Student</span> s = <span class="keyword">new</span> <span class="class-name">Student</span>(<span class="string">"S001"</span>, <span class="string">"Nam"</span>, <span class="number">20</span>);
+
+System.out.println(s);                    <span class="comment">// Tự động gọi toString()</span>
+System.out.println(<span class="string">"Student: "</span> + s);      <span class="comment">// Tự động gọi toString()</span>
+<span class="keyword">String</span> info = <span class="string">"Info: "</span> + s;              <span class="comment">// Tự động gọi toString()</span></pre>
+                    </div>
+
+                    <h3><i class="fas fa-equals"></i> 2. equals() - So sánh bằng nhau</h3>
+                    <p><strong>Mục đích:</strong> So sánh hai đối tượng có bằng nhau không.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Vấn đề với toán tử ==</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="class-name">String</span> s1 = <span class="keyword">new</span> <span class="class-name">String</span>(<span class="string">"Hello"</span>);
+<span class="class-name">String</span> s2 = <span class="keyword">new</span> <span class="class-name">String</span>(<span class="string">"Hello"</span>);
+
+System.out.println(s1 == s2);      <span class="comment">// false - so sánh địa chỉ</span>
+System.out.println(s1.equals(s2)); <span class="comment">// true  - so sánh nội dung</span></pre>
+                    </div>
+
+                    <h4>Cách override equals() chuẩn:</h4>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cách override equals() đúng chuẩn</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="keyword">import</span> java.util.Objects;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">Student</span> {
+    <span class="keyword">private</span> <span class="keyword">String</span> studentId;
+    <span class="keyword">private</span> <span class="keyword">String</span> name;
+    <span class="keyword">private</span> <span class="keyword">int</span> age;
+    
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">boolean</span> <span class="method">equals</span>(<span class="class-name">Object</span> obj) {
+        <span class="comment">// 1. Kiểm tra cùng tham chiếu</span>
+        <span class="keyword">if</span> (<span class="keyword">this</span> == obj) <span class="keyword">return</span> <span class="keyword">true</span>;
+        
+        <span class="comment">// 2. Kiểm tra null</span>
+        <span class="keyword">if</span> (obj == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">false</span>;
+        
+        <span class="comment">// 3. Kiểm tra cùng lớp</span>
+        <span class="keyword">if</span> (getClass() != obj.getClass()) <span class="keyword">return</span> <span class="keyword">false</span>;
+        
+        <span class="comment">// 4. Ép kiểu</span>
+        <span class="class-name">Student</span> other = (<span class="class-name">Student</span>) obj;
+        
+        <span class="comment">// 5. So sánh các trường quan trọng</span>
+        <span class="keyword">return</span> <span class="class-name">Objects</span>.equals(studentId, other.studentId);
+    }
+}</pre>
+                    </div>
+                </section>
+
+                <!-- PHẦN SO SÁNH == VÀ EQUALS -->
+                <section id="equals-vs" class="section">
+                    <h2><i class="fas fa-equals"></i> 13.4 So sánh == và equals()</h2>
+
+                    <div class="concept-box">
+                        Hiểu bản chất: == so sánh địa chỉ | equals() so sánh nội dung (có thể override)
+                    </div>
+
+                    <h3><i class="fas fa-balance-scale"></i> Bảng so sánh</h3>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Toán tử/Phương thức</th>
+                                    <th>Primitive types</th>
+                                    <th>Reference types</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>==</strong></td>
+                                    <td>So sánh giá trị</td>
+                                    <td>So sánh địa chỉ bộ nhớ</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>equals()</strong></td>
+                                    <td>Không có</td>
+                                    <td>So sánh nội dung (có thể override)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3><i class="fas fa-code"></i> Ví dụ minh họa</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Các trường hợp so sánh phổ biến</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="comment">// 1. Primitive types - chỉ có ==</span>
+<span class="keyword">int</span> a = <span class="number">5</span>;
+<span class="keyword">int</span> b = <span class="number">5</span>;
+System.out.println(a == b);  <span class="comment">// true</span>
+
+<span class="comment">// 2. Reference types</span>
+<span class="class-name">String</span> s1 = <span class="keyword">new</span> <span class="class-name">String</span>(<span class="string">"Hello"</span>);
+<span class="class-name">String</span> s2 = <span class="keyword">new</span> <span class="class-name">String</span>(<span class="string">"Hello"</span>);
+<span class="class-name">String</span> s3 = s1;
+
+System.out.println(s1 == s2);      <span class="comment">// false - khác object</span>
+System.out.println(s1 == s3);      <span class="comment">// true - cùng object</span>
+System.out.println(s1.equals(s2)); <span class="comment">// true - cùng nội dung</span>
+
+<span class="comment">// 3. String literal pool</span>
+<span class="class-name">String</span> str1 = <span class="string">"Hello"</span>;
+<span class="class-name">String</span> str2 = <span class="string">"Hello"</span>;
+System.out.println(str1 == str2);  <span class="comment">// true! (cùng trong pool)</span>
+
+<span class="comment">// 4. Wrapper classes</span>
+<span class="class-name">Integer</span> i1 = <span class="number">127</span>;
+<span class="class-name">Integer</span> i2 = <span class="number">127</span>;
+System.out.println(i1 == i2);      <span class="comment">// true (cache -128 đến 127)</span>
+
+<span class="class-name">Integer</span> i3 = <span class="number">128</span>;
+<span class="class-name">Integer</span> i4 = <span class="number">128</span>;
+System.out.println(i3 == i4);      <span class="comment">// false! (ngoài cache)</span>
+System.out.println(i3.equals(i4)); <span class="comment">// true</span></pre>
+                    </div>
+
+                    <h3><i class="fas fa-gem"></i> Quy tắc vàng khi so sánh</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Best practices khi so sánh object</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="comment">// 1. Luôn dùng equals() để so sánh nội dung object</span>
+<span class="keyword">if</span> (obj1.equals(obj2)) { ... }
+
+<span class="comment">// 2. Cẩn thận với null</span>
+<span class="class-name">String</span> s1 = <span class="keyword">null</span>;
+<span class="class-name">String</span> s2 = <span class="string">"Hello"</span>;
+
+<span class="comment">// ❌ SAI: s1.equals(s2) - NullPointerException</span>
+<span class="comment">// ✅ ĐÚNG: </span>
+<span class="keyword">if</span> (s1 != <span class="keyword">null</span> && s1.equals(s2)) { ... }
+<span class="comment">// HOẶC:</span>
+<span class="keyword">import</span> java.util.Objects;
+<span class="keyword">if</span> (<span class="class-name">Objects</span>.equals(s1, s2)) { ... }
+
+<span class="comment">// 3. Với enum, có thể dùng == (an toàn, nhanh hơn)</span>
+<span class="keyword">enum</span> <span class="class-name">Status</span> { ACTIVE, INACTIVE }
+<span class="class-name">Status</span> s1 = <span class="class-name">Status</span>.ACTIVE;
+<span class="class-name">Status</span> s2 = <span class="class-name">Status</span>.ACTIVE;
+System.out.println(s1 == s2);      <span class="comment">// true (tốt với enum)</span>
+System.out.println(s1.equals(s2)); <span class="comment">// true (cũng được)</span></pre>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm so sánh == và equals()</h4>
+                        <div class="input-group">
+                            <label for="string1">String 1:</label>
+                            <input type="text" id="string1" value="Hello">
+                        </div>
+                        <div class="input-group">
+                            <label for="string2">String 2:</label>
+                            <input type="text" id="string2" value="Hello">
+                        </div>
+                        <div class="input-group">
+                            <label for="comparisonType">Kiểu tạo String:</label>
+                            <select id="comparisonType">
+                                <option value="new">new String()</option>
+                                <option value="literal">String literal</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="testComparison()">
+                            <i class="fas fa-play"></i> So sánh
+                        </button>
+                        <div class="result" id="comparisonResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="comparisonResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN BÀI TẬP THỰC HÀNH -->
+                <section id="exercises" class="section">
+                    <h2><i class="fas fa-dumbbell"></i> BÀI TẬP THỰC HÀNH</h2>
+
+                    <h3><i class="fas fa-laptop-code"></i> Bài tập 1: Tạo class Bank với static members</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Bank.java - Yêu cầu</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="comment">// Tạo class Bank với các yêu cầu sau:
+// 1. Các thuộc tính:
+//    - bankName (static String): tên ngân hàng (chung cho tất cả)
+//    - totalAccounts (static int): tổng số tài khoản đã tạo
+//    - accountNumber (String): số tài khoản
+//    - balance (double): số dư
+//    - ownerName (String): chủ tài khoản
+
+// 2. Constructor:
+//    - Khởi tạo accountNumber, ownerName, balance
+//    - Tăng totalAccounts lên 1 mỗi khi tạo account mới
+
+// 3. Static methods:
+//    - getBankInfo(): trả về thông tin ngân hàng
+//    - getTotalAccounts(): trả về tổng số tài khoản
+
+// 4. Instance methods:
+//    - deposit(amount): gửi tiền
+//    - withdraw(amount): rút tiền (kiểm tra đủ tiền)
+//    - displayAccountInfo(): hiển thị thông tin tài khoản
+
+// 5. Override toString() và equals()
+//    - equals() so sánh theo accountNumber</span></pre>
+                    </div>
+
+                    <h3><i class="fas fa-laptop-code"></i> Bài tập 2: Tạo class MathOperations</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>MathOperations.java - Yêu cầu</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+<pre><span class="comment">// Tạo class MathOperations với các yêu cầu sau:
+// 1. Chỉ chứa static methods (utility class)
+// 2. Các static final constants:
+//    - PI = 3.141592653589793
+//    - E = 2.718281828459045
+
+// 3. Các static methods:
+//    - add(a, b), subtract(a, b), multiply(a, b), divide(a, b)
+//    - power(base, exponent): tính lũy thừa
+//    - factorial(n): tính giai thừa
+//    - isPrime(n): kiểm tra số nguyên tố
+//    - gcd(a, b): ước chung lớn nhất
+//    - lcm(a, b): bội chung nhỏ nhất
+
+// 4. Static block:
+//    - In ra thông báo "MathOperations class loaded"
+//    - Khởi tạo bất kỳ resource cần thiết
+
+// 5. Main method để test tất cả các phương thức</span></pre>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-check-circle"></i> Kiểm tra giải pháp mẫu</h4>
+                        <div class="input-group">
+                            <label for="exerciseChoice">Chọn bài tập:</label>
+                            <select id="exerciseChoice">
+                                <option value="bank">Bài tập 1: Bank</option>
+                                <option value="math">Bài tập 2: MathOperations</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="showSolution()">
+                            <i class="fas fa-code"></i> Xem giải pháp mẫu
+                        </button>
+                        <div class="result" id="solutionResult">
+                            <strong>Giải pháp mẫu:</strong>
+                            <div class="result-content" id="solutionResultContent"></div>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <h4><i class="fas fa-trophy"></i> Tóm tắt kiến thức quan trọng</h4>
+                        <ul>
+                            <li><strong>Static members</strong> thuộc về lớp, không thuộc về đối tượng</li>
+                            <li>Chỉ có một bản sao static trong bộ nhớ, chia sẻ cho tất cả instances</li>
+                            <li><strong>Static methods</strong> không thể sử dụng <code>this</code> và không thể override</li>
+                            <li><strong>Static block</strong> chạy khi class được tải, dùng để khởi tạo phức tạp</li>
+                            <li>Mọi class đều kế thừa từ <strong>Object class</strong></li>
+                            <li><strong>==</strong> so sánh địa chỉ, <strong>equals()</strong> so sánh nội dung</li>
+                            <li>Luôn override <strong>toString()</strong> và <strong>equals()</strong> cho các class của bạn</li>
+                        </ul>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>Giáo trình Java - GV:Nguyễn Đình Mạnh</p>
+        </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // Xóa class active từ tất cả các link và section
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    // Thêm class active cho link được click
+                    this.classList.add('active');
+
+                    // Hiển thị section tương ứng
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+                    
+                    // Cuộn lên đầu section
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            });
+        });
+
+        // Hàm copy code
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '✓ Đã copy!';
+                button.style.background = '#27ae60';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                }, 2000);
+            });
+        }
+
+        // Demo static variable
+        function demonstrateStatic() {
+            const numObjects = parseInt(document.getElementById('numObjects').value) || 3;
+
+            const result = document.getElementById('staticDemoResult');
+            const output = document.getElementById('staticDemoResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== DEMO STATIC VARIABLE ===\n\n`;
+            outputText += `Tạo ${numObjects} đối tượng Counter:\n\n`;
+
+            // Simulate the Counter class behavior
+            let staticCount = 0;
+            
+            for (let i = 1; i <= numObjects; i++) {
+                staticCount++; // static variable
+                let instanceCount = 1; // instance variable (resets each time)
+                
+                outputText += `Đối tượng ${i}:\n`;
+                outputText += `- Static count: ${staticCount}\n`;
+                outputText += `- Instance count: ${instanceCount}\n\n`;
+            }
+
+            outputText += `👉 KẾT LUẬN:\n`;
+            outputText += `- Static count: TĂNG LIÊN TỤC (chỉ 1 bản trong bộ nhớ)\n`;
+            outputText += `- Instance count: LUÔN BẮT ĐẦU TỪ 1 (mỗi object có bản riêng)\n`;
+            outputText += `- Static variable được CHIA SẺ giữa tất cả objects`;
+
+            output.textContent = outputText;
+        }
+
+        // Test comparison
+        function testComparison() {
+            const str1 = document.getElementById('string1').value || "Hello";
+            const str2 = document.getElementById('string2').value || "Hello";
+            const type = document.getElementById('comparisonType').value;
+
+            const result = document.getElementById('comparisonResult');
+            const output = document.getElementById('comparisonResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== SO SÁNH == VÀ equals() ===\n\n`;
+
+            if (type === 'new') {
+                outputText += `String s1 = new String("${str1}");\n`;
+                outputText += `String s2 = new String("${str2}");\n\n`;
+                
+                outputText += `Kết quả:\n`;
+                outputText += `s1 == s2: ${str1 === str2 ? 'true' : 'false'} (so sánh địa chỉ)\n`;
+                outputText += `s1.equals(s2): ${str1 === str2 ? 'true' : 'false'} (so sánh nội dung)\n\n`;
+                
+                outputText += `📌 GIẢI THÍCH:\n`;
+                outputText += `- new String() luôn tạo object mới ở heap memory\n`;
+                outputText += `- == so sánh địa chỉ → thường là false\n`;
+                outputText += `- equals() so sánh nội dung → true nếu nội dung giống nhau`;
+            } else {
+                outputText += `String s1 = "${str1}";\n`;
+                outputText += `String s2 = "${str2}";\n\n`;
+                
+                outputText += `Kết quả:\n`;
+                outputText += `s1 == s2: ${str1 === str2 ? 'true' : 'false'}\n`;
+                outputText += `s1.equals(s2): ${str1 === str2 ? 'true' : 'false'}\n\n`;
+                
+                outputText += `📌 GIẢI THÍCH:\n`;
+                outputText += `- String literal được lưu trong String Pool\n`;
+                outputText += `- Nếu nội dung giống nhau, chúng trỏ đến cùng 1 object trong Pool\n`;
+                outputText += `- == và equals() đều cho kết quả true`;
+            }
+
+            output.textContent = outputText;
+        }
+
+        // Show solution
+        function showSolution() {
+            const exercise = document.getElementById('exerciseChoice').value;
+            const result = document.getElementById('solutionResult');
+            const output = document.getElementById('solutionResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== GIẢI PHÁP MẪU ===\n\n`;
+
+            if (exercise === 'bank') {
+                outputText += `// Bank.java\n\n`;
+                outputText += `public class Bank {\n`;
+                outputText += `    // Static variables\n`;
+                outputText += `    private static String bankName = "TechBank";\n`;
+                outputText += `    private static int totalAccounts = 0;\n\n`;
+                outputText += `    // Instance variables\n`;
+                outputText += `    private String accountNumber;\n`;
+                outputText += `    private double balance;\n`;
+                outputText += `    private String ownerName;\n\n`;
+                outputText += `    // Constructor\n`;
+                outputText += `    public Bank(String accountNumber, String ownerName, double initialBalance) {\n`;
+                outputText += `        this.accountNumber = accountNumber;\n`;
+                outputText += `        this.ownerName = ownerName;\n`;
+                outputText += `        this.balance = initialBalance;\n`;
+                outputText += `        totalAccounts++; // Tăng biến static\n`;
+                outputText += `    }\n\n`;
+                outputText += `    // Static methods\n`;
+                outputText += `    public static String getBankInfo() {\n`;
+                outputText += `        return bankName + " - Total accounts: " + totalAccounts;\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public static int getTotalAccounts() {\n`;
+                outputText += `        return totalAccounts;\n`;
+                outputText += `    }\n\n`;
+                outputText += `    // Instance methods\n`;
+                outputText += `    public void deposit(double amount) {\n`;
+                outputText += `        if (amount > 0) {\n`;
+                outputText += `            balance += amount;\n`;
+                outputText += `        }\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public boolean withdraw(double amount) {\n`;
+                outputText += `        if (amount > 0 && amount <= balance) {\n`;
+                outputText += `            balance -= amount;\n`;
+                outputText += `            return true;\n`;
+                outputText += `        }\n`;
+                outputText += `        return false;\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public void displayAccountInfo() {\n`;
+                outputText += `        System.out.println("Account: " + accountNumber);\n`;
+                outputText += `        System.out.println("Owner: " + ownerName);\n`;
+                outputText += `        System.out.println("Balance: " + balance);\n`;
+                outputText += `        System.out.println("Bank: " + bankName);\n`;
+                outputText += `    }\n\n`;
+                outputText += `    // Override toString()\n`;
+                outputText += `    @Override\n`;
+                outputText += `    public String toString() {\n`;
+                outputText += `        return "BankAccount[number=" + accountNumber + \n`;
+                outputText += `               ", owner=" + ownerName + \n`;
+                outputText += `               ", balance=" + balance + "]";\n`;
+                outputText += `    }\n\n`;
+                outputText += `    // Override equals()\n`;
+                outputText += `    @Override\n`;
+                outputText += `    public boolean equals(Object obj) {\n`;
+                outputText += `        if (this == obj) return true;\n`;
+                outputText += `        if (obj == null || getClass() != obj.getClass()) return false;\n`;
+                outputText += `        Bank other = (Bank) obj;\n`;
+                outputText += `        return accountNumber.equals(other.accountNumber);\n`;
+                outputText += `    }\n`;
+                outputText += `}\n`;
+            } else {
+                outputText += `// MathOperations.java\n\n`;
+                outputText += `public class MathOperations {\n`;
+                outputText += `    // Static constants\n`;
+                outputText += `    public static final double PI = 3.141592653589793;\n`;
+                outputText += `    public static final double E = 2.718281828459045;\n`;
+                outputText += `    private static int operationCount = 0;\n\n`;
+                outputText += `    // Static block\n`;
+                outputText += `    static {\n`;
+                outputText += `        System.out.println("MathOperations class loaded successfully");\n`;
+                outputText += `        System.out.println("Constants initialized: PI=" + PI + ", E=" + E);\n`;
+                outputText += `    }\n\n`;
+                outputText += `    // Static utility methods\n`;
+                outputText += `    public static double add(double a, double b) {\n`;
+                outputText += `        operationCount++;\n`;
+                outputText += `        return a + b;\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public static double subtract(double a, double b) {\n`;
+                outputText += `        operationCount++;\n`;
+                outputText += `        return a - b;\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public static double multiply(double a, double b) {\n`;
+                outputText += `        operationCount++;\n`;
+                outputText += `        return a * b;\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public static double divide(double a, double b) {\n`;
+                outputText += `        if (b == 0) throw new ArithmeticException("Division by zero");\n`;
+                outputText += `        operationCount++;\n`;
+                outputText += `        return a / b;\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public static double power(double base, double exponent) {\n`;
+                outputText += `        operationCount++;\n`;
+                outputText += `        return Math.pow(base, exponent);\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public static long factorial(int n) {\n`;
+                outputText += `        if (n < 0) throw new IllegalArgumentException("n must be >= 0");\n`;
+                outputText += `        if (n <= 1) return 1;\n`;
+                outputText += `        operationCount++;\n`;
+                outputText += `        long result = 1;\n`;
+                outputText += `        for (int i = 2; i <= n; i++) {\n`;
+                outputText += `            result *= i;\n`;
+                outputText += `        }\n`;
+                outputText += `        return result;\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public static boolean isPrime(int n) {\n`;
+                outputText += `        if (n <= 1) return false;\n`;
+                outputText += `        operationCount++;\n`;
+                outputText += `        for (int i = 2; i <= Math.sqrt(n); i++) {\n`;
+                outputText += `            if (n % i == 0) return false;\n`;
+                outputText += `        }\n`;
+                outputText += `        return true;\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public static int gcd(int a, int b) {\n`;
+                outputText += `        operationCount++;\n`;
+                outputText += `        while (b != 0) {\n`;
+                outputText += `            int temp = b;\n`;
+                outputText += `            b = a % b;\n`;
+                outputText += `            a = temp;\n`;
+                outputText += `        }\n`;
+                outputText += `        return a;\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public static int lcm(int a, int b) {\n`;
+                outputText += `        operationCount++;\n`;
+                outputText += `        return Math.abs(a * b) / gcd(a, b);\n`;
+                outputText += `    }\n\n`;
+                outputText += `    public static int getOperationCount() {\n`;
+                outputText += `        return operationCount;\n`;
+                outputText += `    }\n\n`;
+                outputText += `    // Main method for testing\n`;
+                outputText += `    public static void main(String[] args) {\n`;
+                outputText += `        System.out.println("Testing MathOperations:");\n`;
+                outputText += `        System.out.println("5 + 3 = " + add(5, 3));\n`;
+                outputText += `        System.out.println("Factorial(5) = " + factorial(5));\n`;
+                outputText += `        System.out.println("Is 17 prime? " + isPrime(17));\n`;
+                outputText += `        System.out.println("GCD(48, 18) = " + gcd(48, 18));\n`;
+                outputText += `        System.out.println("LCM(12, 18) = " + lcm(12, 18));\n`;
+                outputText += `        System.out.println("Total operations: " + getOperationCount());\n`;
+                outputText += `    }\n`;
+                outputText += `}\n`;
+            }
+
+            output.textContent = outputText;
+        }
+    </script>
+</body>
+</html>
