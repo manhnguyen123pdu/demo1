@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GIÁO TRÌNH HÀM TRONG JAVA CHO NGƯỜI MỚI BẮT ĐẦU</title>
+    <title>GIÁO TRÌNH phương thức TRONG JAVA CHO NGƯỜI MỚI BẮT ĐẦU</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -44,7 +44,6 @@
         header {
             background: var(--primary);
             color: white;
-            padding: 30px;
             text-align: center;
         }
 
@@ -512,51 +511,51 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-code"></i> GIÁO TRÌNH HÀM TRONG JAVA</h1>
-            <!-- <p class="subtitle">Hướng dẫn toàn diện về hàm trong Java với ví dụ thực tế</p> -->
+            <h1><i class="fas fa-code"></i> PHƯƠNG THỨC TRONG JAVA</h1>
+            <!-- <p class="subtitle">Hướng dẫn toàn diện về phương thức trong Java với ví dụ thực tế</p> -->
         </header>
 
         <div class="content-wrapper">
             <nav class="sidebar">
                 <ul class="nav-list">
-                    <li class="nav-item"><a href="#phan1" class="nav-link active"><i class="fas fa-question-circle"></i> Phần 1: Hàm là gì?</a></li>
-                    <li class="nav-item"><a href="#phan2" class="nav-link"><i class="fas fa-cogs"></i> Phần 2: Cấu trúc hàm</a></li>
-                    <li class="nav-item"><a href="#phan3" class="nav-link"><i class="fas fa-phone"></i> Phần 3: Gọi hàm</a></li>
-                    <li class="nav-item"><a href="#phan4" class="nav-link"><i class="fas fa-th"></i> Phần 4: Loại hàm phổ biến</a></li>
+                    <li class="nav-item"><a href="#phan1" class="nav-link active"><i class="fas fa-question-circle"></i> Phần 1: phương thức là gì?</a></li>
+                    <li class="nav-item"><a href="#phan2" class="nav-link"><i class="fas fa-cogs"></i> Phần 2: Cấu trúc phương thức </a></li>
+                    <li class="nav-item"><a href="#phan3" class="nav-link"><i class="fas fa-phone"></i> Phần 3: Gọi phương thức </a></li>
+                    <li class="nav-item"><a href="#phan4" class="nav-link"><i class="fas fa-th"></i> Phần 4: Loại phương thức phổ biến</a></li>
                     <li class="nav-item"><a href="#phan5" class="nav-link"><i class="fas fa-exchange-alt"></i> Phần 5: Tham số đặc biệt</a></li>
-                    <li class="nav-item"><a href="#phan6" class="nav-link"><i class="fas fa-layer-group"></i> Phần 6: Nạp chồng hàm</a></li>
-                    <li class="nav-item"><a href="#phan7" class="nav-link"><i class="fas fa-infinity"></i> Phần 7: Đệ quy</a></li>
-                    <li class="nav-item"><a href="#phan8" class="nav-link"><i class="fas fa-exclamation-triangle"></i> Phần 8: Lỗi thường gặp</a></li>
-                    <li class="nav-item"><a href="#phan9" class="nav-link"><i class="fas fa-dumbbell"></i> Phần 9: Bài tập thực hành</a></li>
+                    <!-- <li class="nav-item"><a href="#phan6" class="nav-link"><i class="fas fa-layer-group"></i> Phần 6: Nạp chồng phương thức </a></li> -->
+                    <li class="nav-item"><a href="#phan7" class="nav-link"><i class="fas fa-infinity"></i> Phần 6: Đệ quy</a></li>
+                    <li class="nav-item"><a href="#phan8" class="nav-link"><i class="fas fa-exclamation-triangle"></i> Phần 7: Lỗi thường gặp</a></li>
+                    <!-- <li class="nav-item"><a href="#phan9" class="nav-link"><i class="fas fa-dumbbell"></i> Phần 8: Bài tập thực hành</a></li> -->
                     <!-- <li class="nav-item"><a href="#phan10" class="nav-link"><i class="fas fa-project-diagram"></i> Phần 10: Thực hành tổng hợp</a></li> -->
                 </ul>
             </nav>
 
             <main class="main-content">
-                <!-- PHẦN 1: HÀM LÀ GÌ -->
+                <!-- PHẦN 1: phương thức LÀ GÌ -->
                 <section id="phan1" class="section active">
-                    <h2><i class="fas fa-question-circle"></i> PHẦN 1: HÀM LÀ GÌ VÀ TẠI SAO CẦN HÀM?</h2>
+                    <h2><i class="fas fa-question-circle"></i> PHẦN 1: PHƯƠNG THỨC TRONG JAVA LÀ GÌ ?</h2>
                     
                     <div class="info-box">
-                        <h4><i class="fas fa-utensils"></i> 1.1. Hàm (Method) là gì? - Ví dụ đầu bếp</h4>
-                        <p><strong>Không có hàm:</strong> Mỗi lần nấu mì, bạn phải làm từ A-Z: đun nước, cho mì, nêm gia vị...</p>
-                        <p><strong>Có hàm:</strong> Bạn tạo ra "công thức nấu mì" (hàm). Khi cần, chỉ cần gọi "nấu mì" là xong!</p>
+                        <h4><i class="fas fa-utensils"></i> 1.1. phương thức (Method) là gì? - Ví dụ đầu bếp</h4>
+                        <p><strong>Không có phương thức :</strong> Mỗi lần nấu mì, bạn phải làm từ A-Z: đun nước, cho mì, nêm gia vị...</p>
+                        <p><strong>Có phương thức :</strong> Bạn tạo ra "công thức nấu mì" (phương thức ). Khi cần, chỉ cần gọi "nấu mì" là xong!</p>
                     </div>
                     
                     <h4>Trong lập trình:</h4>
                     <ul>
-                        <li>Hàm là một khối lệnh thực hiện một công việc cụ thể</li>
+                        <li>phương thức là một khối lệnh thực hiện một công việc cụ thể</li>
                         <li>Được đặt tên để gọi lại nhiều lần</li>
                     </ul>
                     
-                    <h3>1.2. Tại sao cần hàm?</h3>
+                    <h3>1.2. Tại sao cần phương thức ?</h3>
                     
                     <div class="code-block">
                         <div class="code-header">
                             <span>Ví dụ: Tính tổng 2 số</span>
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                         </div>
-                        <span class="comment">// KHÔNG dùng hàm:</span><br>
+                        <span class="comment">// KHÔNG dùng phương thức :</span><br>
                         <span class="keyword">int</span> a = 5, b = 3;<br>
                         <span class="keyword">int</span> tong1 = a + b;  <span class="comment">// Lần 1</span><br>
                         System.out.println(<span class="string">"Tổng 1: "</span> + tong1);<br>
@@ -565,18 +564,18 @@
                         <span class="keyword">int</span> tong2 = c + d;  <span class="comment">// Lần 2 - phải viết lại phép cộng</span><br>
                         System.out.println(<span class="string">"Tổng 2: "</span> + tong2);<br>
                         <br>
-                        <span class="comment">// DÙNG hàm:</span><br>
+                        <span class="comment">// DÙNG phương thức :</span><br>
                         <span class="keyword">public static int</span> tinhTong(<span class="keyword">int</span> x, <span class="keyword">int</span> y) {<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> x + y;<br>
                         }<br>
                         <br>
                         <span class="comment">// Sử dụng:</span><br>
-                        <span class="keyword">int</span> tong1 = tinhTong(5, 3);    <span class="comment">// Gọi hàm</span><br>
-                        <span class="keyword">int</span> tong2 = tinhTong(10, 7);   <span class="comment">// Gọi lại hàm</span>
+                        <span class="keyword">int</span> tong1 = tinhTong(5, 3);    <span class="comment">// Gọi phương thức </span><br>
+                        <span class="keyword">int</span> tong2 = tinhTong(10, 7);   <span class="comment">// Gọi lại phương thức </span>
                     </div>
                     
                     <div class="success-box">
-                        <h4><i class="fas fa-check-circle"></i> Lợi ích của hàm:</h4>
+                        <h4><i class="fas fa-check-circle"></i> Lợi ích của phương thức :</h4>
                         <ul>
                             <li><strong>Tái sử dụng:</strong> Viết 1 lần, dùng nhiều lần</li>
                             <li><strong>Dễ đọc:</strong> tinhTong(5, 3) dễ hiểu hơn 5 + 3</li>
@@ -586,7 +585,7 @@
                     </div>
                     
                     <div class="interactive-section">
-                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm: So sánh có và không có hàm</h4>
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm: So sánh có và không có phương thức </h4>
                         <button class="btn" onclick="demoTinhTong()">
                             <i class="fas fa-play"></i> Chạy ví dụ tính tổng
                         </button>
@@ -597,15 +596,15 @@
                     </div>
                 </section>
 
-                <!-- PHẦN 2: CẤU TRÚC HÀM -->
+                <!-- PHẦN 2: CẤU TRÚC phương thức -->
                 <section id="phan2" class="section">
-                    <h2><i class="fas fa-cogs"></i> PHẦN 2: CẤU TRÚC CƠ BẢN CỦA HÀM</h2>
+                    <h2><i class="fas fa-cogs"></i> PHẦN 2: CẤU TRÚC CƠ BẢN  </h2>
                     
-                    <h3>2.1. Các phần của một hàm</h3>
+                    <h3>2.1. Các phần của một phương thức </h3>
                     
                     <div class="syntax">
-                        [phạm vi] [từ khóa] kiểu-trả-về tên-hàm([thông số]) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Thân hàm - nơi viết code</span><br>
+                        [phạm vi] [từ khóa] kiểu-trả-về tên-phương thức ([thông số]) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Thân phương thức - nơi viết code</span><br>
                         &nbsp;&nbsp;&nbsp;&nbsp;[lệnh 1]<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;[lệnh 2]<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;...<br>
@@ -627,7 +626,7 @@
                     <h3>2.2. Phân tích chi tiết từng phần</h3>
                     
                     <h4>Phần 1: Phạm vi truy cập (Access Modifier)</h4>
-                    <p>Quyết định ai được phép sử dụng hàm này</p>
+                    <p>Quyết định ai được phép sử dụng phương thức này</p>
                     
                     <div class="code-block">
                         <div class="code-header">
@@ -692,7 +691,7 @@
                     </div>
                     
                     <h4>Phần 2: Từ khóa (Non-access Modifier)</h4>
-                    <p>Bổ sung tính chất đặc biệt cho hàm</p>
+                    <p>Bổ sung tính chất đặc biệt cho phương thức </p>
                     
                     <div class="code-block">
                         <div class="code-header">
@@ -713,7 +712,7 @@
                     </div>
                     
                     <div class="interactive-section">
-                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm: Hàm static vs non-static</h4>
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm: phương thức static vs non-static</h4>
                         <button class="btn" onclick="demoStaticMethod()">
                             <i class="fas fa-play"></i> Chạy ví dụ
                         </button>
@@ -724,11 +723,11 @@
                     </div>
                 </section>
 
-                <!-- PHẦN 3: GỌI HÀM -->
+                <!-- PHẦN 3: GỌI phương thức -->
                 <section id="phan3" class="section">
-                    <h2><i class="fas fa-phone"></i> PHẦN 3: CÁCH GỌI HÀM</h2>
+                    <h2><i class="fas fa-phone"></i> PHẦN 3: CÁCH GỌI  </h2>
                     
-                    <h3>3.1. Gọi hàm trong cùng lớp</h3>
+                    <h3>3.1. Gọi phương thức trong cùng lớp</h3>
                     
                     <div class="code-block">
                         <div class="code-header">
@@ -737,22 +736,22 @@
                         </div>
                         <span class="keyword">public class</span> <span class="class-name">CungLop</span> {<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> hamA() {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Đây là hàm A"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Đây là phương thức A"</span>);<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;}<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> hamB() {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Gọi hàm A từ hàm B</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Gọi phương thức A từ phương thức B</span><br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hamA();  <span class="comment">// Gọi trực tiếp</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Đây là hàm B"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Đây là phương thức B"</span>);<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;}<br>
                         }
                     </div>
                     
-                    <h3>3.2. Gọi hàm từ lớp khác</h3>
+                    <h3>3.2. Gọi phương thức từ lớp khác</h3>
                     
                     <div class="code-block">
                         <div class="code-header">
-                            <span>Gọi hàm từ lớp khác</span>
+                            <span>Gọi phương thức từ lớp khác</span>
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                         </div>
                         <span class="comment">// Lớp Toán Học</span><br>
@@ -765,7 +764,7 @@
                         <span class="comment">// Lớp chính</span><br>
                         <span class="keyword">public class</span> <span class="class-name">Main</span> {<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Gọi hàm non-static từ lớp khác</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Gọi phương thức non-static từ lớp khác</span><br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ToanHoc toan = <span class="keyword">new</span> ToanHoc();  <span class="comment">// 1. Tạo đối tượng</span><br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> ketQuaCong = toan.cong(5, 3);  <span class="comment">// 2. Gọi qua đối tượng</span><br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
@@ -774,11 +773,11 @@
                         }
                     </div>
                     
-                    <h3>3.3. Gọi hàm từ package khác</h3>
+                    <h3>3.3. Gọi phương thức từ package khác</h3>
                     
                     <div class="code-block">
                         <div class="code-header">
-                            <span>Gọi hàm từ package khác</span>
+                            <span>Gọi phương thức từ package khác</span>
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                         </div>
                         <span class="comment">// Package: com.utils</span><br>
@@ -803,7 +802,7 @@
                     </div>
                     
                     <div class="interactive-section">
-                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm gọi hàm</h4>
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm gọi phương thức </h4>
                         <div class="example-nav">
                             <button class="example-btn active" onclick="showCallMethod('sameClass')">Cùng lớp</button>
                             <button class="example-btn" onclick="showCallMethod('diffClass')">Khác lớp</button>
@@ -819,9 +818,9 @@
                     </div>
                 </section>
 
-                <!-- PHẦN 4: LOẠI HÀM PHỔ BIẾN -->
+                <!-- PHẦN 4: LOẠI phương thức PHỔ BIẾN -->
                 <section id="phan4" class="section">
-                    <h2><i class="fas fa-th"></i> PHẦN 4: CÁC LOẠI HÀM PHỔ BIẾN</h2>
+                    <h2><i class="fas fa-th"></i> PHẦN 4: CÁC LOẠI PHỔ BIẾN</h2>
                     
                     <h3>4.1. Getter và Setter</h3>
                     
@@ -849,7 +848,7 @@
                         }
                     </div>
                     
-                    <h3>4.2. Hàm tiện ích (Utility)</h3>
+                    <h3>4.2. phương thức tiện ích (Utility)</h3>
                     
                     <div class="code-block">
                         <div class="code-header">
@@ -857,7 +856,7 @@
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                         </div>
                         <span class="keyword">public class</span> <span class="class-name">TienIchChuoi</span> {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Hàm đếm số từ</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// phương thức đếm số từ</span><br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static int</span> demSoTu(String chuoi) {<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (chuoi == <span class="keyword">null</span> || chuoi.trim().isEmpty()) {<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> 0;<br>
@@ -868,7 +867,7 @@
                         }
                     </div>
                     
-                    <h3>4.3. Hàm kiểm tra (Validation)</h3>
+                    <h3>4.3. phương thức kiểm tra (Validation)</h3>
                     
                     <div class="code-block">
                         <div class="code-header">
@@ -886,11 +885,11 @@
                     </div>
                     
                     <div class="interactive-section">
-                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm các loại hàm</h4>
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm các loại phương thức </h4>
                         <div class="example-nav">
                             <button class="example-btn active" onclick="showFunctionType('getter')">Getter/Setter</button>
-                            <button class="example-btn" onclick="showFunctionType('utility')">Hàm tiện ích</button>
-                            <button class="example-btn" onclick="showFunctionType('validation')">Hàm kiểm tra</button>
+                            <button class="example-btn" onclick="showFunctionType('utility')">phương thức tiện ích</button>
+                            <button class="example-btn" onclick="showFunctionType('validation')">phương thức kiểm tra</button>
                         </div>
                         <button class="btn" onclick="demoFunctionType()">
                             <i class="fas fa-play"></i> Chạy ví dụ
@@ -954,7 +953,7 @@
                                 <tr>
                                     <th>Kiểu dữ liệu</th>
                                     <th>Cách truyền</th>
-                                    <th>Hàm có thay đổi biến gốc?</th>
+                                    <th>phương thức có thay đổi biến gốc?</th>
                                     <th>Ví dụ</th>
                                 </tr>
                             </thead>
@@ -982,12 +981,12 @@
                     </div>
                 </section>
 
-                <!-- PHẦN 6: NẠP CHỒNG HÀM -->
-                <section id="phan6" class="section">
-                    <h2><i class="fas fa-layer-group"></i> PHẦN 6: NẠP CHỒNG HÀM (METHOD OVERLOADING)</h2>
+                <!-- PHẦN 6: NẠP CHỒNG phương thức -->
+                <!-- <section id="phan6" class="section">
+                    <h2><i class="fas fa-layer-group"></i> PHẦN 6: NẠP CHỒNG phương thức (METHOD OVERLOADING)</h2>
                     
                     <h3>6.1. Khái niệm</h3>
-                    <p>Cùng tên hàm, khác tham số</p>
+                    <p>Cùng tên phương thức , khác tham số</p>
                     
                     <div class="code-block">
                         <div class="code-header">
@@ -1030,7 +1029,7 @@
                     </ul>
                     
                     <div class="interactive-section">
-                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm nạp chồng hàm</h4>
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm nạp chồng phương thức </h4>
                         <div class="input-group">
                             <label for="overloadName">Tên:</label>
                             <input type="text" id="overloadName" value="Mai" placeholder="Nhập tên">
@@ -1040,21 +1039,21 @@
                             <input type="number" id="overloadHour" value="15" min="0" max="23">
                         </div>
                         <button class="btn" onclick="demoOverloading()">
-                            <i class="fas fa-play"></i> Gọi hàm nạp chồng
+                            <i class="fas fa-play"></i> Gọi phương thức nạp chồng
                         </button>
                         <div class="result" id="overloadResult">
                             <strong>Kết quả:</strong>
                             <div class="result-content" id="overloadResultContent"></div>
                         </div>
                     </div>
-                </section>
+                </section> -->
 
                 <!-- PHẦN 7: ĐỆ QUY -->
                 <section id="phan7" class="section">
                     <h2><i class="fas fa-infinity"></i> PHẦN 7: ĐỆ QUY (RECURSION)</h2>
                     
-                    <h3>7.1. Khái niệm</h3>
-                    <p>Hàm gọi lại chính nó</p>
+                    <h3>6.1. Khái niệm</h3>
+                    <p>phương thức gọi lại chính nó</p>
                     
                     <div class="code-block">
                         <div class="code-header">
@@ -1074,11 +1073,11 @@
                         }
                     </div>
                     
-                    <h3>7.2. Cấu trúc hàm đệ quy</h3>
-                    <p>Mọi hàm đệ quy đều có:</p>
+                    <h3>6.2. Cấu trúc phương thức đệ quy</h3>
+                    <p>Mọi phương thức đệ quy đều có:</p>
                     <ul>
                         <li><strong>Phần cơ sở:</strong> Điều kiện dừng</li>
-                        <li><strong>Phần đệ quy:</strong> Gọi lại chính hàm</li>
+                        <li><strong>Phần đệ quy:</strong> Gọi lại chính phương thức </li>
                     </ul>
                     
                     <div class="warning-box">
@@ -1113,9 +1112,9 @@
 
                 <!-- PHẦN 8: LỖI THƯỜNG GẶP -->
                 <section id="phan8" class="section">
-                    <h2><i class="fas fa-exclamation-triangle"></i> PHẦN 8: LỖI THƯỜNG GẶP VÀ CÁCH SỬA</h2>
+                    <h2><i class="fas fa-exclamation-triangle"></i> PHẦN 7: LỖI THƯỜNG GẶP VÀ CÁCH SỬA</h2>
                     
-                    <h3>8.1. Lỗi biên dịch</h3>
+                    <h3>7.1. Lỗi biên dịch</h3>
                     
                     <div class="code-block">
                         <div class="code-header">
@@ -1140,7 +1139,7 @@
                         }
                     </div>
                     
-                    <h3>8.2. Lỗi thời gian chạy</h3>
+                    <h3>7.2. Lỗi thời gian chạy</h3>
                     
                     <div class="code-block">
                         <div class="code-header">
@@ -1161,19 +1160,19 @@
                         }
                     </div>
                     
-                    <h3>8.3. Lỗi logic</h3>
+                    <h3>7.3. Lỗi logic</h3>
                     
                     <div class="code-block">
                         <div class="code-header">
                             <span>Lỗi logic thường gặp</span>
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                         </div>
-                        <span class="comment">// Hàm tính trung bình SAI</span><br>
+                        <span class="comment">// phương thức tính trung bình SAI</span><br>
                         <span class="keyword">public double</span> trungBinhSai(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> a + b / 2;  <span class="comment">// SAI: Thiếu ngoặc</span><br>
                         }<br>
                         <br>
-                        <span class="comment">// Hàm tính trung bình ĐÚNG</span><br>
+                        <span class="comment">// phương thức tính trung bình ĐÚNG</span><br>
                         <span class="keyword">public double</span> trungBinhDung(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> (a + b) / 2.0;  <span class="comment">// Dùng 2.0 để ra số thực</span><br>
                         }
@@ -1186,10 +1185,10 @@
                     
                     <div class="info-box">
                         <h4><i class="fas fa-info-circle"></i> Hướng dẫn làm bài tập</h4>
-                        <p>Giải quyết từng bài tập dưới đây để củng cố kiến thức về hàm trong Java.</p>
+                        <p>Giải quyết từng bài tập dưới đây để củng cố kiến thức về phương thức trong Java.</p>
                     </div>
                     
-                    <h3>Bài tập 1: Hàm cơ bản</h3>
+                    <h3>Bài tập 1: phương thức cơ bản</h3>
                     
                     <div class="code-block">
                         <div class="code-header">
@@ -1197,7 +1196,7 @@
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                         </div>
                         <span class="keyword">public class</span> <span class="class-name">BaiTap1</span> {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 1. Viết hàm in bảng cửu chương</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 1. Viết phương thức in bảng cửu chương</span><br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> inBangCuuChuong(<span class="keyword">int</span> n) {<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Bảng cửu chương "</span> + n + <span class="string">":"</span>);<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> i = 1; i <= 10; i++) {<br>
@@ -1205,7 +1204,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;}<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 2. Viết hàm đổi độ C sang độ F</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 2. Viết phương thức đổi độ C sang độ F</span><br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static double</span> doiCSangF(<span class="keyword">double</span> doC) {<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> doC * 1.8 + 32;<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;}<br>
@@ -1231,7 +1230,7 @@
                         </div>
                     </div>
                     
-                    <h3>Bài tập 2: Hàm với mảng</h3>
+                    <h3>Bài tập 2: phương thức với mảng</h3>
                     
                     <div class="code-block">
                         <div class="code-header">
@@ -1239,7 +1238,7 @@
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                         </div>
                         <span class="keyword">public class</span> <span class="class-name">BaiTap2</span> {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 1. Viết hàm tìm giá trị lớn nhất trong mảng</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 1. Viết phương thức tìm giá trị lớn nhất trong mảng</span><br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static int</span> timMax(<span class="keyword">int</span>[] mang) {<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (mang == <span class="keyword">null</span> || mang.length == 0) {<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> -1;<br>
@@ -1301,17 +1300,17 @@
                     </div>
                     
                     <div class="success-box">
-                        <h4><i class="fas fa-check-circle"></i> TỔNG KẾT - 10 điều cần nhớ về hàm trong Java:</h4>
+                        <h4><i class="fas fa-check-circle"></i> TỔNG KẾT - 10 điều cần nhớ về phương thức trong Java:</h4>
                         <ol>
-                            <li><strong>Mỗi hàm làm một việc:</strong> Hàm càng nhỏ, càng dễ hiểu, dễ sửa</li>
+                            <li><strong>Mỗi phương thức làm một việc:</strong> phương thức càng nhỏ, càng dễ hiểu, dễ sửa</li>
                             <li><strong>Đặt tên có ý nghĩa:</strong> tinhDiemTrungBinh() tốt hơn tinh()</li>
                             <li><strong>Hạn chế tham số:</strong> Tối ưu 0-3 tham số, dùng đối tượng nếu nhiều</li>
-                            <li><strong>Tránh side effect:</strong> Hàm không nên thay đổi bất ngờ</li>
+                            <li><strong>Tránh side effect:</strong> phương thức không nên thay đổi bất ngờ</li>
                             <li><strong>Kiểm tra đầu vào:</strong> Luôn kiểm tra null và giá trị hợp lệ</li>
                             <li><strong>Xử lý lỗi:</strong> Dùng return đặc biệt hoặc ném ngoại lệ</li>
-                            <li><strong>Comment rõ ràng:</strong> Giải thích hàm phức tạp, tham số đặc biệt</li>
+                            <li><strong>Comment rõ ràng:</strong> Giải thích phương thức phức tạp, tham số đặc biệt</li>
                             <li><strong>Tránh đệ quy sâu:</strong> Có thể gây StackOverflow</li>
-                            <li><strong>Tái sử dụng:</strong> Nếu code lặp 3 lần, hãy tạo hàm</li>
+                            <li><strong>Tái sử dụng:</strong> Nếu code lặp 3 lần, hãy tạo phương thức </li>
                             <li><strong>Test kỹ:</strong> Test với các trường hợp biên</li>
                         </ol>
                     </div>
@@ -1343,7 +1342,7 @@
         </div>
 
         <footer>
-            <p>Giáo trình Hàm trong Java cho người mới bắt đầu &copy; 2024 | Tổng hợp và biên soạn</p>
+             <p>Giáo trình Java - phương thức trong Java © GV: Nguyễn Đình Mạnh</p>
         </footer>
     </div>
 
@@ -1378,7 +1377,7 @@
             });
         });
         
-        // Hàm copy code
+        // phương thức copy code
         function copyCode(button) {
             const codeBlock = button.parentElement.parentElement;
             const text = codeBlock.innerText;
@@ -1393,14 +1392,14 @@
             });
         }
         
-        // =========== PHẦN 1: HÀM LÀ GÌ ===========
+        // =========== PHẦN 1: phương thức LÀ GÌ ===========
         function demoTinhTong() {
             const result = document.getElementById('demoTongResult');
             const output = document.getElementById('demoTongResultContent');
             
             result.classList.add('active');
             
-            let outputText = '=== KHÔNG DÙNG HÀM ===\n';
+            let outputText = '=== KHÔNG DÙNG phương thức ===\n';
             outputText += 'int a = 5, b = 3;\n';
             outputText += 'int tong1 = a + b;\n';
             outputText += 'System.out.println("Tổng 1: " + tong1);\n\n';
@@ -1413,7 +1412,7 @@
             outputText += 'Tổng 1: 8\n';
             outputText += 'Tổng 2: 17\n\n';
             
-            outputText += '=== DÙNG HÀM ===\n';
+            outputText += '=== DÙNG phương thức ===\n';
             outputText += 'public static int tinhTong(int x, int y) {\n';
             outputText += '    return x + y;\n';
             outputText += '}\n\n';
@@ -1431,32 +1430,32 @@
             output.textContent = outputText;
         }
         
-        // =========== PHẦN 2: CẤU TRÚC HÀM ===========
+        // =========== PHẦN 2: CẤU TRÚC phương thức ===========
         function demoStaticMethod() {
             const result = document.getElementById('staticResult');
             const output = document.getElementById('staticResultContent');
             
             result.classList.add('active');
             
-            let outputText = '=== HÀM STATIC ===\n';
+            let outputText = '=== phương thức STATIC ===\n';
             outputText += 'public class TienIch {\n';
-            outputText += '    // Hàm static\n';
+            outputText += '    // phương thức static\n';
             outputText += '    public static double tinhChuVi(double r) {\n';
             outputText += '        return 2 * Math.PI * r;\n';
             outputText += '    }\n';
             outputText += '    \n';
-            outputText += '    // Hàm non-static\n';
+            outputText += '    // phương thức non-static\n';
             outputText += '    public void gioiThieu() {\n';
             outputText += '        System.out.println("Tôi là tiện ích");\n';
             outputText += '    }\n';
             outputText += '}\n\n';
             
             outputText += '=== CÁCH SỬ DỤNG ===\n';
-            outputText += '// Gọi hàm static KHÔNG cần tạo đối tượng:\n';
+            outputText += '// Gọi phương thức static KHÔNG cần tạo đối tượng:\n';
             outputText += 'double chuVi = TienIch.tinhChuVi(5);\n';
             outputText += 'System.out.println("Chu vi: " + chuVi);\n\n';
             
-            outputText += '// Gọi hàm non-static CẦN tạo đối tượng:\n';
+            outputText += '// Gọi phương thức non-static CẦN tạo đối tượng:\n';
             outputText += 'TienIch util = new TienIch();\n';
             outputText += 'util.gioiThieu();\n\n';
             
@@ -1467,7 +1466,7 @@
             output.textContent = outputText;
         }
         
-        // =========== PHẦN 3: GỌI HÀM ===========
+        // =========== PHẦN 3: GỌI phương thức ===========
         let currentCallMethod = 'sameClass';
         
         function showCallMethod(method) {
@@ -1486,24 +1485,24 @@
             
             switch (currentCallMethod) {
                 case 'sameClass':
-                    outputText = '=== GỌI HÀM TRONG CÙNG LỚP ===\n\n';
+                    outputText = '=== GỌI phương thức TRONG CÙNG LỚP ===\n\n';
                     outputText += 'public class CungLop {\n';
                     outputText += '    public void hamA() {\n';
-                    outputText += '        System.out.println("Hàm A");\n';
+                    outputText += '        System.out.println("phương thức A");\n';
                     outputText += '    }\n';
                     outputText += '    \n';
                     outputText += '    public void hamB() {\n';
                     outputText += '        hamA(); // Gọi trực tiếp\n';
-                    outputText += '        System.out.println("Hàm B");\n';
+                    outputText += '        System.out.println("phương thức B");\n';
                     outputText += '    }\n';
                     outputText += '}\n\n';
                     outputText += 'Kết quả khi gọi hamB():\n';
-                    outputText += 'Hàm A\n';
-                    outputText += 'Hàm B';
+                    outputText += 'phương thức A\n';
+                    outputText += 'phương thức B';
                     break;
                     
                 case 'diffClass':
-                    outputText = '=== GỌI HÀM TỪ LỚP KHÁC ===\n\n';
+                    outputText = '=== GỌI phương thức TỪ LỚP KHÁC ===\n\n';
                     outputText += '// Lớp ToánHọc\n';
                     outputText += 'public class ToanHoc {\n';
                     outputText += '    public int cong(int a, int b) {\n';
@@ -1516,7 +1515,7 @@
                     outputText += '        // 1. Tạo đối tượng\n';
                     outputText += '        ToanHoc toan = new ToanHoc();\n';
                     outputText += '        \n';
-                    outputText += '        // 2. Gọi hàm qua đối tượng\n';
+                    outputText += '        // 2. Gọi phương thức qua đối tượng\n';
                     outputText += '        int ketQua = toan.cong(5, 3);\n';
                     outputText += '        System.out.println("Kết quả: " + ketQua);\n';
                     outputText += '    }\n';
@@ -1525,7 +1524,7 @@
                     break;
                     
                 case 'staticCall':
-                    outputText = '=== GỌI HÀM STATIC ===\n\n';
+                    outputText = '=== GỌI phương thức STATIC ===\n\n';
                     outputText += 'public class TienIch {\n';
                     outputText += '    public static int tinhBinhPhuong(int n) {\n';
                     outputText += '        return n * n;\n';
@@ -1544,7 +1543,7 @@
             output.textContent = outputText;
         }
         
-        // =========== PHẦN 4: LOẠI HÀM PHỔ BIẾN ===========
+        // =========== PHẦN 4: LOẠI phương thức PHỔ BIẾN ===========
         let currentFunctionType = 'getter';
         
         function showFunctionType(type) {
@@ -1587,7 +1586,7 @@
                     break;
                     
                 case 'utility':
-                    outputText = '=== HÀM TIỆN ÍCH ===\n\n';
+                    outputText = '=== phương thức TIỆN ÍCH ===\n\n';
                     outputText += 'public class TienIchChuoi {\n';
                     outputText += '    // Đếm số từ trong chuỗi\n';
                     outputText += '    public static int demSoTu(String chuoi) {\n';
@@ -1606,7 +1605,7 @@
                     break;
                     
                 case 'validation':
-                    outputText = '=== HÀM KIỂM TRA ===\n\n';
+                    outputText = '=== phương thức KIỂM TRA ===\n\n';
                     outputText += 'public class KiemTra {\n';
                     outputText += '    // Kiểm tra email hợp lệ\n';
                     outputText += '    public static boolean laEmailHopLe(String email) {\n';
@@ -1629,7 +1628,7 @@
             output.textContent = outputText;
         }
         
-        // =========== PHẦN 6: NẠP CHỒNG HÀM ===========
+        // =========== PHẦN 6: NẠP CHỒNG phương thức ===========
         function demoOverloading() {
             const name = document.getElementById('overloadName').value || "Mai";
             const hour = parseInt(document.getElementById('overloadHour').value) || 15;
@@ -1639,9 +1638,9 @@
             
             result.classList.add('active');
             
-            let outputText = '=== NẠP CHỒNG HÀM CHAO() ===\n\n';
+            let outputText = '=== NẠP CHỒNG phương thức CHAO() ===\n\n';
             
-            // Mô phỏng các phiên bản hàm chao()
+            // Mô phỏng các phiên bản phương thức chao()
             outputText += '1. chao() -> "Xin chào!"\n';
             outputText += '2. chao("' + name + '") -> "Xin chào ' + name + '!"\n';
             
@@ -1779,7 +1778,7 @@
             
             result.classList.add('active');
             
-            let outputText = '=== BÀI TẬP 1: HÀM CƠ BẢN ===\n\n';
+            let outputText = '=== BÀI TẬP 1: phương thức CƠ BẢN ===\n\n';
             
             // Bảng cửu chương
             outputText += '1. Bảng cửu chương ' + number + ':\n';

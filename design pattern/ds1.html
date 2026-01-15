@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUỔI 17: SINGLETON & FACTORY PATTERN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset và biến */
+        :root {
+            --primary: #2563eb;
+            --secondary: #7c3aed;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f3f4f6;
+            --code-bg: #1e1e1e;
+            --border: #e5e7eb;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        /* Container chính */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--success), var(--warning));
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+        }
+        
+        .header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .badge {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+        
+        /* Layout chính */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        @media (min-width: 992px) {
+            .main-content {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+        
+        /* Card */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-title i {
+            color: var(--secondary);
+        }
+        
+        /* Code block */
+        .code-block {
+            background-color: var(--code-bg);
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.95rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            position: relative;
+            border-left: 4px solid var(--success);
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .code-keyword {
+            color: #ff79c6;
+        }
+        
+        .code-class {
+            color: #8be9fd;
+        }
+        
+        .code-comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+        
+        .code-string {
+            color: #f1fa8c;
+        }
+        
+        .code-method {
+            color: #50fa7b;
+        }
+        
+        /* Comparison */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        @media (min-width: 768px) {
+            .comparison {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .bad-example {
+            border-left: 4px solid var(--danger);
+        }
+        
+        .good-example {
+            border-left: 4px solid var(--success);
+        }
+        
+        .example-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .bad-example .example-title {
+            color: var(--danger);
+        }
+        
+        .good-example .example-title {
+            color: var(--success);
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            color: #6b7280;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .tab:hover {
+            color: var(--primary);
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* List */
+        .list {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .list li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        
+        .list li::before {
+            content: '▸';
+            color: var(--primary);
+            font-weight: bold;
+            position: absolute;
+            left: -1.5rem;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            position: sticky;
+            top: 20px;
+        }
+        
+        .sidebar-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-links {
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--dark);
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+        }
+        
+        .nav-links a.active {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .nav-links i {
+            width: 20px;
+        }
+        
+        /* Table */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .table th {
+            background-color: var(--primary);
+            color: white;
+            text-align: left;
+            padding: 12px 15px;
+            font-weight: 600;
+        }
+        
+        .table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        
+        .table tr:hover {
+            background-color: #f3f4f6;
+        }
+        
+        /* Exercise */
+        .exercise {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        
+        .exercise-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        /* Alert */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .alert-warning {
+            background-color: #fffbeb;
+            border-left: 4px solid var(--warning);
+            color: #92400e;
+        }
+        
+        .alert-success {
+            background-color: #ecfdf5;
+            border-left: 4px solid var(--success);
+            color: #065f46;
+        }
+        
+        .alert-info {
+            background-color: #eff6ff;
+            border-left: 4px solid var(--primary);
+            color: #1e40af;
+        }
+        
+        /* Progress bar */
+        .progress-container {
+            margin: 2rem 0;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+            width: 0;
+            transition: width 1.5s ease-in-out;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border);
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .card {
+                padding: 1rem;
+            }
+            
+            .code-block {
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1><i class="fas fa-cubes"></i> BUỔI 17: SINGLETON & FACTORY PATTERN</h1>
+            <p class="subtitle">Hướng dẫn chi tiết về Design Patterns với ví dụ thực tế và code minh họa</p>
+            <div>
+                <span class="badge"><i class="fas fa-clock"></i> Thời lượng: 45 phút</span>
+                <span class="badge"><i class="fas fa-signal"></i> Cấp độ: Cơ bản</span>
+                <span class="badge"><i class="fas fa-code"></i> Ngôn ngữ: Java</span>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <!-- Nội dung chính -->
+            <main>
+                <!-- Tabs navigation -->
+                <div class="tabs">
+                    <button class="tab active" data-tab="overview"><i class="fas fa-book-open"></i> Tổng quan</button>
+                    <button class="tab" data-tab="singleton"><i class="fas fa-lock"></i> Singleton Pattern</button>
+                    <button class="tab" data-tab="factory"><i class="fas fa-industry"></i> Factory Pattern</button>
+                    <button class="tab" data-tab="exercises"><i class="fas fa-pencil-alt"></i> Bài tập</button>
+                    <button class="tab" data-tab="summary"><i class="fas fa-star"></i> Tổng kết</button>
+                </div>
+                
+                <!-- Tab 1: Tổng quan -->
+                <div class="tab-content active" id="overview">
+                    <div class="card">
+                        <h2 class="card-title"><i class="fas fa-puzzle-piece"></i> Design Patterns là gì?</h2>
+                        <p>Design Pattern giống như <strong>"công thức nấu ăn"</strong> trong lập trình - giải pháp đã được kiểm chứng cho các vấn đề thường gặp trong thiết kế phần mềm.</p>
+                        
+                        <div class="comparison">
+                            <div class="card bad-example">
+                                <div class="example-title">
+                                    <i class="fas fa-times-circle"></i> KHÔNG dùng Design Pattern
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">BadExample.java</div>
+                                    <pre><span class="code-keyword">public class</span> <span class="code-class">BadCode</span> {
+    <span class="code-comment">// Code lộn xộn, khó hiểu, khó bảo trì</span>
+    <span class="code-comment">// Mỗi lần sửa phải thay đổi nhiều nơi</span>
+    <span class="code-comment">// Khó tái sử dụng và mở rộng</span>
+}</pre>
+                                </div>
+                            </div>
+                            
+                            <div class="card good-example">
+                                <div class="example-title">
+                                    <i class="fas fa-check-circle"></i> DÙNG Design Pattern
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">GoodExample.java</div>
+<pre><span class="code-keyword">public class</span> <span class="code-class">GoodCode</span> {
+    <span class="code-comment">// Code rõ ràng, dễ đọc, dễ bảo trì</span>
+    <span class="code-comment">// Tuân theo nguyên tắc SOLID</span>
+    <span class="code-comment">// Dễ dàng mở rộng và tái sử dụng</span>
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>Ví dụ đơn giản:</strong>
+                                <ul class="list" style="margin-top: 8px; margin-left: 0;">
+                                    <li>Bạn muốn tạo <strong>1 đối tượng duy nhất</strong> → Dùng <strong>Singleton Pattern</strong></li>
+                                    <li>Bạn muốn tạo <strong>nhiều loại đối tượng khác nhau</strong> → Dùng <strong>Factory Pattern</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h2 class="card-title"><i class="fas fa-question-circle"></i> Tại sao cần Design Patterns?</h2>
+                        <p>Design Patterns giúp giải quyết các vấn đề thường gặp trong lập trình một cách hiệu quả và tối ưu.</p>
+                        
+                        <div class="comparison">
+                            <div class="card bad-example">
+                                <div class="example-title">
+                                    <i class="fas fa-times-circle"></i> Code không dùng Design Pattern
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">PaymentWithoutPattern.java</div>
+<pre><span class="code-keyword">public class</span> <span class="code-class">Payment</span> {
+    <span class="code-keyword">public void</span> <span class="code-method">process</span>(String type) {
+        <span class="code-keyword">if</span> (type.<span class="code-method">equals</span>(<span class="code-string">"cash"</span>)) {
+            System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"Xử lý tiền mặt"</span>);
+            <span class="code-comment">// 50 dòng code xử lý tiền mặt</span>
+        } <span class="code-keyword">else if</span> (type.<span class="code-method">equals</span>(<span class="code-string">"credit"</span>)) {
+            System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"Xử lý thẻ tín dụng"</span>);
+            <span class="code-comment">// 50 dòng code xử lý thẻ</span>
+        } <span class="code-keyword">else if</span> (type.<span class="code-method">equals</span>(<span class="code-string">"bank"</span>)) {
+            System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"Xử lý chuyển khoản"</span>);
+            <span class="code-comment">// 50 dòng code xử lý chuyển khoản</span>
+        }
+        <span class="code-comment">// Thêm phương thức mới? Phải sửa code cũ!</span>
+    }
+}</pre>
+                                </div>
+                            </div>
+                            
+                            <div class="card good-example">
+                                <div class="example-title">
+                                    <i class="fas fa-check-circle"></i> Code dùng Design Pattern
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">PaymentWithPattern.java</div>
+<pre><span class="code-keyword">public class</span> <span class="code-class">Payment</span> {
+    <span class="code-keyword">public void</span> <span class="code-method">process</span>(PaymentMethod method) {
+        method.<span class="code-method">process</span>(); <span class="code-comment">// Chỉ 1 dòng!</span>
+    }
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab 2: Singleton Pattern -->
+                <div class="tab-content" id="singleton">
+                    <div class="card">
+                        <h2 class="card-title"><i class="fas fa-lock"></i> Singleton Pattern - Đối tượng duy nhất</h2>
+                        <p>Singleton đảm bảo một lớp chỉ có <strong>một instance duy nhất</strong> và cung cấp một điểm truy cập toàn cục đến instance đó.</p>
+                        
+                        <div class="alert alert-warning">
+                            <i class="fas fa-print"></i>
+                            <div>
+                                <strong>Ví dụ thực tế:</strong> Máy in trong văn phòng
+                                <ul class="list" style="margin-top: 8px; margin-left: 0;">
+                                    <li><strong>❌ KHÔNG NÊN:</strong> Mỗi người mang 1 máy in riêng → Tốn tiền, rối loạn</li>
+                                    <li><strong>✅ NÊN:</strong> Chỉ 1 máy in chung, ai cũng dùng chung máy đó</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h2 class="card-title"><i class="fas fa-code"></i> Triển khai Singleton từng bước</h2>
+                        
+                        <div class="tabs">
+                            <button class="tab active" data-subtab="singleton1">Bước 1: Cơ bản</button>
+                            <button class="tab" data-subtab="singleton2">Bước 2: Sử dụng</button>
+                            <button class="tab" data-subtab="singleton3">Bước 3: Dữ liệu chung</button>
+                        </div>
+                        
+                        <div class="tab-content active" id="singleton1">
+                            <h3 style="margin: 1rem 0;">Singleton cơ bản nhất</h3>
+                            <div class="code-block">
+                                <div class="code-header">DatabaseConnection.java</div>
+<pre><span class="code-keyword">public class</span> <span class="code-class">DatabaseConnection</span> {
+    <span class="code-comment">// Bước 1: Tạo biến static để lưu instance duy nhất</span>
+    <span class="code-keyword">private static</span> <span class="code-class">DatabaseConnection</span> instance;
+    
+    <span class="code-comment">// Bước 2: Constructor PRIVATE - không cho tạo từ bên ngoài</span>
+    <span class="code-keyword">private</span> <span class="code-class">DatabaseConnection</span>() {
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"✅ Đã tạo kết nối Database"</span>);
+    }
+    
+    <span class="code-comment">// Bước 3: Phương thức public để lấy instance</span>
+    <span class="code-keyword">public static</span> <span class="code-class">DatabaseConnection</span> <span class="code-method">getInstance</span>() {
+        <span class="code-keyword">if</span> (instance == <span class="code-keyword">null</span>) {
+            instance = <span class="code-keyword">new</span> <span class="code-class">DatabaseConnection</span>();
+        }
+        <span class="code-keyword">return</span> instance;
+    }
+    
+    <span class="code-comment">// Các phương thức khác</span>
+    <span class="code-keyword">public void</span> <span class="code-method">query</span>(String sql) {
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"Thực thi: "</span> + sql);
+    }
+}</pre>
+                                <button class="copy-btn"><i class="fas fa-copy"></i> Copy code</button>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="singleton2">
+                            <h3 style="margin: 1rem 0;">Sử dụng Singleton</h3>
+                            <div class="code-block">
+                                <div class="code-header">Main.java</div>
+<pre><span class="code-keyword">public class</span> <span class="code-class">Main</span> {
+    <span class="code-keyword">public static void</span> <span class="code-method">main</span>(String[] args) {
+        <span class="code-comment">// ❌ KHÔNG THỂ làm thế này:</span>
+        <span class="code-comment">// DatabaseConnection conn = new DatabaseConnection();</span>
+        
+        <span class="code-comment">// ✅ PHẢI làm thế này:</span>
+        <span class="code-class">DatabaseConnection</span> conn1 = <span class="code-class">DatabaseConnection</span>.<span class="code-method">getInstance</span>();
+        <span class="code-class">DatabaseConnection</span> conn2 = <span class="code-class">DatabaseConnection</span>.<span class="code-method">getInstance</span>();
+        <span class="code-class">DatabaseConnection</span> conn3 = <span class="code-class">DatabaseConnection</span>.<span class="code-method">getInstance</span>();
+        
+        conn1.<span class="code-method">query</span>(<span class="code-string">"SELECT * FROM users"</span>);
+        
+        <span class="code-comment">// Kiểm tra xem có thực sự là 1 instance không</span>
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"conn1 == conn2? "</span> + (conn1 == conn2)); <span class="code-comment">// true</span>
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"conn1 == conn3? "</span> + (conn1 == conn3)); <span class="code-comment">// true</span>
+        
+        <span class="code-comment">// In ra: "✅ Đã tạo kết nối Database" CHỈ 1 LẦN!</span>
+    }
+}</pre>
+                                <button class="copy-btn"><i class="fas fa-copy"></i> Copy code</button>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="singleton3">
+                            <h3 style="margin: 1rem 0;">Singleton với dữ liệu chung</h3>
+                            <div class="code-block">
+                                <div class="code-header">AppConfig.java</div>
+<pre><span class="code-keyword">public class</span> <span class="code-class">AppConfig</span> {
+    <span class="code-keyword">private static</span> <span class="code-class">AppConfig</span> instance;
+    <span class="code-keyword">private</span> String appName;
+    <span class="code-keyword">private</span> String version;
+    
+    <span class="code-keyword">private</span> <span class="code-class">AppConfig</span>() {
+        <span class="code-comment">// Đọc config từ file</span>
+        <span class="code-keyword">this</span>.appName = <span class="code-string">"MyApp"</span>;
+        <span class="code-keyword">this</span>.version = <span class="code-string">"1.0.0"</span>;
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"📁 Đã đọc cấu hình từ file config.properties"</span>);
+    }
+    
+    <span class="code-keyword">public static</span> <span class="code-class">AppConfig</span> <span class="code-method">getInstance</span>() {
+        <span class="code-keyword">if</span> (instance == <span class="code-keyword">null</span>) {
+            instance = <span class="code-keyword">new</span> <span class="code-class">AppConfig</span>();
+        }
+        <span class="code-keyword">return</span> instance;
+    }
+    
+    <span class="code-comment">// Getter cho dữ liệu chung</span>
+    <span class="code-keyword">public</span> String <span class="code-method">getAppName</span>() { <span class="code-keyword">return</span> appName; }
+    <span class="code-keyword">public</span> String <span class="code-method">getVersion</span>() { <span class="code-keyword">return</span> version; }
+    
+    <span class="code-comment">// Setter (nếu cần)</span>
+    <span class="code-keyword">public void</span> <span class="code-method">setVersion</span>(String version) { 
+        <span class="code-keyword">this</span>.version = version; 
+    }
+}
+
+<span class="code-comment">// Sử dụng:</span>
+<span class="code-keyword">public class</span> <span class="code-class">Main</span> {
+    <span class="code-keyword">public static void</span> <span class="code-method">main</span>(String[] args) {
+        <span class="code-comment">// Lấy cấu hình từ nhiều nơi</span>
+        <span class="code-class">AppConfig</span> config1 = <span class="code-class">AppConfig</span>.<span class="code-method">getInstance</span>();
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(config1.<span class="code-method">getAppName</span>()); <span class="code-comment">// MyApp</span>
+        
+        <span class="code-class">AppConfig</span> config2 = <span class="code-class">AppConfig</span>.<span class="code-method">getInstance</span>();
+        config2.<span class="code-method">setVersion</span>(<span class="code-string">"2.0.0"</span>);
+        
+        <span class="code-comment">// Cả 2 đều thấy version mới</span>
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(config1.<span class="code-method">getVersion</span>()); <span class="code-comment">// 2.0.0</span>
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(config2.<span class="code-method">getVersion</span>()); <span class="code-comment">// 2.0.0</span>
+    }
+}</pre>
+                                <button class="copy-btn"><i class="fas fa-copy"></i> Copy code</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h2 class="card-title"><i class="fas fa-check-circle"></i> Khi nào dùng Singleton?</h2>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-thumbs-up"></i> NÊN Dùng</th>
+                                    <th><i class="fas fa-thumbs-down"></i> KHÔNG NÊN Dùng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Kết nối Database</td>
+                                    <td>Đối tượng thường xuyên thay đổi</td>
+                                </tr>
+                                <tr>
+                                    <td>Logger ghi log</td>
+                                    <td>Đối tượng có trạng thái phức tạp</td>
+                                </tr>
+                                <tr>
+                                    <td>Quản lý Cache</td>
+                                    <td>Khi cần nhiều instance khác nhau</td>
+                                </tr>
+                                <tr>
+                                    <td>Configuration</td>
+                                    <td>Khi dữ liệu không cần chia sẻ</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Tab 3: Factory Pattern -->
+                <div class="tab-content" id="factory">
+                    <div class="card">
+                        <h2 class="card-title"><i class="fas fa-industry"></i> Factory Pattern - Nhà máy đối tượng</h2>
+                        <p>Factory Pattern cung cấp một interface để tạo các đối tượng trong một lớp cha, nhưng cho phép các lớp con thay đổi loại đối tượng sẽ được tạo.</p>
+                        
+                        <div class="alert alert-info">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div>
+                                <strong>Vấn đề Factory giải quyết:</strong>
+                                <p style="margin-top: 8px;">Bài toán: Cần tạo nhiều loại đối tượng khác nhau (Hình tròn, vuông, chữ nhật...)</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h2 class="card-title"><i class="fas fa-code-branch"></i> Triển khai Factory từng bước</h2>
+                        
+                        <div class="tabs">
+                            <button class="tab active" data-subtab="factory1">Bước 1: Interface</button>
+                            <button class="tab" data-subtab="factory2">Bước 2: Class cụ thể</button>
+                            <button class="tab" data-subtab="factory3">Bước 3: Factory</button>
+                            <button class="tab" data-subtab="factory4">Bước 4: Sử dụng</button>
+                        </div>
+                        
+                        <div class="tab-content active" id="factory1">
+                            <h3 style="margin: 1rem 0;">Bước 1: Định nghĩa Interface chung</h3>
+                            <div class="code-block">
+                                <div class="code-header">Animal.java</div>
+<pre><span class="code-comment">// Interface định nghĩa hành vi chung</span>
+<span class="code-keyword">public interface</span> <span class="code-class">Animal</span> {
+    <span class="code-keyword">void</span> <span class="code-method">makeSound</span>();
+    <span class="code-keyword">void</span> <span class="code-method">eat</span>();
+}</pre>
+                                <button class="copy-btn"><i class="fas fa-copy"></i> Copy code</button>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="factory2">
+                            <h3 style="margin: 1rem 0;">Bước 2: Tạo các lớp cụ thể</h3>
+                            <div class="code-block">
+                                <div class="code-header">ConcreteAnimals.java</div>
+<pre><span class="code-keyword">public class</span> <span class="code-class">Dog</span> <span class="code-keyword">implements</span> <span class="code-class">Animal</span> {
+    <span class="code-keyword">@Override</span>
+    <span class="code-keyword">public void</span> <span class="code-method">makeSound</span>() {
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"🐶 Gâu gâu!"</span>);
+    }
+    
+    <span class="code-keyword">@Override</span>
+    <span class="code-keyword">public void</span> <span class="code-method">eat</span>() {
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"🐶 Đang ăn xương..."</span>);
+    }
+}
+
+<span class="code-keyword">public class</span> <span class="code-class">Cat</span> <span class="code-keyword">implements</span> <span class="code-class">Animal</span> {
+    <span class="code-keyword">@Override</span>
+    <span class="code-keyword">public void</span> <span class="code-method">makeSound</span>() {
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"🐱 Meo meo!"</span>);
+    }
+    
+    <span class="code-keyword">@Override</span>
+    <span class="code-keyword">public void</span> <span class="code-method">eat</span>() {
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"🐱 Đang ăn cá..."</span>);
+    }
+}
+
+<span class="code-keyword">public class</span> <span class="code-class">Duck</span> <span class="code-keyword">implements</span> <span class="code-class">Animal</span> {
+    <span class="code-keyword">@Override</span>
+    <span class="code-keyword">public void</span> <span class="code-method">makeSound</span>() {
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"🦆 Quạc quạc!"</span>);
+    }
+    
+    <span class="code-keyword">@Override</span>
+    <span class="code-keyword">public void</span> <span class="code-method">eat</span>() {
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"🦆 Đang ăn bèo..."</span>);
+    }
+}</pre>
+                                <button class="copy-btn"><i class="fas fa-copy"></i> Copy code</button>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="factory3">
+                            <h3 style="margin: 1rem 0;">Bước 3: Tạo Factory</h3>
+                            <div class="code-block">
+                                <div class="code-header">AnimalFactory.java</div>
+<pre><span class="code-keyword">import</span> java.util.Random;
+
+<span class="code-keyword">public class</span> <span class="code-class">AnimalFactory</span> {
+    
+    <span class="code-comment">// Phương thức tạo Animal dựa vào type</span>
+    <span class="code-keyword">public static</span> <span class="code-class">Animal</span> <span class="code-method">createAnimal</span>(String type) {
+        type = type.<span class="code-method">toLowerCase</span>().<span class="code-method">trim</span>();
+        
+        <span class="code-keyword">switch</span> (type) {
+            <span class="code-keyword">case</span> <span class="code-string">"dog"</span>:
+                <span class="code-keyword">return new</span> <span class="code-class">Dog</span>();
+            <span class="code-keyword">case</span> <span class="code-string">"cat"</span>:
+                <span class="code-keyword">return new</span> <span class="code-class">Cat</span>();
+            <span class="code-keyword">case</span> <span class="code-string">"duck"</span>:
+                <span class="code-keyword">return new</span> <span class="code-class">Duck</span>();
+            <span class="code-keyword">default</span>:
+                System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"⚠️ Không tìm thấy animal: "</span> + type);
+                <span class="code-keyword">return null</span>;
+        }
+    }
+    
+    <span class="code-comment">// Có thể thêm nhiều phương thức factory khác</span>
+    <span class="code-keyword">public static</span> <span class="code-class">Animal</span> <span class="code-method">createRandomAnimal</span>() {
+        String[] animals = {<span class="code-string">"dog"</span>, <span class="code-string">"cat"</span>, <span class="code-string">"duck"</span>};
+        Random rand = <span class="code-keyword">new</span> Random();
+        String randomType = animals[rand.<span class="code-method">nextInt</span>(animals.length)];
+        <span class="code-keyword">return</span> <span class="code-method">createAnimal</span>(randomType);
+    }
+}</pre>
+                                <button class="copy-btn"><i class="fas fa-copy"></i> Copy code</button>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="factory4">
+                            <h3 style="margin: 1rem 0;">Bước 4: Sử dụng Factory</h3>
+                            <div class="code-block">
+                                <div class="code-header">Main.java</div>
+<pre><span class="code-keyword">public class</span> <span class="code-class">Main</span> {
+    <span class="code-keyword">public static void</span> <span class="code-method">main</span>(String[] args) {
+        <span class="code-comment">// Tạo animals mà không cần biết chi tiết khởi tạo</span>
+        <span class="code-class">Animal</span> dog = <span class="code-class">AnimalFactory</span>.<span class="code-method">createAnimal</span>(<span class="code-string">"dog"</span>);
+        <span class="code-class">Animal</span> cat = <span class="code-class">AnimalFactory</span>.<span class="code-method">createAnimal</span>(<span class="code-string">"cat"</span>);
+        <span class="code-class">Animal</span> duck = <span class="code-class">AnimalFactory</span>.<span class="code-method">createAnimal</span>(<span class="code-string">"duck"</span>);
+        
+        <span class="code-comment">// Sử dụng</span>
+        dog.<span class="code-method">makeSound</span>();  <span class="code-comment">// 🐶 Gâu gâu!</span>
+        dog.<span class="code-method">eat</span>();        <span class="code-comment">// 🐶 Đang ăn xương...</span>
+        
+        cat.<span class="code-method">makeSound</span>();  <span class="code-comment">// 🐱 Meo meo!</span>
+        
+        <span class="code-comment">// Tạo ngẫu nhiên</span>
+        <span class="code-class">Animal</span> randomPet = <span class="code-class">AnimalFactory</span>.<span class="code-method">createRandomAnimal</span>();
+        randomPet.<span class="code-method">makeSound</span>();
+    }
+}</pre>
+                                <button class="copy-btn"><i class="fas fa-copy"></i> Copy code</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h2 class="card-title"><i class="fas fa-chart-line"></i> Lợi ích của Factory Pattern</h2>
+                        
+                        <div class="code-block">
+                            <div class="code-header">Lợi ích khi thêm tính năng mới</div>
+<pre><span class="code-comment">// TRƯỚC: Khi thêm Animal mới</span>
+<span class="code-keyword">public class</span> <span class="code-class">OldCode</span> {
+    <span class="code-keyword">public</span> <span class="code-class">Animal</span> <span class="code-method">getAnimal</span>(String type) {
+        <span class="code-keyword">if</span> (type.<span class="code-method">equals</span>(<span class="code-string">"dog"</span>)) <span class="code-keyword">return new</span> <span class="code-class">Dog</span>();
+        <span class="code-keyword">if</span> (type.<span class="code-method">equals</span>(<span class="code-string">"cat"</span>)) <span class="code-keyword">return new</span> <span class="code-class">Cat</span>();
+        <span class="code-keyword">if</span> (type.<span class="code-method">equals</span>(<span class="code-string">"duck"</span>)) <span class="code-keyword">return new</span> <span class="code-class">Duck</span>();
+        <span class="code-comment">// Thêm con Cow? Phải sửa code ở đây!</span>
+        <span class="code-keyword">return null</span>;
+    }
+}
+
+<span class="code-comment">// SAU: Khi thêm Animal mới</span>
+<span class="code-keyword">public class</span> <span class="code-class">AnimalFactory</span> {
+    <span class="code-keyword">public static</span> <span class="code-class">Animal</span> <span class="code-method">createAnimal</span>(String type) {
+        <span class="code-keyword">switch</span> (type) {
+            <span class="code-keyword">case</span> <span class="code-string">"dog"</span>: <span class="code-keyword">return new</span> <span class="code-class">Dog</span>();
+            <span class="code-keyword">case</span> <span class="code-string">"cat"</span>: <span class="code-keyword">return new</span> <span class="code-class">Cat</span>();
+            <span class="code-keyword">case</span> <span class="code-string">"duck"</span>: <span class="code-keyword">return new</span> <span class="code-class">Duck</span>();
+            <span class="code-keyword">case</span> <span class="code-string">"cow"</span>: <span class="code-keyword">return new</span> <span class="code-class">Cow</span>(); <span class="code-comment">// ✅ Chỉ thêm 1 dòng!</span>
+            <span class="code-keyword">default</span>: <span class="code-keyword">return null</span>;
+        }
+    }
+}
+<span class="code-comment">// Không cần sửa các class khác!</span></pre>
+                            <button class="copy-btn"><i class="fas fa-copy"></i> Copy code</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab 4: Bài tập -->
+                <div class="tab-content" id="exercises">
+                    <div class="card">
+                        <h2 class="card-title"><i class="fas fa-dumbbell"></i> Bài tập thực hành</h2>
+                        <p>Hoàn thành các bài tập sau để củng cố kiến thức về Singleton và Factory Pattern.</p>
+                        
+                        <!-- Progress bar -->
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Tiến độ hoàn thành bài tập</span>
+                                <span id="progress-percent">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="exercise">
+                        <div class="exercise-title">
+                            <i class="fas fa-pencil-alt"></i> Bài 1: Singleton - Quản lý Logger
+                        </div>
+                        <p>Tạo Singleton class Logger với các yêu cầu sau:</p>
+                        <ul class="list">
+                            <li>Chỉ có 1 instance duy nhất</li>
+                            <li>Có thể ghi log ra file/màn hình</li>
+                            <li>Các lớp khác đều dùng chung Logger này</li>
+                        </ul>
+                        
+                        <div class="code-block">
+                            <div class="code-header">Logger.java</div>
+<pre><span class="code-comment">// TODO 1: Tạo Singleton class Logger</span>
+<span class="code-keyword">public class</span> <span class="code-class">Logger</span> {
+    <span class="code-comment">// Viết code ở đây</span>
+    <span class="code-keyword">private static</span> <span class="code-class">Logger</span> instance;
+    
+    <span class="code-keyword">private</span> <span class="code-class">Logger</span>() {
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"Logger initialized"</span>);
+    }
+    
+    <span class="code-comment">// TODO: Thêm phương thức getInstance()</span>
+    <span class="code-comment">// TODO: Thêm phương thức log(String message)</span>
+}</pre>
+                            <button class="copy-btn"><i class="fas fa-copy"></i> Copy code</button>
+                        </div>
+                        
+                        <div style="margin-top: 1rem;">
+                            <button class="copy-btn" id="check-exercise1"><i class="fas fa-check"></i> Kiểm tra bài làm</button>
+                            <button class="copy-btn" style="margin-left: 10px;" id="show-solution1"><i class="fas fa-lightbulb"></i> Xem đáp án</button>
+                        </div>
+                        
+                        <div id="solution1" style="display: none; margin-top: 1rem;">
+                            <div class="code-block">
+                                <div class="code-header">Logger.java - Solution</div>
+<pre><span class="code-keyword">public class</span> <span class="code-class">Logger</span> {
+    <span class="code-keyword">private static</span> <span class="code-class">Logger</span> instance;
+    
+    <span class="code-keyword">private</span> <span class="code-class">Logger</span>() {
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"Logger initialized"</span>);
+    }
+    
+    <span class="code-keyword">public static</span> <span class="code-class">Logger</span> <span class="code-method">getInstance</span>() {
+        <span class="code-keyword">if</span> (instance == <span class="code-keyword">null</span>) {
+            instance = <span class="code-keyword">new</span> <span class="code-class">Logger</span>();
+        }
+        <span class="code-keyword">return</span> instance;
+    }
+    
+    <span class="code-keyword">public void</span> <span class="code-method">log</span>(String message) {
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"[LOG] "</span> + message);
+    }
+    
+    <span class="code-keyword">public void</span> <span class="code-method">logToFile</span>(String message) {
+        <span class="code-comment">// Code ghi log vào file</span>
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"[FILE LOG] "</span> + message);
+    }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="exercise">
+                        <div class="exercise-title">
+                            <i class="fas fa-pencil-alt"></i> Bài 2: Factory - Hệ thống thanh toán
+                        </div>
+                        <p>Tạo Factory cho các phương thức thanh toán với các yêu cầu:</p>
+                        <ul class="list">
+                            <li>Tạo interface PaymentMethod</li>
+                            <li>Tạo các lớp: CreditCard, PayPal, BankTransfer</li>
+                            <li>Tạo PaymentFactory để tạo các phương thức thanh toán</li>
+                        </ul>
+                        
+                        <div class="code-block">
+                            <div class="code-header">PaymentSystem.java</div>
+<pre><span class="code-comment">// TODO: Tạo Factory cho các phương thức thanh toán</span>
+<span class="code-comment">// 1. Tạo interface PaymentMethod</span>
+<span class="code-comment">// 2. Tạo các lớp: CreditCard, PayPal, BankTransfer</span>
+<span class="code-comment">// 3. Tạo PaymentFactory để tạo các phương thức thanh toán</span>
+
+<span class="code-keyword">interface</span> <span class="code-class">PaymentMethod</span> {
+    <span class="code-keyword">void</span> <span class="code-method">pay</span>(<span class="code-keyword">double</span> amount);
+}
+
+<span class="code-keyword">class</span> <span class="code-class">PaymentFactory</span> {
+    <span class="code-keyword">public static</span> <span class="code-class">PaymentMethod</span> <span class="code-method">create</span>(String type) {
+        <span class="code-comment">// TODO: Implement</span>
+        <span class="code-keyword">return null</span>;
+    }
+}</pre>
+                            <button class="copy-btn"><i class="fas fa-copy"></i> Copy code</button>
+                        </div>
+                        
+                        <div style="margin-top: 1rem;">
+                            <button class="copy-btn" id="check-exercise2"><i class="fas fa-check"></i> Kiểm tra bài làm</button>
+                            <button class="copy-btn" style="margin-left: 10px;" id="show-solution2"><i class="fas fa-lightbulb"></i> Xem đáp án</button>
+                        </div>
+                        
+                        <div id="solution2" style="display: none; margin-top: 1rem;">
+                            <div class="code-block">
+                                <div class="code-header">PaymentSystem.java - Solution</div>
+<pre><span class="code-keyword">interface</span> <span class="code-class">PaymentMethod</span> {
+    <span class="code-keyword">void</span> <span class="code-method">pay</span>(<span class="code-keyword">double</span> amount);
+}
+
+<span class="code-keyword">class</span> <span class="code-class">CreditCard</span> <span class="code-keyword">implements</span> <span class="code-class">PaymentMethod</span> {
+    <span class="code-keyword">@Override</span>
+    <span class="code-keyword">public void</span> <span class="code-method">pay</span>(<span class="code-keyword">double</span> amount) {
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"Thanh toán "</span> + amount + <span class="code-string">" bằng thẻ tín dụng"</span>);
+    }
+}
+
+<span class="code-keyword">class</span> <span class="code-class">PayPal</span> <span class="code-keyword">implements</span> <span class="code-class">PaymentMethod</span> {
+    <span class="code-keyword">@Override</span>
+    <span class="code-keyword">public void</span> <span class="code-method">pay</span>(<span class="code-keyword">double</span> amount) {
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"Thanh toán "</span> + amount + <span class="code-string">" bằng PayPal"</span>);
+    }
+}
+
+<span class="code-keyword">class</span> <span class="code-class">BankTransfer</span> <span class="code-keyword">implements</span> <span class="code-class">PaymentMethod</span> {
+    <span class="code-keyword">@Override</span>
+    <span class="code-keyword">public void</span> <span class="code-method">pay</span>(<span class="code-keyword">double</span> amount) {
+        System.<span class="code-keyword">out</span>.<span class="code-method">println</span>(<span class="code-string">"Thanh toán "</span> + amount + <span class="code-string">" bằng chuyển khoản ngân hàng"</span>);
+    }
+}
+
+<span class="code-keyword">class</span> <span class="code-class">PaymentFactory</span> {
+    <span class="code-keyword">public static</span> <span class="code-class">PaymentMethod</span> <span class="code-method">create</span>(String type) {
+        <span class="code-keyword">switch</span> (type.<span class="code-method">toLowerCase</span>()) {
+            <span class="code-keyword">case</span> <span class="code-string">"creditcard"</span>:
+                <span class="code-keyword">return new</span> <span class="code-class">CreditCard</span>();
+            <span class="code-keyword">case</span> <span class="code-string">"paypal"</span>:
+                <span class="code-keyword">return new</span> <span class="code-class">PayPal</span>();
+            <span class="code-keyword">case</span> <span class="code-string">"banktransfer"</span>:
+                <span class="code-keyword">return new</span> <span class="code-class">BankTransfer</span>();
+            <span class="code-keyword">default</span>:
+                <span class="code-keyword">throw new</span> IllegalArgumentException(<span class="code-string">"Unknown payment method: "</span> + type);
+        }
+    }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab 5: Tổng kết -->
+                <div class="tab-content" id="summary">
+                    <div class="card">
+                        <h2 class="card-title"><i class="fas fa-graduation-cap"></i> Tổng kết & Lưu ý quan trọng</h2>
+                        
+                        <h3 style="margin: 1.5rem 0 1rem 0;">Khi nào dùng gì?</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Pattern</th>
+                                    <th>Khi nào dùng</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Singleton</strong></td>
+                                    <td>Cần DUY NHẤT 1 instance</td>
+                                    <td>Database, Logger, Config</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Factory</strong></td>
+                                    <td>Cần tạo NHIỀU loại object</td>
+                                    <td>Payment methods, Shapes, Animals</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div>
+                                <strong>Cẩn thận khi dùng Singleton!</strong>
+                                <div class="comparison" style="margin-top: 10px; grid-template-columns: 1fr 1fr;">
+                                    <div>
+                                        <div class="example-title">
+                                            <i class="fas fa-times-circle"></i> LẠM DỤNG SINGLETON
+                                        </div>
+                                        <div class="code-block" style="font-size: 0.9rem;">
+<pre><span class="code-keyword">public class</span> <span class="code-class">User</span> {
+    <span class="code-comment">// KHÔNG NÊN: Mỗi User là duy nhất? Sai!</span>
+    <span class="code-keyword">private static</span> <span class="code-class">User</span> instance;
+    <span class="code-keyword">private</span> <span class="code-class">User</span>() {}
+    <span class="code-comment">// ...</span>
+}</pre>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="example-title">
+                                            <i class="fas fa-check-circle"></i> DÙNG ĐÚNG CHỖ
+                                        </div>
+                                        <div class="code-block" style="font-size: 0.9rem;">
+<pre><span class="code-keyword">public class</span> <span class="code-class">Database</span> {
+    <span class="code-comment">// NÊN: Chỉ 1 kết nối database</span>
+    <span class="code-keyword">private static</span> <span class="code-class">Database</span> instance;
+    <span class="code-keyword">private</span> <span class="code-class">Database</span>() {}
+    <span class="code-comment">// ...</span>
+}</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin: 1.5rem 0 1rem 0;">Mẹo nhớ nhanh</h3>
+                        <div class="alert alert-success">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <ul class="list" style="margin-left: 0;">
+                                    <li><strong>Singleton:</strong> "1 cái duy nhất cho tất cả"</li>
+                                    <li><strong>Factory:</strong> "1 cửa hàng bán nhiều đồ"</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin: 1.5rem 0 1rem 0;">Code mẫu hoàn chỉnh</h3>
+                        <div class="code-block">
+                            <div class="code-header">Pattern Templates</div>
+<pre><span class="code-comment">// SINGLETON MẪU</span>
+<span class="code-keyword">public class</span> <span class="code-class">MySingleton</span> {
+    <span class="code-keyword">private static</span> <span class="code-class">MySingleton</span> instance;
+    
+    <span class="code-keyword">private</span> <span class="code-class">MySingleton</span>() { <span class="code-comment">/* private constructor */</span> }
+    
+    <span class="code-keyword">public static</span> <span class="code-class">MySingleton</span> <span class="code-method">getInstance</span>() {
+        <span class="code-keyword">if</span> (instance == <span class="code-keyword">null</span>) {
+            instance = <span class="code-keyword">new</span> <span class="code-class">MySingleton</span>();
+        }
+        <span class="code-keyword">return</span> instance;
+    }
+}
+
+<span class="code-comment">// FACTORY MẪU</span>
+<span class="code-keyword">public class</span> <span class="code-class">MyFactory</span> {
+    <span class="code-keyword">public static</span> <span class="code-class">MyInterface</span> <span class="code-method">create</span>(String type) {
+        <span class="code-keyword">switch</span> (type) {
+            <span class="code-keyword">case</span> <span class="code-string">"A"</span>: <span class="code-keyword">return new</span> <span class="code-class">ClassA</span>();
+            <span class="code-keyword">case</span> <span class="code-string">"B"</span>: <span class="code-keyword">return new</span> <span class="code-class">ClassB</span>();
+            <span class="code-keyword">default</span>: <span class="code-keyword">return null</span>;
+        }
+    }
+}</pre>
+                            <button class="copy-btn"><i class="fas fa-copy"></i> Copy code</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h2 class="sidebar-title"><i class="fas fa-list-ul"></i> Nội dung bài học</h2>
+                <ul class="nav-links">
+                    <li><a href="#overview" class="nav-link active" data-tab="overview"><i class="fas fa-book-open"></i> Tổng quan Design Patterns</a></li>
+                    <li><a href="#singleton" class="nav-link" data-tab="singleton"><i class="fas fa-lock"></i> Singleton Pattern</a></li>
+                    <li><a href="#factory" class="nav-link" data-tab="factory"><i class="fas fa-industry"></i> Factory Pattern</a></li>
+                    <li><a href="#exercises" class="nav-link" data-tab="exercises"><i class="fas fa-pencil-alt"></i> Bài tập thực hành</a></li>
+                    <li><a href="#summary" class="nav-link" data-tab="summary"><i class="fas fa-star"></i> Tổng kết & Lưu ý</a></li>
+                </ul>
+                
+                <h2 class="sidebar-title" style="margin-top: 2rem;"><i class="fas fa-download"></i> Tài nguyên</h2>
+                <ul class="nav-links">
+                    <li><a href="#"><i class="fas fa-file-code"></i> Code mẫu đầy đủ</a></li>
+                    <li><a href="#"><i class="fas fa-file-pdf"></i> PDF bài giảng</a></li>
+                    <li><a href="#"><i class="fas fa-video"></i> Video hướng dẫn</a></li>
+                </ul>
+                
+                <div class="alert alert-info" style="margin-top: 2rem;">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <strong>Thời gian hoàn thành ước tính:</strong>
+                        <p style="margin-top: 5px;">45-60 phút</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© 2023 Bài học Design Patterns - Singleton & Factory Pattern</p>
+            <p>Dành cho người mới bắt đầu học lập trình Java và Design Patterns</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Tab navigation
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Update active tab
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Update active tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+                
+                // Update sidebar links
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('data-tab') === tabId) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                // Update progress bar for exercises tab
+                if (tabId === 'exercises') {
+                    updateProgressBar();
+                }
+            });
+        });
+        
+        // Sub-tab navigation
+        document.querySelectorAll('[data-subtab]').forEach(subTab => {
+            subTab.addEventListener('click', () => {
+                const subtabId = subTab.getAttribute('data-subtab');
+                const parent = subTab.closest('.card');
+                
+                // Update active sub-tab
+                parent.querySelectorAll('[data-subtab]').forEach(t => t.classList.remove('active'));
+                subTab.classList.add('active');
+                
+                // Update active sub-tab content
+                parent.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                parent.querySelector(`#${subtabId}`).classList.add('active');
+            });
+        });
+        
+        // Sidebar navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tabId = link.getAttribute('data-tab');
+                
+                // Update active tab
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
+                
+                // Update active tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+                
+                // Update active sidebar links
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Update progress bar for exercises tab
+                if (tabId === 'exercises') {
+                    updateProgressBar();
+                }
+            });
+        });
+        
+        // Copy code button
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const codeBlock = button.previousElementSibling;
+                const codeText = codeBlock.textContent;
+                
+                navigator.clipboard.writeText(codeText).then(() => {
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-check"></i> Đã copy!';
+                    button.style.backgroundColor = '#10b981';
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.style.backgroundColor = '';
+                    }, 2000);
+                });
+            });
+        });
+        
+        // Exercise solutions
+        document.getElementById('show-solution1').addEventListener('click', () => {
+            const solution = document.getElementById('solution1');
+            solution.style.display = solution.style.display === 'block' ? 'none' : 'block';
+        });
+        
+        document.getElementById('show-solution2').addEventListener('click', () => {
+            const solution = document.getElementById('solution2');
+            solution.style.display = solution.style.display === 'block' ? 'none' : 'block';
+        });
+        
+        // Check exercise buttons
+        document.getElementById('check-exercise1').addEventListener('click', () => {
+            alert('Tính năng kiểm tra bài làm đang được phát triển!');
+        });
+        
+        document.getElementById('check-exercise2').addEventListener('click', () => {
+            alert('Tính năng kiểm tra bài làm đang được phát triển!');
+        });
+        
+        // Progress bar
+        function updateProgressBar() {
+            const progressFill = document.getElementById('progress-fill');
+            const progressPercent = document.getElementById('progress-percent');
+            
+            // Simulate progress based on viewing time
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 5;
+                progressFill.style.width = `${progress}%`;
+                progressPercent.textContent = `${progress}%`;
+                
+                if (progress >= 30) {
+                    clearInterval(interval);
+                }
+            }, 200);
+        }
+        
+        // Initialize progress bar on exercises tab
+        document.querySelector('.tab[data-tab="exercises"]').addEventListener('click', updateProgressBar);
+        
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe cards for animation
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s, transform 0.5s';
+            observer.observe(card);
+        });
+        
+        // Initialize first tab as active
+        document.querySelector('.tab.active').click();
+    </script>
+</body>
+</html>
