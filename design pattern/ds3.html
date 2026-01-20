@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUỔI 19: Adapter & Decorator Pattern</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 80vh;
+        }
+
+        .sidebar {
+            background: var(--light);
+            padding: 20px;
+            border-right: 3px solid var(--secondary);
+        }
+
+        .nav-list {
+            list-style: none;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h4 {
+            color: var(--info);
+            margin: 20px 0 10px;
+        }
+
+        h5 {
+            color: var(--dark);
+            margin: 15px 0 8px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.4;
+            border: 2px solid #444;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid var(--info);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .warning-box {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .interactive-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+
+        .btn-run {
+            background: var(--success);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid var(--warning);
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid var(--secondary);
+        }
+
+        .comparison-card h4 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 3px solid var(--secondary);
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pattern-diagram {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 2px dashed #ddd;
+        }
+
+        .pattern-diagram i {
+            font-size: 48px;
+            color: var(--secondary);
+            margin: 10px;
+        }
+
+        .pattern-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .pattern-step {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            width: 150px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border: 2px solid var(--light);
+        }
+
+        .pattern-step-number {
+            background: var(--secondary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: bold;
+        }
+
+        .analogy-box {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid var(--info);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .analogy-icon {
+            font-size: 48px;
+            color: var(--secondary);
+            flex-shrink: 0;
+        }
+
+        .analogy-content {
+            flex-grow: 1;
+        }
+
+        .adapter-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .adapter-visual .item {
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .adapter-visual .old {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .adapter-visual .adapter {
+            background: #4ecdc4;
+            color: white;
+        }
+
+        .adapter-visual .new {
+            background: #1dd1a1;
+            color: white;
+        }
+
+        .adapter-visual .arrow {
+            font-size: 24px;
+            color: var(--secondary);
+        }
+
+        .decorator-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .decorator-layer {
+            padding: 15px 30px;
+            margin: 5px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            width: 300px;
+        }
+
+        .decorator-layer.core {
+            background: #ff9ff3;
+            color: white;
+        }
+
+        .decorator-layer.milk {
+            background: #feca57;
+            color: white;
+        }
+
+        .decorator-layer.sugar {
+            background: #54a0ff;
+            color: white;
+        }
+
+        .decorator-layer.whip {
+            background: #5f27cd;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-puzzle-piece"></i> BUỔI 19: Adapter & Decorator Pattern</h1>
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#intro" class="nav-link active"><i class="fas fa-home"></i> Giới thiệu</a></li>
+                    <li class="nav-item"><a href="#adapter-intro" class="nav-link"><i class="fas fa-plug"></i> Adapter Pattern</a></li>
+                    <li class="nav-item"><a href="#adapter-example" class="nav-link"><i class="fas fa-exchange-alt"></i> Ví dụ Adapter</a></li>
+                    <li class="nav-item"><a href="#decorator-intro" class="nav-link"><i class="fas fa-gift"></i> Decorator Pattern</a></li>
+                    <li class="nav-item"><a href="#decorator-example" class="nav-link"><i class="fas fa-layer-group"></i> Ví dụ Decorator</a></li>
+                    <li class="nav-item"><a href="#comparison" class="nav-link"><i class="fas fa-balance-scale"></i> So sánh Pattern</a></li>
+                    <li class="nav-item"><a href="#exercises" class="nav-link"><i class="fas fa-dumbbell"></i> Bài tập thực hành</a></li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- PHẦN GIỚI THIỆU -->
+                <section id="intro" class="section active">
+                    <h2><i class="fas fa-home"></i> BUỔI 19: ADAPTER & DECORATOR</h2>
+
+                    <div class="analogy-box">
+                        <div class="analogy-icon">
+                            <i class="fas fa-puzzle-piece"></i>
+                        </div>
+                        <div class="analogy-content">
+                            <h4>👉 Buổi này thuộc Structural Pattern</h4>
+                            <p><strong>Structural Patterns</strong> tập trung vào cách kết hợp các class và object để tạo thành cấu trúc lớn hơn.</p>
+                            <p>➡ Tập trung vào <strong>cấu trúc & cách kết hợp các class</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4><i class="fas fa-plug"></i> Adapter Pattern</h4>
+                            <p><strong>Mục đích:</strong> Chuyển đổi interface này sang interface khác</p>
+                            <ul>
+                                <li>Giúp các class không tương thích làm việc cùng nhau</li>
+                                <li>Như đầu chuyển điện: ổ cắm tròn → phích cắm vuông</li>
+                                <li>Tái sử dụng code cũ với hệ thống mới</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="comparison-card">
+                            <h4><i class="fas fa-gift"></i> Decorator Pattern</h4>
+                            <p><strong>Mục đích:</strong> Thêm chức năng cho object linh hoạt</p>
+                            <ul>
+                                <li>Không cần sửa class gốc, không dùng kế thừa</li>
+                                <li>Như gói quà: thêm giấy, nơ, hộp theo ý muốn</li>
+                                <li>Mở rộng chức năng mà không thay đổi code cũ</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-lightbulb"></i> Tại sao học hai pattern này?</h4>
+                        <p>Adapter và Decorator giải quyết hai vấn đề quan trọng trong thiết kế phần mềm:</p>
+                        <ol>
+                            <li><strong>Adapter</strong> - Kết nối các thành phần không tương thích, tái sử dụng code cũ</li>
+                            <li><strong>Decorator</strong> - Mở rộng chức năng linh hoạt, tránh kế thừa cứng nhắc</li>
+                        </ol>
+                        <p>Cả hai đều giúp code <strong>linh hoạt, dễ bảo trì, dễ mở rộng</strong>.</p>
+                    </div>
+                </section>
+
+                <!-- PHẦN ADAPTER PATTERN -->
+                <section id="adapter-intro" class="section">
+                    <h2><i class="fas fa-plug"></i> I. ADAPTER PATTERN</h2>
+
+                    <h3>1. Adapter Pattern là gì?</h3>
+                    <p><strong>Adapter Pattern</strong> là một Structural Pattern dùng để:</p>
+                    <ul>
+                        <li>Chuyển đổi interface này sang interface khác</li>
+                        <li>Giúp các class không tương thích vẫn làm việc được với nhau</li>
+                        <li>Tái sử dụng code cũ trong hệ thống mới</li>
+                    </ul>
+
+                    <div class="analogy-box">
+                        <div class="analogy-icon">
+                            <i class="fas fa-plug"></i>
+                        </div>
+                        <div class="analogy-content">
+                            <h4>📌 Hiểu đơn giản (rất quan trọng)</h4>
+                            <p><strong>🔌 Adapter giống như đầu chuyển điện</strong></p>
+                            <ul>
+                                <li>Ổ cắm tròn ❌</li>
+                                <li>Phích cắm vuông ❌</li>
+                                <li>Adapter → kết nối được ✅</li>
+                            </ul>
+                            <p><strong>➡ Trong code:</strong></p>
+                            <ul>
+                                <li>Class cũ (interface cũ)</li>
+                                <li>Interface mới (hệ thống yêu cầu)</li>
+                                <li>Adapter đứng giữa chuyển đổi</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="adapter-visual">
+                        <div class="item old">Class Cũ</div>
+                        <div class="arrow">←</div>
+                        <div class="item adapter">Adapter</div>
+                        <div class="arrow">→</div>
+                        <div class="item new">Interface Mới</div>
+                    </div>
+
+                    <h3>2. Vấn đề khi KHÔNG dùng Adapter</h3>
+                    <p>Giả sử:</p>
+                    <ul>
+                        <li>Hệ thống mới yêu cầu interface <strong>Target</strong></li>
+                        <li>Nhưng class cũ chỉ có method khác tên, khác signature</li>
+                    </ul>
+
+                    <div class="warning-box">
+                        <h4><i class="fas fa-exclamation-triangle"></i> ❌ Không dùng Adapter → phải:</h4>
+                        <ul>
+                            <li><strong>Sửa code cũ</strong> → có thể phá vỡ hệ thống hiện tại</li>
+                            <li><strong>Viết lại toàn bộ</strong> → tốn thời gian, công sức</li>
+                            <li><strong>Copy-paste code</strong> → vi phạm DRY (Don't Repeat Yourself)</li>
+                        </ul>
+                        <p><strong>➡ Rất nguy hiểm – dễ lỗi, khó bảo trì</strong></p>
+                    </div>
+
+                    <h3>3. Khi nào nên dùng Adapter?</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Trường hợp</th>
+                                    <th>Lý do</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Dùng thư viện cũ</strong></td>
+                                    <td>Không sửa được code (third-party library)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Interface không tương thích</strong></td>
+                                    <td>Cần chuyển đổi giữa các interface</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Bảo trì hệ thống</strong></td>
+                                    <td>Tránh sửa code gốc, giảm rủi ro</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tích hợp hệ thống</strong></td>
+                                    <td>Kết nối hệ thống cũ với hệ thống mới</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>4. Cấu trúc Adapter Pattern</h3>
+                    <div class="pattern-steps">
+                        <div class="pattern-step">
+                            <div class="pattern-step-number">1</div>
+                            <strong>Target</strong>
+                            <p>Interface mong muốn</p>
+                        </div>
+                        <div class="pattern-step">
+                            <div class="pattern-step-number">2</div>
+                            <strong>Adaptee</strong>
+                            <p>Class có sẵn (không phù hợp)</p>
+                        </div>
+                        <div class="pattern-step">
+                            <div class="pattern-step-number">3</div>
+                            <strong>Adapter</strong>
+                            <p>Lớp chuyển đổi</p>
+                        </div>
+                        <div class="pattern-step">
+                            <div class="pattern-step-number">4</div>
+                            <strong>Client</strong>
+                            <p>Sử dụng Target interface</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN VÍ DỤ ADAPTER -->
+                <section id="adapter-example" class="section">
+                    <h2><i class="fas fa-exchange-alt"></i> ADAPTER PATTERN - VÍ DỤ CHI TIẾT</h2>
+
+                    <h3>5. Adapter Pattern – Ví dụ CHI TIẾT</h3>
+                    <div class="info-box">
+                        <h4><i class="fas fa-bolt"></i> Bài toán thực tế:</h4>
+                        <p>Hệ thống mới cần sạc điện 220V, nhưng ổ điện cũ chỉ có 110V. Cần adapter để chuyển đổi.</p>
+                    </div>
+
+                    <h4>5.1. Target – Interface mong muốn (220V)</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Charger220V.java - Interface hệ thống cần</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Interface hệ thống đang cần</span><br>
+                        <span class="keyword">public interface</span> <span class="class-name">Charger220V</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">void</span> charge();<br>
+                        }
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Giải thích:</h4>
+                        <p>Hệ thống chỉ biết sạc 220V thông qua interface <code>Charger220V</code>.</p>
+                        <p>Client không quan tâm bên trong làm gì, chỉ cần gọi method <code>charge()</code>.</p>
+                    </div>
+
+                    <h4>5.2. Adaptee – Class có sẵn (110V - không phù hợp)</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>OldSocket110V.java - Ổ điện cũ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Ổ điện cũ chỉ hỗ trợ 110V</span><br>
+                        <span class="keyword">public class</span> <span class="class-name">OldSocket110V</span> {<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> plug110V() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Cắm điện 110V"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Có thể có các method khác...</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> checkVoltage() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Kiểm tra điện áp: 110V"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <div class="warning-box">
+                        <h4><i class="fas fa-exclamation-circle"></i> Vấn đề:</h4>
+                        <ul>
+                            <li>Method khác tên (<code>plug110V()</code> thay vì <code>charge()</code>)</li>
+                            <li>Không implement interface <code>Charger220V</code></li>
+                            <li>Không đúng interface hệ thống cần</li>
+                            <li>Không thể thay thế trực tiếp</li>
+                        </ul>
+                    </div>
+
+                    <h4>5.3. Adapter – Lớp chuyển đổi</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>SocketAdapter.java - Adapter chuyển đổi</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Adapter chuyển 110V -> 220V</span><br>
+                        <span class="keyword">public class</span> <span class="class-name">SocketAdapter</span> <span class="keyword">implements</span> <span class="class-name">Charger220V</span> {<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> <span class="class-name">OldSocket110V</span> oldSocket;<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Nhận object cũ vào constructor</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">SocketAdapter</span>(<span class="class-name">OldSocket110V</span> oldSocket) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.oldSocket = oldSocket;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Implement method của interface mới</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">@Override</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> charge() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Chuyển đổi hành vi: 110V -> 220V</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"[Adapter] Chuyển đổi 110V sang 220V"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;oldSocket.plug110V(); <span class="comment">// gọi method cũ</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;oldSocket.checkVoltage(); <span class="comment">// có thể gọi thêm method khác</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <div class="success-box">
+                        <h4><i class="fas fa-check-circle"></i> Adapter làm gì?</h4>
+                        <ul>
+                            <li><strong>Implements interface mới</strong> (<code>Charger220V</code>)</li>
+                            <li><strong>Chứa reference</strong> đến object cũ (<code>OldSocket110V</code>)</li>
+                            <li><strong>Chuyển đổi method call</strong>: <code>charge()</code> → <code>plug110V()</code></li>
+                            <li><strong>Hệ thống KHÔNG biết</strong> sự tồn tại của class cũ</li>
+                            <li>Có thể thêm logic chuyển đổi phức tạp bên trong</li>
+                        </ul>
+                    </div>
+
+                    <h4>5.4. Sử dụng Adapter</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Main.java - Client sử dụng</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">Main</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Tạo object cũ</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="class-name">OldSocket110V</span> oldSocket = <span class="keyword">new</span> <span class="class-name">OldSocket110V</span>();<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Dùng Adapter để chuyển đổi</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="class-name">Charger220V</span> charger = <span class="keyword">new</span> <span class="class-name">SocketAdapter</span>(oldSocket);<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Client chỉ gọi interface mới, không biết về class cũ</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charger.charge();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-terminal"></i> Kết quả khi chạy:</h4>
+                        <div class="code-block" style="background: #f8f9fa; color: #333;">
+                            [Adapter] Chuyển đổi 110V sang 220V<br>
+                            Cắm điện 110V<br>
+                            Kiểm tra điện áp: 110V
+                        </div>
+                        <p><strong>Client chỉ biết interface <code>Charger220V</code></strong>, không biết về sự tồn tại của <code>OldSocket110V</code>.</p>
+                    </div>
+
+                    <h3>6. Ưu & Nhược điểm Adapter Pattern</h3>
+                    <div class="comparison-grid">
+                        <div class="comparison-card" style="border-top-color: var(--success);">
+                            <h4><i class="fas fa-check-circle"></i> Ưu điểm</h4>
+                            <ul>
+                                <li><strong>Tái sử dụng code cũ</strong> - không cần viết lại</li>
+                                <li><strong>Không sửa class gốc</strong> - giảm rủi ro</li>
+                                <li><strong>Dễ mở rộng</strong> - thêm adapter mới dễ dàng</li>
+                                <li><strong>Single Responsibility</strong> - adapter chỉ làm 1 việc: chuyển đổi</li>
+                                <li><strong>Linh hoạt</strong> - có thể adapter nhiều class cũ</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="comparison-card" style="border-top-color: var(--accent);">
+                            <h4><i class="fas fa-exclamation-circle"></i> Nhược điểm</h4>
+                            <ul>
+                                <li><strong>Tăng số lượng class</strong> - thêm adapter class</li>
+                                <li><strong>Code phức tạp hơn</strong> - nhiều lớp trung gian</li>
+                                <li><strong>Hiệu năng</strong> - thêm một lớp gọi gián tiếp</li>
+                                <li><strong>Debug khó hơn</strong> - phải trace qua adapter</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm Adapter Pattern</h4>
+                        <p>Chọn loại adapter để xem cách hoạt động:</p>
+                        <div class="input-group">
+                            <label for="adapterType">Loại chuyển đổi:</label>
+                            <select id="adapterType">
+                                <option value="voltage">110V → 220V (Điện)</option>
+                                <option value="usb">USB-A → USB-C (Cáp)</option>
+                                <option value="json">XML → JSON (Dữ liệu)</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="testAdapterPattern()">
+                            <i class="fas fa-play"></i> Chạy Demo Adapter
+                        </button>
+                        <div class="result" id="adapterResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="adapterResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN DECORATOR PATTERN -->
+                <section id="decorator-intro" class="section">
+                    <h2><i class="fas fa-gift"></i> II. DECORATOR PATTERN</h2>
+
+                    <h3>1. Decorator Pattern là gì?</h3>
+                    <p><strong>Decorator Pattern</strong> là một Structural Pattern dùng để:</p>
+                    <ul>
+                        <li>Thêm chức năng cho object một cách linh hoạt</li>
+                        <li>Không cần sửa class gốc, không dùng kế thừa cứng nhắc</li>
+                        <li>Bọc object bằng các decorator để thêm tính năng</li>
+                    </ul>
+
+                    <div class="analogy-box">
+                        <div class="analogy-icon">
+                            <i class="fas fa-gift"></i>
+                        </div>
+                        <div class="analogy-content">
+                            <h4>📌 Hiểu đơn giản</h4>
+                            <p><strong>🎁 Decorator giống như gói quà</strong></p>
+                            <ul>
+                                <li>Quà gốc (Core object)</li>
+                                <li>Gói thêm giấy (Decorator 1)</li>
+                                <li>Gói thêm nơ (Decorator 2)</li>
+                                <li>Gói thêm hộp (Decorator 3)</li>
+                            </ul>
+                            <p><strong>➡ Gói bao nhiêu lớp cũng được</strong></p>
+                            <p><strong>➡ Object ban đầu không bị thay đổi</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="decorator-visual">
+                        <div class="decorator-layer whip">Whipped Cream</div>
+                        <div class="decorator-layer sugar">Sugar</div>
+                        <div class="decorator-layer milk">Milk</div>
+                        <div class="decorator-layer core">Coffee</div>
+                        <p><i class="fas fa-arrow-up"></i> Các lớp decorator bọc lên nhau</p>
+                    </div>
+
+                    <h3>2. Vấn đề khi KHÔNG dùng Decorator</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Vấn đề: Quá nhiều subclass</span>
+                        </div>
+                        <span class="keyword">class</span> <span class="class-name">Coffee</span> { }<br>
+                        <span class="keyword">class</span> <span class="class-name">CoffeeWithMilk</span> <span class="keyword">extends</span> <span class="class-name">Coffee</span> { }<br>
+                        <span class="keyword">class</span> <span class="class-name">CoffeeWithSugar</span> <span class="keyword">extends</span> <span class="class-name">Coffee</span> { }<br>
+                        <span class="keyword">class</span> <span class="class-name">CoffeeWithMilkAndSugar</span> <span class="keyword">extends</span> <span class="class-name">Coffee</span> { }<br>
+                        <span class="keyword">class</span> <span class="class-name">CoffeeWithMilkSugarAndCream</span> <span class="keyword">extends</span> <span class="class-name">Coffee</span> { }<br>
+                        <span class="comment">// ... và nhiều class khác nữa!</span>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4><i class="fas fa-times-circle"></i> Vấn đề với kế thừa:</h4>
+                        <ul>
+                            <li><strong>Quá nhiều class</strong> - n class, m tính năng → n*m class</li>
+                            <li><strong>Rất khó mở rộng</strong> - mỗi tính năng mới cần nhiều class mới</li>
+                            <li><strong>Code trùng lặp</strong> - logic giống nhau ở nhiều class</li>
+                            <li><strong>Khó bảo trì</strong> - sửa một tính năng phải sửa nhiều class</li>
+                            <li><strong>Class explosion</strong> - số lượng class tăng theo cấp số nhân</li>
+                        </ul>
+                    </div>
+
+                    <h3>3. Khi nào nên dùng Decorator?</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Trường hợp</th>
+                                    <th>Lý do</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Muốn thêm chức năng</strong></td>
+                                    <td>Không sửa class gốc (Open/Closed Principle)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Chức năng linh hoạt</strong></td>
+                                    <td>Bật/tắt tùy ý, kết hợp tự do</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tránh nhiều subclass</strong></td>
+                                    <td>Thay vì tạo class cho mỗi tổ hợp</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Runtime modification</strong></td>
+                                    <td>Thay đổi chức năng khi chạy chương trình</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>4. Cấu trúc Decorator Pattern</h3>
+                    <div class="pattern-steps">
+                        <div class="pattern-step">
+                            <div class="pattern-step-number">1</div>
+                            <strong>Component</strong>
+                            <p>Interface chung</p>
+                        </div>
+                        <div class="pattern-step">
+                            <div class="pattern-step-number">2</div>
+                            <strong>ConcreteComponent</strong>
+                            <p>Object gốc</p>
+                        </div>
+                        <div class="pattern-step">
+                            <div class="pattern-step-number">3</div>
+                            <strong>Decorator</strong>
+                            <p>Lớp bọc trừu tượng</p>
+                        </div>
+                        <div class="pattern-step">
+                            <div class="pattern-step-number">4</div>
+                            <strong>ConcreteDecorator</strong>
+                            <p>Chức năng cụ thể</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN VÍ DỤ DECORATOR -->
+                <section id="decorator-example" class="section">
+                    <h2><i class="fas fa-layer-group"></i> DECORATOR PATTERN - VÍ DỤ CHI TIẾT</h2>
+
+                    <h3>5. Decorator Pattern – Ví dụ CHI TIẾT</h3>
+                    <div class="info-box">
+                        <h4><i class="fas fa-coffee"></i> Bài toán thực tế: Gọi món cà phê</h4>
+                        <p>Khách hàng có thể thêm nhiều topping vào cà phê: sữa, đường, kem, đá,... Mỗi topping thêm tiền và thay đổi mô tả.</p>
+                    </div>
+
+                    <h4>5.1. Component – Interface Coffee</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Coffee.java - Interface chung</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public interface</span> <span class="class-name">Coffee</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> cost(); <span class="comment">// giá tiền</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;String description(); <span class="comment">// mô tả</span><br>
+                        }
+                    </div>
+
+                    <h4>5.2. ConcreteComponent – Cà phê gốc</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>BasicCoffee.java - Cà phê đen cơ bản</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">BasicCoffee</span> <span class="keyword">implements</span> <span class="class-name">Coffee</span> {<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">@Override</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public double</span> cost() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> 20000; <span class="comment">// giá gốc 20k</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">@Override</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String description() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="string">"Cà phê đen"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <h4>5.3. Decorator – Lớp bọc trừu tượng</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>CoffeeDecorator.java - Decorator trừu tượng</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public abstract class</span> <span class="class-name">CoffeeDecorator</span> <span class="keyword">implements</span> <span class="class-name">Coffee</span> {<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">protected</span> <span class="class-name">Coffee</span> coffee; <span class="comment">// Object được bọc</span><br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">CoffeeDecorator</span>(<span class="class-name">Coffee</span> coffee) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.coffee = coffee;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Các method sẽ được override bởi concrete decorator</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">@Override</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public double</span> cost() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> coffee.cost();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">@Override</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String description() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> coffee.description();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Giải thích Decorator trừu tượng:</h4>
+                        <ul>
+                            <li><strong>Chứa reference</strong> đến Coffee object (object được bọc)</li>
+                            <li><strong>Implement Coffee interface</strong> - có thể thay thế Coffee</li>
+                            <li><strong>Delegate</strong> các method call đến coffee bên trong</li>
+                            <li><strong>Có thể bọc nhiều lớp</strong> - decorator bọc decorator</li>
+                        </ul>
+                    </div>
+
+                    <h4>5.4. ConcreteDecorator – Thêm sữa</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>MilkDecorator.java - Thêm sữa</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">MilkDecorator</span> <span class="keyword">extends</span> <span class="class-name">CoffeeDecorator</span> {<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">MilkDecorator</span>(<span class="class-name">Coffee</span> coffee) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">super</span>(coffee);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">@Override</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public double</span> cost() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="keyword">super</span>.cost() + 5000; <span class="comment">// thêm 5k cho sữa</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">@Override</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String description() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="keyword">super</span>.description() + <span class="string">" + sữa"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <h4>5.5. ConcreteDecorator – Thêm đường</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>SugarDecorator.java - Thêm đường</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">SugarDecorator</span> <span class="keyword">extends</span> <span class="class-name">CoffeeDecorator</span> {<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">SugarDecorator</span>(<span class="class-name">Coffee</span> coffee) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">super</span>(coffee);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">@Override</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public double</span> cost() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="keyword">super</span>.cost() + 2000; <span class="comment">// thêm 2k cho đường</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">@Override</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String description() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="keyword">super</span>.description() + <span class="string">" + đường"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <h4>5.6. ConcreteDecorator – Thêm kem whipping</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>WhippedCreamDecorator.java - Thêm kem</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">WhippedCreamDecorator</span> <span class="keyword">extends</span> <span class="class-name">CoffeeDecorator</span> {<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">WhippedCreamDecorator</span>(<span class="class-name">Coffee</span> coffee) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">super</span>(coffee);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">@Override</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public double</span> cost() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="keyword">super</span>.cost() + 7000; <span class="comment">// thêm 7k cho kem</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">@Override</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String description() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="keyword">super</span>.description() + <span class="string">" + kem whipping"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <h3>5.7. Sử dụng Decorator Pattern</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>CoffeeShop.java - Client sử dụng</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">CoffeeShop</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 1. Cà phê đen cơ bản</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="class-name">Coffee</span> coffee = <span class="keyword">new</span> <span class="class-name">BasicCoffee</span>();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(coffee.description() + <span class="string">" - Giá: "</span> + coffee.cost());<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 2. Thêm sữa</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;coffee = <span class="keyword">new</span> <span class="class-name">MilkDecorator</span>(coffee);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(coffee.description() + <span class="string">" - Giá: "</span> + coffee.cost());<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 3. Thêm đường</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;coffee = <span class="keyword">new</span> <span class="class-name">SugarDecorator</span>(coffee);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(coffee.description() + <span class="string">" - Giá: "</span> + coffee.cost());<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 4. Thêm kem whipping</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;coffee = <span class="keyword">new</span> <span class="class-name">WhippedCreamDecorator</span>(coffee);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(coffee.description() + <span class="string">" - Giá: "</span> + coffee.cost());<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 5. Tạo order khác: chỉ sữa và đường, không kem</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="class-name">Coffee</span> coffee2 = <span class="keyword">new</span> <span class="class-name">BasicCoffee</span>();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;coffee2 = <span class="keyword">new</span> <span class="class-name">MilkDecorator</span>(coffee2);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;coffee2 = <span class="keyword">new</span> <span class="class-name">SugarDecorator</span>(coffee2);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"\nOrder 2: "</span> + coffee2.description() + <span class="string">" - Giá: "</span> + coffee2.cost());<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-terminal"></i> Kết quả khi chạy:</h4>
+                        <div class="code-block" style="background: #f8f9fa; color: #333;">
+                            Cà phê đen - Giá: 20000.0<br>
+                            Cà phê đen + sữa - Giá: 25000.0<br>
+                            Cà phê đen + sữa + đường - Giá: 27000.0<br>
+                            Cà phê đen + sữa + đường + kem whipping - Giá: 34000.0<br>
+                            <br>
+                            Order 2: Cà phê đen + sữa + đường - Giá: 27000.0
+                        </div>
+                        <p><strong>Ưu điểm:</strong> Có thể kết hợp decorator linh hoạt, tạo nhiều tổ hợp khác nhau mà không cần tạo class mới.</p>
+                    </div>
+
+                    <h3>6. Ưu & Nhược điểm Decorator Pattern</h3>
+                    <div class="comparison-grid">
+                        <div class="comparison-card" style="border-top-color: var(--success);">
+                            <h4><i class="fas fa-check-circle"></i> Ưu điểm</h4>
+                            <ul>
+                                <li><strong>Thêm chức năng linh hoạt</strong> - kết hợp tự do</li>
+                                <li><strong>Không sửa code cũ</strong> - tuân thủ Open/Closed</li>
+                                <li><strong>Tránh kế thừa phức tạp</strong> - không cần class cho mỗi tổ hợp</li>
+                                <li><strong>Single Responsibility</strong> - mỗi decorator một chức năng</li>
+                                <li><strong>Runtime modification</strong> - thêm/xóa chức năng khi chạy</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="comparison-card" style="border-top-color: var(--accent);">
+                            <h4><i class="fas fa-exclamation-circle"></i> Nhược điểm</h4>
+                            <ul>
+                                <li><strong>Nhiều class nhỏ</strong> - mỗi chức năng một class</li>
+                                <li><strong>Khó debug</strong> - stack trace dài khi có nhiều decorator</li>
+                                <li><strong>Cấu trúc phức tạp</strong> - nhiều lớp bọc lồng nhau</li>
+                                <li><strong>Khó khởi tạo</strong> - phải bọc từ trong ra ngoài</li>
+                                <li><strong>Performance</strong> - nhiều lớp delegate</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm Decorator Pattern</h4>
+                        <p>Chọn các topping để thêm vào cà phê:</p>
+                        <div class="input-group">
+                            <label><input type="checkbox" id="milk" checked> Thêm sữa (+5k)</label>
+                            <label><input type="checkbox" id="sugar" checked> Thêm đường (+2k)</label>
+                            <label><input type="checkbox" id="cream"> Thêm kem whipping (+7k)</label>
+                            <label><input type="checkbox" id="ice"> Thêm đá (+1k)</label>
+                        </div>
+                        <button class="btn" onclick="testDecoratorPattern()">
+                            <i class="fas fa-play"></i> Tạo Cà Phê
+                        </button>
+                        <div class="result" id="decoratorResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="decoratorResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN SO SÁNH -->
+                <section id="comparison" class="section">
+                    <h2><i class="fas fa-balance-scale"></i> III. SO SÁNH ADAPTER & DECORATOR</h2>
+
+                    <h3>So sánh Adapter và Decorator Pattern</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tiêu chí</th>
+                                    <th>Adapter Pattern</th>
+                                    <th>Decorator Pattern</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Mục đích</strong></td>
+                                    <td>Chuyển đổi interface</td>
+                                    <td>Thêm chức năng</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Sửa hành vi</strong></td>
+                                    <td>Không (chỉ chuyển đổi)</td>
+                                    <td>Có (thêm chức năng mới)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Bọc object</strong></td>
+                                    <td>Có (chứa Adaptee)</td>
+                                    <td>Có (chứa Component)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Transparency</strong></td>
+                                    <td>Không (client biết interface mới)</td>
+                                    <td>Có (client không biết có decorator)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Dùng khi</strong></td>
+                                    <td>Interface không tương thích</td>
+                                    <td>Muốn mở rộng chức năng</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Số lượng class</strong></td>
+                                    <td>Ít (1 adapter cho 1 adaptee)</td>
+                                    <td>Nhiều (1 decorator cho 1 chức năng)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4><i class="fas fa-plug"></i> Dùng Adapter khi:</h4>
+                            <ul>
+                                <li>Cần tích hợp code cũ với hệ thống mới</li>
+                                <li>Interface không tương thích</li>
+                                <li>Không thể sửa code gốc (third-party lib)</li>
+                                <li>Muốn tái sử dụng class có sẵn</li>
+                                <li>Ví dụ: Chuyển đổi XML → JSON, 110V → 220V</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="comparison-card">
+                            <h4><i class="fas fa-gift"></i> Dùng Decorator khi:</h4>
+                            <ul>
+                                <li>Muốn thêm chức năng linh hoạt</li>
+                                <li>Không muốn dùng kế thừa (class explosion)</li>
+                                <li>Cần thêm/xóa chức năng khi runtime</li>
+                                <li>Object cần nhiều tính năng tùy chọn</li>
+                                <li>Ví dụ: Coffee với topping, File với compression/encryption</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="note">
+                        <h4><i class="fas fa-lightbulb"></i> Lưu ý quan trọng:</h4>
+                        <p>Trong thực tế, hai pattern này thường bị nhầm lẫn vì đều "bọc" object. Cách phân biệt:</p>
+                        <ol>
+                            <li><strong>Adapter</strong>: <em>"Làm cho A trông giống B"</em> - chỉ thay đổi interface, không thêm chức năng</li>
+                            <li><strong>Decorator</strong>: <em>"Làm cho A tốt hơn"</em> - giữ nguyên interface, thêm chức năng mới</li>
+                        </ol>
+                        <p>Một object có thể vừa được adapter vừa được decorator!</p>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-question-circle"></i> Bài tập phân biệt Pattern</h4>
+                        <p>Trong các tình huống sau, nên dùng Adapter hay Decorator?</p>
+                        
+                        <div class="input-group">
+                            <label>1. Hệ thống cần đọc file PDF, nhưng thư viện cũ chỉ đọc DOC:</label>
+                            <select id="q1">
+                                <option value="">Chọn pattern</option>
+                                <option value="adapter">Adapter</option>
+                                <option value="decorator">Decorator</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>2. Muốn thêm tính năng nén (compress) và mã hóa (encrypt) cho file:</label>
+                            <select id="q2">
+                                <option value="">Chọn pattern</option>
+                                <option value="adapter">Adapter</option>
+                                <option value="decorator">Decorator</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>3. Kết nối database MySQL cũ với hệ thống mới dùng PostgreSQL interface:</label>
+                            <select id="q3">
+                                <option value="">Chọn pattern</option>
+                                <option value="adapter">Adapter</option>
+                                <option value="decorator">Decorator</option>
+                            </select>
+                        </div>
+                        
+                        <button class="btn" onclick="checkPatternUnderstanding()">
+                            <i class="fas fa-check"></i> Kiểm tra
+                        </button>
+                        
+                        <div class="result" id="patternResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="patternResultContent"></div>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <h4><i class="fas fa-graduation-cap"></i> Tổng kết buổi học</h4>
+                        <p>Hôm nay bạn đã học hai Structural Pattern quan trọng:</p>
+                        <ol>
+                            <li><strong>Adapter Pattern</strong> - Chuyển đổi interface, kết nối các thành phần không tương thích</li>
+                            <li><strong>Decorator Pattern</strong> - Thêm chức năng linh hoạt, tránh kế thừa cứng nhắc</li>
+                        </ol>
+                        <p>Cả hai pattern đều giúp:</p>
+                        <ul>
+                            <li><strong>Tái sử dụng code</strong> - không cần viết lại từ đầu</li>
+                            <li><strong>Linh hoạt</strong> - dễ dàng mở rộng, thay đổi</li>
+                            <li><strong>Tuân thủ SOLID</strong> - đặc biệt là Open/Closed Principle</li>
+                            <li><strong>Giảm coupling</strong> - các thành phần ít phụ thuộc vào nhau</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- PHẦN BÀI TẬP THỰC HÀNH -->
+                <section id="exercises" class="section">
+                    <h2><i class="fas fa-dumbbell"></i> BÀI TẬP THỰC HÀNH</h2>
+
+                    <h3>Bài tập 1: Adapter cho Payment Gateway</h3>
+                    <p>Bạn có class cũ <code>PayPalPayment</code> với method <code>sendPayment(double amount)</code>. Hệ thống mới yêu cầu interface <code>PaymentProcessor</code> với method <code>processPayment(double amount)</code>. Hãy viết adapter.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>PaymentProcessor.java (Interface mới)</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public interface</span> <span class="class-name">PaymentProcessor</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">boolean</span> processPayment(<span class="keyword">double</span> amount);<br>
+                        }
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>PayPalPayment.java (Class cũ)</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">PayPalPayment</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> sendPayment(<span class="keyword">double</span> amount) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Sending $"</span> + amount + <span class="string">" via PayPal"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <h3>Bài tập 2: Decorator cho Text Editor</h3>
+                    <p>Tạo hệ thống decorator cho text editor: Text cơ bản có thể thêm tính năng bold, italic, underline, color.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Text.java (Interface)</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public interface</span> <span class="class-name">Text</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;String getContent();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;String getDescription();<br>
+                        }
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>PlainText.java (ConcreteComponent)</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">PlainText</span> <span class="keyword">implements</span> <span class="class-name">Text</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String content;<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">PlainText</span>(String content) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.content = content;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">@Override</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String getContent() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> content;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">@Override</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String getDescription() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="string">"Plain text"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-question-circle"></i> Câu hỏi ôn tập</h4>
+                        
+                        <div class="input-group">
+                            <label>1. Adapter Pattern thường được dùng khi nào?</label>
+                            <select id="quiz1">
+                                <option value="">Chọn đáp án</option>
+                                <option value="a">Muốn thêm chức năng mới</option>
+                                <option value="b">Interface không tương thích</option>
+                                <option value="c">Cần tạo nhiều object giống nhau</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>2. Decorator Pattern khác kế thừa ở điểm nào?</label>
+                            <select id="quiz2">
+                                <option value="">Chọn đáp án</option>
+                                <option value="a">Decorator linh hoạt hơn, có thể thêm/xóa tính năng runtime</option>
+                                <option value="b">Decorator nhanh hơn kế thừa</option>
+                                <option value="c">Decorator ít code hơn kế thừa</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>3. Adapter và Decorator đều "bọc" object. Điểm khác biệt chính là?</label>
+                            <select id="quiz3">
+                                <option value="">Chọn đáp án</option>
+                                <option value="a">Adapter thay đổi interface, Decorator thêm chức năng</option>
+                                <option value="b">Adapter dùng cho class cũ, Decorator dùng cho class mới</option>
+                                <option value="c">Adapter có hiệu năng tốt hơn Decorator</option>
+                            </select>
+                        </div>
+                        
+                        <button class="btn" onclick="checkQuiz()">
+                            <i class="fas fa-check"></i> Kiểm tra đáp án
+                        </button>
+                        
+                        <div class="result" id="quizResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="quizResultContent"></div>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-tips"></i> Mẹo thực tế:</h4>
+                        <ul>
+                            <li><strong>Adapter</strong> thường được dùng khi làm việc với legacy code, third-party libraries</li>
+                            <li><strong>Decorator</strong> thường thấy trong I/O streams của Java (BufferedReader, GZIPInputStream,...)</li>
+                            <li>Cả hai pattern đều tuân thủ <strong>Open/Closed Principle</strong>: mở cho extension, đóng cho modification</li>
+                            <li>Khi gặp vấn đề "class explosion" (quá nhiều subclass), hãy nghĩ đến Decorator</li>
+                            <li>Khi gặp vấn đề "interface mismatch", hãy nghĩ đến Adapter</li>
+                        </ul>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>Giáo trình Java - Buổi 19: Adapter & Decorator Pattern &copy; 2023</p>
+        </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // Xóa class active từ tất cả các link và section
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    // Thêm class active cho link được click
+                    this.classList.add('active');
+
+                    // Hiển thị section tương ứng
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+        });
+
+        // Hàm copy code
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Đã copy!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Thử nghiệm Adapter Pattern
+        function testAdapterPattern() {
+            const adapterType = document.getElementById('adapterType').value;
+            const result = document.getElementById('adapterResult');
+            const output = document.getElementById('adapterResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = `=== DEMO ADAPTER PATTERN ===\n\n`;
+            
+            if (adapterType === 'voltage') {
+                outputText += `🎯 Tình huống: Chuyển đổi 110V → 220V\n\n`;
+                outputText += `// 1. Tạo object cũ (110V)\n`;
+                outputText += `OldSocket110V oldSocket = new OldSocket110V();\n\n`;
+                outputText += `// 2. Dùng Adapter để chuyển đổi\n`;
+                outputText += `Charger220V charger = new SocketAdapter(oldSocket);\n\n`;
+                outputText += `// 3. Client chỉ gọi interface mới\n`;
+                outputText += `charger.charge();\n\n`;
+                outputText += `📊 Kết quả:\n`;
+                outputText += `[Adapter] Chuyển đổi 110V sang 220V\n`;
+                outputText += `Cắm điện 110V\n`;
+                outputText += `Kiểm tra điện áp: 110V\n\n`;
+                outputText += `✅ Client chỉ biết interface Charger220V, không biết về OldSocket110V!`;
+            } else if (adapterType === 'usb') {
+                outputText += `🎯 Tình huống: Chuyển đổi USB-A → USB-C\n\n`;
+                outputText += `// 1. Cable cũ (USB-A)\n`;
+                outputText += `USBAcable usbA = new USBAcable();\n\n`;
+                outputText += `// 2. Adapter chuyển đổi\n`;
+                outputText += `USBCAdapter adapter = new USBCAdapter(usbA);\n\n`;
+                outputText += `// 3. Device mới chỉ nhận USB-C\n`;
+                outputText += `ModernDevice device = new ModernDevice();\n`;
+                outputText += `device.connect(adapter); // adapter implements USB-C interface\n\n`;
+                outputText += `📊 Kết quả:\n`;
+                outputText += `[Adapter] Chuyển USB-A sang USB-C\n`;
+                outputText += `USB-A connected\n`;
+                outputText += `Device: Connected via USB-C\n\n`;
+                outputText += `✅ Device không biết đang dùng cable USB-A cũ!`;
+            } else if (adapterType === 'json') {
+                outputText += `🎯 Tình huống: Chuyển đổi XML → JSON\n\n`;
+                outputText += `// 1. Service cũ trả về XML\n`;
+                outputText += `XMLService xmlService = new XMLService();\n`;
+                outputText += `String xmlData = xmlService.getData(); // returns XML\n\n`;
+                outputText += `// 2. Adapter chuyển XML → JSON\n`;
+                outputText += `JSONAdapter adapter = new JSONAdapter(xmlService);\n\n`;
+                outputText += `// 3. Client mới chỉ đọc JSON\n`;
+                outputText += `ModernClient client = new ModernClient();\n`;
+                outputText += `client.processData(adapter.getData()); // returns JSON\n\n`;
+                outputText += `📊 Kết quả:\n`;
+                outputText += `[Adapter] Converting XML to JSON\n`;
+                outputText += `XML data: <user><name>John</name></user>\n`;
+                outputText += `JSON data: {"user": {"name": "John"}}\n`;
+                outputText += `Client: Successfully processed JSON data\n\n`;
+                outputText += `✅ Client chỉ làm việc với JSON, không biết về XML!`;
+            }
+            
+            output.textContent = outputText;
+        }
+
+        // Thử nghiệm Decorator Pattern
+        function testDecoratorPattern() {
+            const milk = document.getElementById('milk').checked;
+            const sugar = document.getElementById('sugar').checked;
+            const cream = document.getElementById('cream').checked;
+            const ice = document.getElementById('ice').checked;
+            
+            const result = document.getElementById('decoratorResult');
+            const output = document.getElementById('decoratorResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = `=== DEMO DECORATOR PATTERN ===\n\n`;
+            outputText += `🎯 Tạo cà phê với các topping đã chọn:\n\n`;
+            
+            // Mô phỏng quá trình tạo coffee
+            outputText += `Coffee coffee = new BasicCoffee();\n`;
+            outputText += `// Giá gốc: 20,000đ\n\n`;
+            
+            let total = 20000;
+            let description = "Cà phê đen";
+            
+            if (milk) {
+                outputText += `coffee = new MilkDecorator(coffee); // +5,000đ\n`;
+                total += 5000;
+                description += " + sữa";
+            }
+            
+            if (sugar) {
+                outputText += `coffee = new SugarDecorator(coffee); // +2,000đ\n`;
+                total += 2000;
+                description += " + đường";
+            }
+            
+            if (cream) {
+                outputText += `coffee = new WhippedCreamDecorator(coffee); // +7,000đ\n`;
+                total += 7000;
+                description += " + kem whipping";
+            }
+            
+            if (ice) {
+                outputText += `coffee = new IceDecorator(coffee); // +1,000đ\n`;
+                total += 1000;
+                description += " + đá";
+            }
+            
+            outputText += `\n📊 Kết quả:\n`;
+            outputText += `Mô tả: ${description}\n`;
+            outputText += `Tổng tiền: ${total.toLocaleString()}đ\n\n`;
+            
+            outputText += `🎁 Thành phần:\n`;
+            outputText += `- Cà phê đen: 20,000đ\n`;
+            if (milk) outputText += `- Sữa: 5,000đ\n`;
+            if (sugar) outputText += `- Đường: 2,000đ\n`;
+            if (cream) outputText += `- Kem whipping: 7,000đ\n`;
+            if (ice) outputText += `- Đá: 1,000đ\n\n`;
+            
+            outputText += `✅ Ưu điểm với Decorator:\n`;
+            outputText += `1. Có thể kết hợp topping linh hoạt (${Math.pow(2, 4)} tổ hợp có thể)\n`;
+            outputText += `2. Không cần tạo class mới cho mỗi tổ hợp\n`;
+            outputText += `3. Dễ thêm topping mới (chỉ cần thêm Decorator class)\n`;
+            outputText += `4. Code core (BasicCoffee) không bị thay đổi\n`;
+            
+            output.textContent = outputText;
+        }
+
+        // Kiểm tra hiểu biết về Pattern
+        function checkPatternUnderstanding() {
+            const q1 = document.getElementById('q1').value;
+            const q2 = document.getElementById('q2').value;
+            const q3 = document.getElementById('q3').value;
+            
+            const result = document.getElementById('patternResult');
+            const output = document.getElementById('patternResultContent');
+            
+            result.classList.add('active');
+            
+            let score = 0;
+            let outputText = `=== KIỂM TRA HIỂU BIẾT PATTERN ===\n\n`;
+            
+            // Câu 1
+            outputText += `1. Hệ thống cần đọc PDF, thư viện cũ chỉ đọc DOC:\n`;
+            outputText += `   Đáp án của bạn: ${q1 === 'adapter' ? 'Adapter ✅' : q1 === 'decorator' ? 'Decorator' : 'Chưa chọn'}\n`;
+            if (q1 === 'adapter') {
+                outputText += `   ✅ ĐÚNG! Adapter chuyển đổi interface (DOC → PDF)\n`;
+                score++;
+            } else if (q1 === 'decorator') {
+                outputText += `   ❌ SAI - Đây là vấn đề interface không tương thích, cần Adapter\n`;
+            }
+            
+            // Câu 2
+            outputText += `\n2. Thêm tính năng nén và mã hóa cho file:\n`;
+            outputText += `   Đáp án của bạn: ${q2 === 'adapter' ? 'Adapter' : q2 === 'decorator' ? 'Decorator ✅' : 'Chưa chọn'}\n`;
+            if (q2 === 'decorator') {
+                outputText += `   ✅ ĐÚNG! Decorator thêm chức năng (compress, encrypt)\n`;
+                score++;
+            } else if (q2 === 'adapter') {
+                outputText += `   ❌ SAI - Đây là thêm chức năng mới, cần Decorator\n`;
+            }
+            
+            // Câu 3
+            outputText += `\n3. Kết nối MySQL cũ với PostgreSQL interface:\n`;
+            outputText += `   Đáp án của bạn: ${q3 === 'adapter' ? 'Adapter ✅' : q3 === 'decorator' ? 'Decorator' : 'Chưa chọn'}\n`;
+            if (q3 === 'adapter') {
+                outputText += `   ✅ ĐÚNG! Adapter chuyển đổi interface (MySQL → PostgreSQL)\n`;
+                score++;
+            } else if (q3 === 'decorator') {
+                outputText += `   ❌ SAI - Đây là tích hợp hệ thống không tương thích, cần Adapter\n`;
+            }
+            
+            outputText += `\n=== TỔNG KẾT ===\n`;
+            outputText += `Số câu đúng: ${score}/3\n`;
+            
+            if (score === 3) {
+                outputText += `🎉 Xuất sắc! Bạn đã phân biệt rõ Adapter và Decorator!\n\n`;
+                outputText += `📝 Ghi nhớ:\n`;
+                outputText += `- Adapter: "Làm cho A trông giống B" (interface conversion)\n`;
+                outputText += `- Decorator: "Làm cho A tốt hơn" (add functionality)`;
+            } else if (score === 2) {
+                outputText += `👍 Tốt! Hãy ôn tập lại một chút về use case của mỗi pattern.`;
+            } else {
+                outputText += `📚 Cần ôn tập lại về Adapter và Decorator pattern.\n\n`;
+                outputText += `🔑 Mẹo phân biệt:\n`;
+                outputText += `- Adapter: Khi có 2 interface không khớp, cần "chuyển đổi"\n`;
+                outputText += `- Decorator: Khi muốn "thêm tính năng" linh hoạt`;
+            }
+            
+            output.textContent = outputText;
+        }
+
+        // Kiểm tra quiz
+        function checkQuiz() {
+            const q1 = document.getElementById('quiz1').value;
+            const q2 = document.getElementById('quiz2').value;
+            const q3 = document.getElementById('quiz3').value;
+            
+            const result = document.getElementById('quizResult');
+            const output = document.getElementById('quizResultContent');
+            
+            result.classList.add('active');
+            
+            let score = 0;
+            let outputText = `=== KẾT QUẢ TRẮC NGHIỆM ===\n\n`;
+            
+            // Câu 1
+            outputText += `1. Adapter Pattern thường được dùng khi nào?\n`;
+            outputText += `   Đáp án của bạn: ${q1 === 'a' ? 'Muốn thêm chức năng mới' : q1 === 'b' ? 'Interface không tương thích ✅' : q1 === 'c' ? 'Cần tạo nhiều object giống nhau' : 'Chưa chọn'}\n`;
+            if (q1 === 'b') {
+                outputText += `   ✅ ĐÚNG! Adapter dùng khi interface không tương thích\n`;
+                score++;
+            } else {
+                outputText += `   ❌ SAI - Adapter dùng khi interface không tương thích\n`;
+            }
+            
+            // Câu 2
+            outputText += `\n2. Decorator Pattern khác kế thừa ở điểm nào?\n`;
+            outputText += `   Đáp án của bạn: ${q2 === 'a' ? 'Decorator linh hoạt hơn, có thể thêm/xóa tính năng runtime ✅' : q2 === 'b' ? 'Decorator nhanh hơn kế thừa' : q2 === 'c' ? 'Decorator ít code hơn kế thừa' : 'Chưa chọn'}\n`;
+            if (q2 === 'a') {
+                outputText += `   ✅ ĐÚNG! Decorator linh hoạt hơn, có thể thay đổi khi runtime\n`;
+                score++;
+            } else {
+                outputText += `   ❌ SAI - Decorator linh hoạt hơn, có thể thêm/xóa tính năng runtime\n`;
+            }
+            
+            // Câu 3
+            outputText += `\n3. Adapter và Decorator đều "bọc" object. Điểm khác biệt chính là?\n`;
+            outputText += `   Đáp án của bạn: ${q3 === 'a' ? 'Adapter thay đổi interface, Decorator thêm chức năng ✅' : q3 === 'b' ? 'Adapter dùng cho class cũ, Decorator dùng cho class mới' : q3 === 'c' ? 'Adapter có hiệu năng tốt hơn Decorator' : 'Chưa chọn'}\n`;
+            if (q3 === 'a') {
+                outputText += `   ✅ ĐÚNG! Adapter thay đổi interface, Decorator thêm chức năng\n`;
+                score++;
+            } else {
+                outputText += `   ❌ SAI - Adapter thay đổi interface, Decorator thêm chức năng\n`;
+            }
+            
+            outputText += `\n=== TỔNG KẾT ===\n`;
+            outputText += `Số câu đúng: ${score}/3\n`;
+            
+            if (score === 3) {
+                outputText += `🎉 Hoàn hảo! Bạn đã nắm vững Adapter và Decorator Pattern!`;
+            } else if (score === 2) {
+                outputText += `👍 Tốt lắm! Chỉ cần ôn tập thêm một chút nữa.`;
+            } else {
+                outputText += `📚 Cần ôn tập lại bài học về Adapter và Decorator Pattern.`;
+            }
+            
+            output.textContent = outputText;
+        }
+    </script>
+</body>
+</html>
