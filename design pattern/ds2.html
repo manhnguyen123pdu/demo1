@@ -372,7 +372,7 @@
                 border-right: none;
                 border-bottom: 3px solid var(--secondary);
             }
-            
+
             .comparison-grid {
                 grid-template-columns: 1fr;
             }
@@ -407,7 +407,7 @@
             padding: 15px;
             width: 150px;
             text-align: center;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             border: 2px solid var(--light);
         }
 
@@ -449,7 +449,7 @@
             background: white;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         }
 
         .copy-type.shallow {
@@ -477,13 +477,22 @@
         <div class="content-wrapper">
             <nav class="sidebar">
                 <ul class="nav-list">
-                    <li class="nav-item"><a href="#intro" class="nav-link active"><i class="fas fa-home"></i> Giới thiệu</a></li>
-                    <li class="nav-item"><a href="#builder-intro" class="nav-link"><i class="fas fa-building"></i> Builder Pattern</a></li>
-                    <li class="nav-item"><a href="#builder-problem" class="nav-link"><i class="fas fa-exclamation-triangle"></i> Vấn đề không dùng Builder</a></li>
-                    <li class="nav-item"><a href="#builder-example" class="nav-link"><i class="fas fa-code"></i> Ví dụ Builder</a></li>
-                    <li class="nav-item"><a href="#prototype-intro" class="nav-link"><i class="fas fa-clone"></i> Prototype Pattern</a></li>
-                    <li class="nav-item"><a href="#prototype-example" class="nav-link"><i class="fas fa-copy"></i> Ví dụ Prototype</a></li>
-                    <li class="nav-item"><a href="#comparison" class="nav-link"><i class="fas fa-balance-scale"></i> So sánh Pattern</a></li>
+                    <li class="nav-item"><a href="#intro" class="nav-link active"><i class="fas fa-home"></i> Giới
+                            thiệu</a></li>
+                    <li class="nav-item"><a href="#builder-intro" class="nav-link"><i class="fas fa-building"></i>
+                            Builder Pattern</a></li>
+                    <li class="nav-item"><a href="#builder-problem" class="nav-link"><i
+                                class="fas fa-exclamation-triangle"></i> Vấn đề không dùng Builder</a></li>
+                    <li class="nav-item"><a href="#builder-example" class="nav-link"><i class="fas fa-code"></i>
+                            Builder Java core</a></li>
+                    <li class="nav-item"><a href="#builder-example2" class="nav-link"><i class="fas fa-code"></i>
+                            Builder class riêng</a></li>
+                    <li class="nav-item"><a href="#prototype-intro" class="nav-link"><i class="fas fa-clone"></i>
+                            Prototype Pattern</a></li>
+                    <li class="nav-item"><a href="#prototype-example" class="nav-link"><i class="fas fa-copy"></i> Ví dụ
+                            Prototype</a></li>
+                    <li class="nav-item"><a href="#comparison" class="nav-link"><i class="fas fa-balance-scale"></i> So
+                            sánh Pattern</a></li>
                 </ul>
             </nav>
 
@@ -493,7 +502,8 @@
                     <h2><i class="fas fa-home"></i> CHƯƠNG 5 – DESIGN PATTERNS CƠ BẢN</h2>
 
                     <h3>BUILDER & PROTOTYPE</h3>
-                     <div style="display: flex; justify-content: center;"><img style="width: 60%; " src="../img//e69bba3d-15f2-44fd-80db-dcf561497cce-md.jpeg" alt=""></div>
+                    <div style="display: flex; justify-content: center;"><img style="width: 60%; "
+                            src="../img//e69bba3d-15f2-44fd-80db-dcf561497cce-md.jpeg" alt=""></div>
                     <!-- <div class="pattern-diagram">
                         <i class="fas fa-cogs"></i>
                         <h4>Hai Creational Pattern Quan Trọng</h4>
@@ -510,7 +520,7 @@
                                 <li>Linh hoạt trong việc tạo đối tượng</li>
                             </ul>
                         </div>
-                        
+
                         <div class="comparison-card">
                             <h4><i class="fas fa-clone"></i> Prototype Pattern</h4>
                             <p><strong>Mục đích:</strong> Tạo đối tượng mới bằng cách sao chép</p>
@@ -526,8 +536,10 @@
                         <h4><i class="fas fa-lightbulb"></i> Tại sao học hai pattern này?</h4>
                         <p>Builder và Prototype giải quyết hai vấn đề khác nhau trong việc tạo đối tượng:</p>
                         <ol>
-                            <li><strong>Builder</strong> - Khi đối tượng có nhiều thuộc tính, không phải lúc nào cũng cần set hết</li>
-                            <li><strong>Prototype</strong> - Khi cần tạo nhiều đối tượng giống nhau, clone nhanh hơn new</li>
+                            <li><strong>Builder</strong> - Khi đối tượng có nhiều thuộc tính, không phải lúc nào cũng
+                                cần set hết</li>
+                            <li><strong>Prototype</strong> - Khi cần tạo nhiều đối tượng giống nhau, clone nhanh hơn new
+                            </li>
                         </ol>
                     </div>
                 </section>
@@ -552,7 +564,8 @@
 
                     <div class="info-box">
                         <h4><i class="fas fa-comment"></i> Hiểu đơn giản:</h4>
-                        <p><strong>Object có nhiều thuộc tính + Không phải lúc nào cũng dùng hết = Builder giúp tạo object dễ đọc – dễ dùng – tránh lỗi</strong></p>
+                        <p><strong>Object có nhiều thuộc tính + Không phải lúc nào cũng dùng hết = Builder giúp tạo
+                                object dễ đọc – dễ dùng – tránh lỗi</strong></p>
                     </div>
 
                     <h3>2. Khi nào nên dùng Builder?</h3>
@@ -615,13 +628,14 @@
                     <h2><i class="fas fa-exclamation-triangle"></i> VẤN ĐỀ KHI KHÔNG DÙNG BUILDER</h2>
 
                     <h3>2. Vấn đề khi KHÔNG dùng Builder</h3>
-                    
+
                     <div class="code-block">
                         <div class="code-header">
                             <span>Constructor nhiều tham số - Code xấu</span>
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                         </div>
-                        <span class="class-name">User</span> user = <span class="keyword">new</span> <span class="class-name">User</span>(<br>
+                        <span class="class-name">User</span> user = <span class="keyword">new</span> <span
+                            class="class-name">User</span>(<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"manh"</span>,<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"123456"</span>,<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"manh@gmail.com"</span>,<br>
@@ -670,7 +684,12 @@
 
                     <h3>5. Builder Pattern – Ví dụ chi tiết</h3>
                     <p><strong>Ví dụ:</strong> Tạo đối tượng User với nhiều thuộc tính</p>
-
+                    <p><b>Dùng khi:</b></p>
+                    <ul>
+                        <li>Chỉ có 1 class</li>
+                        <li>Không có kế thừa</li>
+                        <li>Không cần Factory</li>
+                    </ul>
                     <h4>5.1. Lớp Product (User.java)</h4>
                     <div class="code-block">
                         <div class="code-header">
@@ -682,73 +701,100 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String username;<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String password;<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String email;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> <span class="keyword">int</span> age;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> <span class="keyword">int</span>
+                        age;<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String address;<br>
                         <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Constructor private - chỉ Builder có thể gọi</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> <span class="class-name">User</span>(Builder builder) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.username = builder.username;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.password = builder.password;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.email = builder.email;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.age = builder.age;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.address = builder.address;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Constructor private - chỉ Builder có thể
+                            gọi</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> <span
+                            class="class-name">User</span>(Builder builder) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.username =
+                        builder.username;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.password =
+                        builder.password;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.email =
+                        builder.email;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.age =
+                        builder.age;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.address =
+                        builder.address;<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;}<br>
                         <br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Getter methods...</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String getUsername() { <span class="keyword">return</span> username; }<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String getEmail() { <span class="keyword">return</span> email; }<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String getUsername() { <span
+                            class="keyword">return</span> username; }<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String getEmail() { <span
+                            class="keyword">return</span> email; }<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// ... các getter khác</span><br>
-                        }
-                    </div>
-
-                    <h4>5.2. Builder (Inner Class trong User)</h4>
-                    <div class="code-block">
-                        <div class="code-header">
-                            <span>Builder Inner Class</span>
-                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                        </div>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Builder class (inner class)</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static class</span> <span class="class-name">Builder</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static class</span> <span
+                            class="class-name">Builder</span> {<br>
                         <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String username;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String password;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String email;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> <span class="keyword">int</span> age;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String address;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String
+                        username;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String
+                        password;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String
+                        email;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> <span
+                            class="keyword">int</span> age;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String
+                        address;<br>
                         <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Các method build từng bước (fluent interface)</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">Builder</span> username(String username) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.username = username;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return this</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Các method build từng
+                            bước (fluent interface)</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span
+                            class="class-name">Builder</span> username(String username) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">this</span>.username = username;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">return this</span>;<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
                         <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">Builder</span> password(String password) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.password = password;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return this</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span
+                            class="class-name">Builder</span> password(String password) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">this</span>.password = password;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">return this</span>;<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
                         <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">Builder</span> email(String email) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.email = email;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return this</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span
+                            class="class-name">Builder</span> email(String email) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">this</span>.email = email;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">return this</span>;<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
                         <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">Builder</span> age(<span class="keyword">int</span> age) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.age = age;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return this</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span
+                            class="class-name">Builder</span> age(<span class="keyword">int</span> age) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">this</span>.age = age;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">return this</span>;<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
                         <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">Builder</span> address(String address) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.address = address;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return this</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span
+                            class="class-name">Builder</span> address(String address) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">this</span>.address = address;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">return this</span>;<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
                         <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Method build() cuối cùng</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">User</span> build() {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Có thể validate ở đây</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (username == <span class="keyword">null</span> || password == <span class="keyword">null</span>) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span> IllegalArgumentException(<span class="string">"Username và password là bắt buộc"</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return new</span> <span class="class-name">User</span>(<span class="keyword">this</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Method build() cuối
+                            cùng</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span
+                            class="class-name">User</span> build() {<br>
+                        <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Có thể validate ở đây</span><br> -->
+                        <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (username == <span class="keyword">null</span> || password == <span class="keyword">null</span>) {<br> -->
+                        <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span> IllegalArgumentException(<span class="string">"Username và password là bắt buộc"</span>);<br> -->
+                        <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br> -->
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">return new</span> <span class="class-name">User</span>(<span
+                            class="keyword">this</span>);<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;}<br>
                         }
@@ -763,7 +809,8 @@
                             <li>Giúp chain method: gọi liên tiếp các method</li>
                         </ol>
                         <div class="method-chain">
-                            <span class="method">.username()</span> → <span class="method">.password()</span> → <span class="method">.email()</span> → <span class="method">.build()</span>
+                            <span class="method">.username()</span> → <span class="method">.password()</span> → <span
+                                class="method">.email()</span> → <span class="method">.build()</span>
                         </div>
                     </div>
 
@@ -774,30 +821,48 @@
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                         </div>
                         <span class="keyword">public class</span> <span class="class-name">Main</span> {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                        {<br>
                         <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Tạo User với Builder - cực kỳ dễ đọc!</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="class-name">User</span> user = <span class="keyword">new</span> <span class="class-name">User</span>.Builder()<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.username(<span class="string">"manh"</span>)<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.password(<span class="string">"123456"</span>)<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.email(<span class="string">"manh@gmail.com"</span>)<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.age(<span class="number">20</span>)<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.address(<span class="string">"Ha Noi"</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Tạo User với Builder -
+                            cực kỳ dễ đọc!</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="class-name">User</span> user =
+                        <span class="keyword">new</span> <span class="class-name">User</span>.Builder()<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.username(<span
+                            class="string">"manh"</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.password(<span
+                            class="string">"123456"</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.email(<span
+                            class="string">"manh@gmail.com"</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.age(<span
+                            class="number">20</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.address(<span
+                            class="string">"Ha Noi"</span>)<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.build();<br>
                         <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Tạo user thành công: "</span> + user.getUsername());<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Tạo
+                            user thành công: "</span> + user.getUsername());<br>
                         <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Có thể bỏ qua một số thuộc tính không bắt buộc</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="class-name">User</span> user2 = <span class="keyword">new</span> <span class="class-name">User</span>.Builder()<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.username(<span class="string">"linh"</span>)<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.password(<span class="string">"654321"</span>)<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Không cần email</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Không cần age</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.address(<span class="string">"Hai Phong"</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Có thể bỏ qua một số
+                            thuộc tính không bắt buộc</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="class-name">User</span> user2 =
+                        <span class="keyword">new</span> <span class="class-name">User</span>.Builder()<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.username(<span
+                            class="string">"linh"</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.password(<span
+                            class="string">"654321"</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//
+                            Không cần email</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//
+                            Không cần age</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.address(<span
+                            class="string">"Hai Phong"</span>)<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.build();<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;}<br>
                         }
                     </div>
+
+
 
                     <div class="success-box">
                         <h4><i class="fas fa-check-circle"></i> Ưu điểm dễ thấy với Builder:</h4>
@@ -822,7 +887,7 @@
                                 <li>Validation trong build() method</li>
                             </ul>
                         </div>
-                        
+
                         <div class="comparison-card" style="border-top-color: var(--accent);">
                             <h4><i class="fas fa-exclamation-circle"></i> Nhược điểm</h4>
                             <ul>
@@ -856,6 +921,149 @@
                             <div class="result-content" id="builderResultContent"></div>
                         </div>
                     </div>
+                </section>
+
+                <!-- PHẦN VÍ DỤ BUILDER -->
+                <section id="builder-example2" class="section">
+                    <h2><i class="fas fa-code"></i> VÍ DỤ BUILDER PATTERN</h2>
+
+                    <h3>5. Builder Pattern – dùng class riêng</h3>
+                    <p><strong>Ví dụ:</strong> Tạo đối tượng User với nhiều thuộc tính</p>
+                    <p><b>Dùng khi:</b></p>
+                    <ul>
+                        <li>Có nhiều lớp con</li>
+                        <li>Kết hợp Factory Pattern</li>
+                        <li>Bài tập tổng hợp OOP + Design Pattern</li>
+                    </ul>
+                    <h4>5.1. Cấu trúc file Java</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cấu trúc file Java</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        User.java // Product<br>
+                        UserBuilder.java // Builder (class ngoài)<br>
+                        Main.java // Test
+                    </div>
+                    <h4>5.2. User.java – Product</h4>
+<div class="code-block">
+    <div class="code-header">
+        <span>User.java – Product</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <span class="keyword">public class</span> <span class="class-name">User</span> {<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String username;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String password;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String email;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> <span class="keyword">int</span> age;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String address;<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Constructor chỉ cho Builder gọi</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">User</span>(UserBuilder builder) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.username = builder.username;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.password = builder.password;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.email = builder.email;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.age = builder.age;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.address = builder.address;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Getter</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String getUsername() {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> username;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String getEmail() {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> email;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="keyword">int</span> getAge() {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> age;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String getAddress() {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> address;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+    }
+</div>
+                       <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Lưu ý</h4>
+                       <ul>
+<li>KHÔNG có setter</li>
+<li>KHÔNG tạo new User() trực tiếp</li>
+<li>User chỉ nhận dữ liệu từ Builder</li>
+                       </ul>
+                    </div>
+                    <h4>5.3.UserBuilder.java – Builder CLASS NGOÀI</h4>
+<div class="code-block">
+    <div class="code-header">
+        <span>UserBuilder.java</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <span class="keyword">public class</span> <span class="class-name">UserBuilder</span> {<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;String username;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;String password;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;String email;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> age;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;String address;<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">UserBuilder</span> username(String username) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.username = username;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return this</span>;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">UserBuilder</span> password(String password) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.password = password;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return this</span>;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">UserBuilder</span> email(String email) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.email = email;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return this</span>;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">UserBuilder</span> age(<span class="keyword">int</span> age) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.age = age;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return this</span>;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">UserBuilder</span> address(String address) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.address = address;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return this</span>;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// build() tạo User</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">User</span> build() {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return new</span> <span class="class-name">User</span>(<span class="keyword">this</span>);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+    }
+</div>
+                    <h3>6. Sử dụng Builder Pattern</h3>
+<div class="code-block">
+    <div class="code-header">
+        <span>Main.java</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <span class="keyword">public class</span> <span class="class-name">Main</span> {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="class-name">User</span> user = <span class="keyword">new</span> <span class="class-name">UserBuilder</span>()<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.username(<span class="string">"manhnd"</span>)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.password(<span class="string">"123456"</span>)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.email(<span class="string">"manh@gmail.com"</span>)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.age(21)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.address(<span class="string">"Ha Noi"</span>)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.build();<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(user.getUsername());<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(user.getEmail());<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+    }
+</div>
+
+
+
                 </section>
 
                 <!-- PHẦN PROTOTYPE PATTERN -->
@@ -916,7 +1124,9 @@
                     <h3>3. Prototype Pattern trong Java</h3>
                     <div class="info-box">
                         <h4><i class="fas fa-info-circle"></i> Java hỗ trợ sẵn Cloneable</h4>
-                        <p>Java có interface <code>Cloneable</code> và method <code>clone()</code> trong class <code>Object</code>:</p>
+                        <p>Java có interface <code>Cloneable</code> và method <code>clone()</code> trong class
+                            <code>Object</code>:
+                        </p>
                         <ul>
                             <li>Interface <code>Cloneable</code> - marker interface (không có method)</li>
                             <li>Method <code>protected Object clone()</code> trong class Object</li>
@@ -937,21 +1147,31 @@
                             <span>Student.java - Implement Cloneable</span>
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                         </div>
-                        <span class="keyword">public class</span> <span class="class-name">Student</span> <span class="keyword">implements</span> <span class="class-name">Cloneable</span> {<br>
+                        <span class="keyword">public class</span> <span class="class-name">Student</span> <span
+                            class="keyword">implements</span> <span class="class-name">Cloneable</span> {<br>
                         <br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String name;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> <span class="keyword">int</span> age;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> <span class="class-name">Address</span> address;  <span class="comment">// Reference type</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> <span class="keyword">int</span>
+                        age;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> <span
+                            class="class-name">Address</span> address; <span class="comment">// Reference
+                            type</span><br>
                         <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">Student</span>(String name, <span class="keyword">int</span> age, <span class="class-name">Address</span> address) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.name = name;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span
+                            class="class-name">Student</span>(String name, <span class="keyword">int</span> age, <span
+                            class="class-name">Address</span> address) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.name =
+                        name;<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.age = age;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.address = address;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.address =
+                        address;<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;}<br>
                         <br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Getter và Setter</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String getName() { <span class="keyword">return</span> name; }<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> setName(String name) { <span class="keyword">this</span>.name = name; }<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String getName() { <span
+                            class="keyword">return</span> name; }<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> setName(String name) { <span
+                            class="keyword">this</span>.name = name; }<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// ... các getter/setter khác</span><br>
                         }
                     </div>
@@ -964,8 +1184,11 @@
                         </div>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Shallow copy - mặc định</span><br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">@Override</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">protected</span> <span class="class-name">Object</span> clone() <span class="keyword">throws</span> <span class="class-name">CloneNotSupportedException</span> {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return super</span>.clone();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">protected</span> <span
+                            class="class-name">Object</span> clone() <span class="keyword">throws</span> <span
+                            class="class-name">CloneNotSupportedException</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return
+                            super</span>.clone();<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;}<br>
                         }
                     </div>
@@ -981,7 +1204,7 @@
                     </div>
 
                     <h3>5. Shallow Copy vs Deep Copy</h3>
-                    
+
                     <div class="copy-vs-deep">
                         <div class="copy-type shallow">
                             <h4><i class="fas fa-layer-group"></i> Shallow Copy</h4>
@@ -999,7 +1222,7 @@
                                 }
                             </div>
                         </div>
-                        
+
                         <div class="copy-type deep">
                             <h4><i class="fas fa-sitemap"></i> Deep Copy</h4>
                             <ul>
@@ -1028,10 +1251,15 @@
                         </div>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Deep copy - copy cả object con</span><br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">@Override</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">protected</span> <span class="class-name">Object</span> clone() <span class="keyword">throws</span> <span class="class-name">CloneNotSupportedException</span> {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="class-name">Student</span> clone = (<span class="class-name">Student</span>) <span class="keyword">super</span>.clone();<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Deep copy cho address</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clone.address = <span class="keyword">new</span> <span class="class-name">Address</span>(<span class="keyword">this</span>.address);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">protected</span> <span
+                            class="class-name">Object</span> clone() <span class="keyword">throws</span> <span
+                            class="class-name">CloneNotSupportedException</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="class-name">Student</span> clone =
+                        (<span class="class-name">Student</span>) <span class="keyword">super</span>.clone();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Deep copy cho
+                            address</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clone.address = <span class="keyword">new</span>
+                        <span class="class-name">Address</span>(<span class="keyword">this</span>.address);<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> clone;<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;}<br>
                         }
@@ -1044,25 +1272,44 @@
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                         </div>
                         <span class="keyword">public class</span> <span class="class-name">PrototypeDemo</span> {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) <span class="keyword">throws</span> <span class="class-name">CloneNotSupportedException</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                        <span class="keyword">throws</span> <span class="class-name">CloneNotSupportedException</span>
+                        {<br>
                         <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Tạo object gốc (prototype)</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="class-name">Address</span> address = <span class="keyword">new</span> <span class="class-name">Address</span>(<span class="string">"Ha Noi"</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="class-name">Student</span> s1 = <span class="keyword">new</span> <span class="class-name">Student</span>(<span class="string">"Manh"</span>, <span class="number">20</span>, address);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Tạo object gốc
+                            (prototype)</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="class-name">Address</span> address
+                        = <span class="keyword">new</span> <span class="class-name">Address</span>(<span
+                            class="string">"Ha Noi"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="class-name">Student</span> s1 =
+                        <span class="keyword">new</span> <span class="class-name">Student</span>(<span
+                            class="string">"Manh"</span>, <span class="number">20</span>, address);<br>
                         <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Clone object (thay vì tạo mới)</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="class-name">Student</span> s2 = (<span class="class-name">Student</span>) s1.clone();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Clone object (thay vì
+                            tạo mới)</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="class-name">Student</span> s2 =
+                        (<span class="class-name">Student</span>) s1.clone();<br>
                         <br>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Kiểm tra</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"s1 == s2: "</span> + (s1 == s2));       <span class="comment">// false - khác object</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"s1.name: "</span> + s1.getName());      <span class="comment">// Manh</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"s2.name: "</span> + s2.getName());      <span class="comment">// Manh</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"s1 ==
+                            s2: "</span> + (s1 == s2)); <span class="comment">// false - khác object</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                            class="string">"s1.name: "</span> + s1.getName()); <span class="comment">// Manh</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                            class="string">"s2.name: "</span> + s2.getName()); <span class="comment">// Manh</span><br>
                         <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Thay đổi tên của s2</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s2.setName(<span class="string">"Linh"</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"\nSau khi đổi tên:"</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"s1.name: "</span> + s1.getName());      <span class="comment">// Vẫn là Manh</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"s2.name: "</span> + s2.getName());      <span class="comment">// Đã thành Linh</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Thay đổi tên của
+                            s2</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s2.setName(<span
+                            class="string">"Linh"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"\nSau
+                            khi đổi tên:"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                            class="string">"s1.name: "</span> + s1.getName()); <span class="comment">// Vẫn là
+                            Manh</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                            class="string">"s2.name: "</span> + s2.getName()); <span class="comment">// Đã thành
+                            Linh</span><br>
                         &nbsp;&nbsp;&nbsp;&nbsp;}<br>
                         }
                     </div>
@@ -1070,8 +1317,9 @@
                     <div class="info-box">
                         <h4><i class="fas fa-info-circle"></i> Kết quả:</h4>
                         <p><strong>s1 == s2: false</strong> → 2 object khác nhau<br>
-                        <strong>s1.getName(): Manh</strong><br>
-                        <strong>s2.getName(): Manh</strong> (ban đầu) → sau đó thành <strong>Linh</strong></p>
+                            <strong>s1.getName(): Manh</strong><br>
+                            <strong>s2.getName(): Manh</strong> (ban đầu) → sau đó thành <strong>Linh</strong>
+                        </p>
                         <p>→ Dữ liệu được sao chép nhưng là 2 object độc lập</p>
                     </div>
 
@@ -1086,7 +1334,7 @@
                                 <li>Ẩn chi tiết tạo object từ client</li>
                             </ul>
                         </div>
-                        
+
                         <div class="comparison-card" style="border-top-color: var(--accent);">
                             <h4><i class="fas fa-exclamation-circle"></i> Nhược điểm</h4>
                             <ul>
@@ -1177,7 +1425,7 @@
                                 <li>Ví dụ: User, Product, Configuration</li>
                             </ul>
                         </div>
-                        
+
                         <div class="comparison-card">
                             <h4><i class="fas fa-clone"></i> Dùng Prototype khi:</h4>
                             <ul>
@@ -1194,25 +1442,29 @@
                         <h4><i class="fas fa-lightbulb"></i> Lời khuyên thực tế:</h4>
                         <p>Trong thực tế phát triển phần mềm:</p>
                         <ol>
-                            <li><strong>Dùng Builder</strong> khi thiết kế các model class (User, Product, Order,...) để code clean và dễ bảo trì</li>
-                            <li><strong>Dùng Prototype</strong> khi làm việc với object phức tạp, cần tạo nhiều instance giống nhau (game, đồ họa, template)</li>
-                            <li><strong>Có thể kết hợp</strong> cả hai: Dùng Builder để tạo prototype, sau đó clone prototype để tạo nhiều instance</li>
+                            <li><strong>Dùng Builder</strong> khi thiết kế các model class (User, Product, Order,...) để
+                                code clean và dễ bảo trì</li>
+                            <li><strong>Dùng Prototype</strong> khi làm việc với object phức tạp, cần tạo nhiều instance
+                                giống nhau (game, đồ họa, template)</li>
+                            <li><strong>Có thể kết hợp</strong> cả hai: Dùng Builder để tạo prototype, sau đó clone
+                                prototype để tạo nhiều instance</li>
                         </ol>
                     </div>
 
                     <div class="interactive-section">
                         <h4><i class="fas fa-question-circle"></i> Bài tập nhỏ</h4>
                         <p>Trong các tình huống sau, nên dùng Builder hay Prototype?</p>
-                        
+
                         <div class="input-group">
-                            <label>1. Tạo đối tượng Order với 15 thuộc tính (customer, items, shipping, payment,...):</label>
+                            <label>1. Tạo đối tượng Order với 15 thuộc tính (customer, items, shipping,
+                                payment,...):</label>
                             <select id="q1">
                                 <option value="">Chọn pattern</option>
                                 <option value="builder">Builder</option>
                                 <option value="prototype">Prototype</option>
                             </select>
                         </div>
-                        
+
                         <div class="input-group">
                             <label>2. Tạo 1000 enemy character trong game, mỗi character có 50+ thuộc tính:</label>
                             <select id="q2">
@@ -1221,7 +1473,7 @@
                                 <option value="prototype">Prototype</option>
                             </select>
                         </div>
-                        
+
                         <div class="input-group">
                             <label>3. Tạo document template, sau đó tạo nhiều document từ template đó:</label>
                             <select id="q3">
@@ -1230,11 +1482,11 @@
                                 <option value="prototype">Prototype</option>
                             </select>
                         </div>
-                        
+
                         <button class="btn" onclick="checkPatternSelection()">
                             <i class="fas fa-check"></i> Kiểm tra
                         </button>
-                        
+
                         <div class="result" id="patternResult">
                             <strong>Kết quả:</strong>
                             <div class="result-content" id="patternResultContent"></div>
@@ -1246,18 +1498,20 @@
                         <p>Hôm nay bạn đã học:</p>
                         <ol>
                             <li><strong>Builder Pattern</strong> - Tạo object phức tạp theo từng bước, code dễ đọc</li>
-                            <li><strong>Prototype Pattern</strong> - Tạo object mới bằng cách clone từ object có sẵn</li>
+                            <li><strong>Prototype Pattern</strong> - Tạo object mới bằng cách clone từ object có sẵn
+                            </li>
                             <li><strong>Shallow Copy vs Deep Copy</strong> - Hiểu sự khác biệt và khi nào dùng</li>
                             <li><strong>So sánh Builder vs Prototype</strong> - Biết khi nào dùng pattern nào</li>
                         </ol>
-                        <p>Hai pattern này đều thuộc nhóm <strong>Creational Patterns</strong>, giúp việc tạo object linh hoạt và hiệu quả hơn.</p>
+                        <p>Hai pattern này đều thuộc nhóm <strong>Creational Patterns</strong>, giúp việc tạo object
+                            linh hoạt và hiệu quả hơn.</p>
                     </div>
                 </section>
             </main>
         </div>
 
         <footer>
-              <p> Giáo trình Java- Builder & Prototype Pattern © GV: Nguyễn Đình Mạnh</p>
+            <p> Giáo trình Java- Builder & Prototype Pattern © GV: Nguyễn Đình Mạnh</p>
         </footer>
     </div>
 
@@ -1303,11 +1557,11 @@
             const selected = document.getElementById('constructorOrder').value;
             const result = document.getElementById('constructorResult');
             const output = document.getElementById('constructorResultContent');
-            
+
             result.classList.add('active');
-            
+
             let outputText = `=== KIỂM TRA THỨ TỰ CONSTRUCTOR ===\n\n`;
-            
+
             if (selected === 'correct') {
                 outputText += `✅ ĐÚNG! Thứ tự là: username, password, email, age, address, role\n\n`;
                 outputText += `Nhưng vấn đề là:\n`;
@@ -1325,7 +1579,7 @@
             } else {
                 outputText += `⚠ Vui lòng chọn một đáp án!`;
             }
-            
+
             output.textContent = outputText;
         }
 
@@ -1334,37 +1588,37 @@
             const username = document.getElementById('builderUsername').value || "manh";
             const email = document.getElementById('builderEmail').value || "manh@gmail.com";
             const age = document.getElementById('builderAge').value || "20";
-            
+
             const result = document.getElementById('builderResult');
             const output = document.getElementById('builderResultContent');
-            
+
             result.classList.add('active');
-            
+
             let outputText = `=== DEMO BUILDER PATTERN ===\n\n`;
             outputText += `// Tạo User với Builder\n`;
             outputText += `User user = new User.Builder()\n`;
             outputText += `    .username("${username}")\n`;
             outputText += `    .password("******")\n`;
             outputText += `    .email("${email}")\n`;
-            
+
             if (age) {
                 outputText += `    .age(${age})\n`;
             } else {
                 outputText += `    // Không set age (optional)\n`;
             }
-            
+
             outputText += `    .address("Ha Noi")\n`;
             outputText += `    .build();\n\n`;
-            
+
             outputText += `Ưu điểm với Builder:\n`;
             outputText += `1. ✅ Dễ đọc: biết ngay giá trị nào ứng với thuộc tính nào\n`;
             outputText += `2. ✅ Không cần nhớ thứ tự tham số\n`;
             outputText += `3. ✅ Có thể bỏ qua thuộc tính không cần thiết (age)\n`;
             outputText += `4. ✅ Có thể validate trong build() method\n`;
             outputText += `5. ✅ Object immutable (không thay đổi sau khi tạo)\n\n`;
-            
+
             outputText += `User được tạo thành công!`;
-            
+
             output.textContent = outputText;
         }
 
@@ -1373,27 +1627,27 @@
             const cloneType = document.getElementById('cloneType').value;
             const result = document.getElementById('prototypeResult');
             const output = document.getElementById('prototypeResultContent');
-            
+
             result.classList.add('active');
-            
+
             let outputText = `=== DEMO PROTOTYPE PATTERN ===\n\n`;
             outputText += `// Tạo object gốc\n`;
             outputText += `Student s1 = new Student("Manh", 20, new Address("Ha Noi"));\n\n`;
             outputText += `// Clone object\n`;
             outputText += `Student s2 = (Student) s1.clone();\n\n`;
-            
+
             outputText += `Kết quả:\n`;
             outputText += `s1 == s2: false (2 object khác nhau)\n`;
             outputText += `s1.name: Manh\n`;
             outputText += `s2.name: Manh (sao chép từ s1)\n\n`;
-            
+
             outputText += `// Thay đổi tên s2\n`;
             outputText += `s2.setName("Linh");\n\n`;
-            
+
             outputText += `Sau khi đổi:\n`;
             outputText += `s1.name: Manh (không đổi)\n`;
             outputText += `s2.name: Linh (đã đổi)\n\n`;
-            
+
             if (cloneType === 'shallow') {
                 outputText += `⚠ Với SHALLOW COPY:\n`;
                 outputText += `- s1.address == s2.address: true (cùng reference)\n`;
@@ -1407,7 +1661,7 @@
                 outputText += `- Tốn thời gian và bộ nhớ hơn nhưng an toàn\n\n`;
                 outputText += `👉 Dùng khi object có reference type và cần độc lập hoàn toàn`;
             }
-            
+
             output.textContent = outputText;
         }
 
@@ -1416,15 +1670,15 @@
             const q1 = document.getElementById('q1').value;
             const q2 = document.getElementById('q2').value;
             const q3 = document.getElementById('q3').value;
-            
+
             const result = document.getElementById('patternResult');
             const output = document.getElementById('patternResultContent');
-            
+
             result.classList.add('active');
-            
+
             let score = 0;
             let outputText = `=== KIỂM TRA HIỂU BIẾT PATTERN ===\n\n`;
-            
+
             // Câu 1
             outputText += `1. Tạo đối tượng Order với 15 thuộc tính:\n`;
             outputText += `   Đáp án của bạn: ${q1 === 'builder' ? 'Builder ✅' : q1 === 'prototype' ? 'Prototype' : 'Chưa chọn'}\n`;
@@ -1434,7 +1688,7 @@
             } else if (q1 === 'prototype') {
                 outputText += `   ❌ SAI - Order có nhiều thuộc tính, Builder sẽ giúp code dễ đọc hơn\n`;
             }
-            
+
             // Câu 2
             outputText += `\n2. Tạo 1000 enemy character trong game:\n`;
             outputText += `   Đáp án của bạn: ${q2 === 'builder' ? 'Builder' : q2 === 'prototype' ? 'Prototype ✅' : 'Chưa chọn'}\n`;
@@ -1444,7 +1698,7 @@
             } else if (q2 === 'builder') {
                 outputText += `   ❌ SAI - Với 1000 object giống nhau, Prototype (clone) sẽ hiệu quả hơn\n`;
             }
-            
+
             // Câu 3
             outputText += `\n3. Tạo document template, sau đó tạo nhiều document:\n`;
             outputText += `   Đáp án của bạn: ${q3 === 'builder' ? 'Builder' : q3 === 'prototype' ? 'Prototype ✅' : 'Chưa chọn'}\n`;
@@ -1454,10 +1708,10 @@
             } else if (q3 === 'builder') {
                 outputText += `   ❌ SAI - Khi đã có template, clone từ template (Prototype) hiệu quả hơn\n`;
             }
-            
+
             outputText += `\n=== TỔNG KẾT ===\n`;
             outputText += `Số câu đúng: ${score}/3\n`;
-            
+
             if (score === 3) {
                 outputText += `🎉 Xuất sắc! Bạn đã hiểu rõ khi nào dùng Builder, khi nào dùng Prototype!`;
             } else if (score === 2) {
@@ -1467,9 +1721,10 @@
                 outputText += `- Builder: object nhiều thuộc tính, code clean\n`;
                 outputText += `- Prototype: nhiều object giống nhau, clone nhanh`;
             }
-            
+
             output.textContent = outputText;
         }
     </script>
 </body>
+
 </html>
