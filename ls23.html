@@ -1,0 +1,1968 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUỔI 24: CUSTOM EXCEPTIONS & BEST PRACTICES</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            overflow: hidden;
+
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 80vh;
+        }
+
+        .sidebar {
+            height: 80vh;
+            overflow: scroll;
+            background: var(--light);
+            padding: 20px;
+            border-right: 3px solid var(--secondary);
+        }
+
+        .nav-list {
+            list-style: none;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h4 {
+            color: var(--info);
+            margin: 20px 0 10px;
+        }
+
+        h5 {
+            color: var(--dark);
+            margin: 15px 0 8px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.4;
+            border: 2px solid #444;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid var(--info);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .interactive-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .sidebar ul {
+            padding: 0;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+
+        .btn-run {
+            background: var(--success);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid var(--warning);
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 1400px) {
+            body {
+                padding: 0;
+            }
+
+            footer {
+
+                padding: 8px 20px;
+
+            }
+
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 3px solid var(--secondary);
+            }
+        }
+
+        .method-detail {
+            background: #f8f9fa;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .method-detail h5 {
+            color: var(--success);
+            margin-top: 0;
+        }
+
+        .tree-structure {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+        }
+
+        .tree-item {
+            margin-left: 20px;
+            padding: 2px 0;
+        }
+
+        .tree-item::before {
+            content: "├── ";
+            color: #666;
+        }
+
+        .tree-item:last-child::before {
+            content: "└── ";
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+
+        .timezone-demo {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .pattern-table {
+            font-size: 0.9rem;
+        }
+
+        .pattern-table code {
+            background: #f5f5f5;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-throw"></i> BUỔI 24: Throwing Exceptions</h1>
+
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#part1" class="nav-link active"><i
+                                class="fas fa-exclamation-circle"></i> <span>PHẦN 1: THROWING EXCEPTIONS</span></a></li>
+                    <li class="nav-item"><a href="#part2" class="nav-link"><i class="fas fa-users"></i> <span>PHẦN 2:
+                                ỨNG DỤNG THỰC TẾ</span></a></li>
+                    <li class="nav-item"><a href="#part3" class="nav-link"><i class="fas fa-check-double"></i>
+                            <span>PHẦN 3: BEST PRACTICES</span></a></li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- PHẦN 1: THROWING EXCEPTIONS -->
+                <section id="part1" class="section active">
+                    <h2><i class="fas fa-exclamation-circle"></i> PHẦN 1: THROWING EXCEPTIONS - CÁCH NÉM EXCEPTION</h2>
+
+                    <h3>1.1 THROW LÀ GÌ? - GIẢI THÍCH CỰC KỲ CHI TIẾT</h3>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-lightbulb"></i> Hãy tưởng tượng:</h4>
+                        <p>Bạn là nhân viên ngân hàng. Một khách hàng đến rút tiền:</p>
+                        <ul>
+                            <li>Nếu khách đưa sổ đỏ, đúng chữ ký → Bạn đưa tiền ✅</li>
+                            <li>Nếu khách không có sổ, chữ ký sai → Bạn KHÔNG đưa tiền và phải BÁO CÁO lỗi</li>
+                        </ul>
+                        <p><strong>Trong lập trình cũng vậy:</strong></p>
+                        <ul>
+                            <li>Khi dữ liệu hợp lệ → Xử lý bình thường</li>
+                            <li>Khi dữ liệu không hợp lệ → Bạn phải NÉM EXCEPTION để báo cáo</li>
+                        </ul>
+                    </div>
+
+                    <div class="note">
+                        <p><strong>Trong Java, throw là từ khóa dùng để ném một exception ra khỏi chương trình hiện
+                                tại.</strong></p>
+                    </div>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">throw new</span> TenException(<span class="string">"Thông báo
+                            lỗi"</span>);
+                    </div>
+
+                    <h4>Giải thích từng thành phần:</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Thành phần</th>
+                                    <th>Ý nghĩa</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge badge-info">throw</span></td>
+                                    <td>Từ khóa báo hiệu "tôi đang ném exception"</td>
+                                    <td><code>throw</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-info">new</span></td>
+                                    <td>Tạo một object mới</td>
+                                    <td><code>new</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-info">TenException</span></td>
+                                    <td>Tên của lớp exception</td>
+                                    <td><code>IllegalArgumentException</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-info">"Thông báo lỗi"</span></td>
+                                    <td>Thông điệp mô tả lỗi</td>
+                                    <td><code>"Tuổi không hợp lệ"</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>1.2 TẠI SAO PHẢI DÙNG THROW?</h3>
+
+                    <h4>Hãy nhìn vào đoạn code KHÔNG dùng throw:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Calculator.java - KHÔNG dùng throw</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> Calculator {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public int</span> divide(<span
+                            class="keyword">int</span> a, <span class="keyword">int</span> b) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Nếu b = 0 thì
+                            sao?</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> a / b; <span
+                            class="comment">// Sẽ bị lỗi ArithmeticException</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                        {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calculator calc = <span
+                            class="keyword">new</span> Calculator();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> result =
+                        calc.divide(<span class="number">10</span>, <span class="number">0</span>); <span
+                            class="comment">// Chương trình crash</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Kết
+                            quả: "</span> + result); <span class="comment">// Không bao giờ chạy đến đây</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <div class="warning-box">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Kết quả:</h4>
+                        <pre style="background: #333; color: #fff; padding: 10px; border-radius: 5px;">
+Exception in thread "main" java.lang.ArithmeticException: / by zero
+    at Calculator.divide(Calculator.java:4)
+    at Calculator.main(Calculator.java:8)
+                        </pre>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Vấn đề:</h4>
+                        <ul>
+                            <li>Java tự động ném ArithmeticException</li>
+                            <li>Chương trình dừng đột ngột</li>
+                            <li>User không biết chuyện gì xảy ra</li>
+                            <li>Không có cơ hội xử lý lỗi</li>
+                        </ul>
+                    </div>
+
+                    <h4>GIẢI PHÁP: Tự kiểm tra và throw exception có ý nghĩa</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Calculator.java - CÓ dùng throw</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> Calculator {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public int</span> divide(<span
+                            class="keyword">int</span> a, <span class="keyword">int</span> b) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Tự kiểm tra và throw
+                            exception</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (b == <span
+                            class="number">0</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">throw new</span> IllegalArgumentException(<span class="string">"Không thể
+                            chia cho 0. Số chia phải khác 0"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> a / b;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                        {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calculator calc = <span
+                            class="keyword">new</span> Calculator();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">int</span> result = calc.divide(<span class="number">10</span>, <span
+                            class="number">0</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                            class="string">"Kết quả: "</span> + result);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                        (IllegalArgumentException e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                            class="string">"Lỗi: "</span> + e.getMessage());<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//
+                            Có thể xử lý tiếp: yêu cầu nhập lại, dùng giá trị mặc định, v.v.</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <h3>1.3 CÁC LOẠI EXCEPTION CÓ SẴN TRONG JAVA</h3>
+
+                    <div class="info-box">
+                        <p>Java cung cấp rất nhiều exception có sẵn. Dưới đây là các loại thường dùng nhất:</p>
+                    </div>
+
+                    <h4>1.3.1 IllegalArgumentException - LỖI THAM SỐ KHÔNG HỢP LỆ</h4>
+                    <div class="note">
+                        <p><strong>Định nghĩa:</strong> Dùng khi tham số truyền vào method không hợp lệ.</p>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> ViduIllegalArgumentException.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> ViduIllegalArgumentException {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> setTuoi(<span
+                            class="keyword">int</span> tuoi) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//
+                            IllegalArgumentException: Dùng khi tham số không hợp lệ</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (tuoi < <span
+                            class="number">0</span> || tuoi > <span class="number">150</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                class="keyword">throw new</span> IllegalArgumentException(<span class="string">"Tuổi
+                                phải từ 0-150. Nhận được: "</span> + tuoi);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Tuổi hợp lệ: "</span> + tuoi);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ViduIllegalArgumentException obj = <span
+                                class="keyword">new</span> ViduIllegalArgumentException();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;obj.setTuoi(-<span
+                                class="number">5</span>); <span class="comment">// Sẽ throw exception</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                            (IllegalArgumentException e) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Bắt được lỗi: "</span> + e.getMessage());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                    </div>
+
+                    <h4>1.3.2 NullPointerException - LỖI THAM CHIẾU NULL</h4>
+                    <div class="note">
+                        <p><strong>Định nghĩa:</strong> Dùng khi đối tượng là null nhưng cố gọi phương thức.</p>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> ViduNullPointerException.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> ViduNullPointerException {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> inDoDaiChuoi(String str) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// NullPointerException:
+                            Dùng khi đối tượng null</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (str == <span
+                            class="keyword">null</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">throw new</span> NullPointerException(<span class="string">"Chuỗi không được
+                            null"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Độ dài:
+                            "</span> + str.length());<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                        {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ViduNullPointerException obj = <span
+                            class="keyword">new</span> ViduNullPointerException();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;obj.inDoDaiChuoi(<span
+                            class="keyword">null</span>); <span class="comment">// Sẽ throw exception</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                        (NullPointerException e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                            class="string">"Bắt được lỗi: "</span> + e.getMessage());<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <h4>1.3.3 ArithmeticException - LỖI TOÁN HỌC</h4>
+                    <div class="note">
+                        <p><strong>Định nghĩa:</strong> Dùng khi có lỗi toán học (chia cho 0, v.v.)</p>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> ViduArithmeticException.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> ViduArithmeticException {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public int</span> chia(<span
+                            class="keyword">int</span> a, <span class="keyword">int</span> b) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// ArithmeticException:
+                            Dùng cho lỗi toán học</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (b == <span
+                            class="number">0</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">throw new</span> ArithmeticException(<span class="string">"Không thể chia
+                            cho 0"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> a / b;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                        {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ViduArithmeticException obj = <span
+                            class="keyword">new</span> ViduArithmeticException();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;obj.chia(<span
+                            class="number">10</span>, <span class="number">0</span>); <span class="comment">// Sẽ throw
+                            exception</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                        (ArithmeticException e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                            class="string">"Bắt được lỗi: "</span> + e.getMessage());<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <h4>1.3.4 NumberFormatException - LỖI ĐỊNH DẠNG SỐ</h4>
+                    <div class="note">
+                        <p><strong>Định nghĩa:</strong> Dùng khi chuyển đổi chuỗi sang số thất bại.</p>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> ViduNumberFormatException.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> ViduNumberFormatException {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public int</span> chuyenSangSo(String str) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// NumberFormatException:
+                            Dùng khi chuỗi không phải số</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (str == <span
+                            class="keyword">null</span> || !str.matches(<span class="string">"\\d+"</span>)) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">throw new</span> NumberFormatException(<span class="string">"Chuỗi không
+                            phải số hợp lệ: "</span> + str);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>
+                        Integer.parseInt(str);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                        {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ViduNumberFormatException obj = <span
+                            class="keyword">new</span> ViduNumberFormatException();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;obj.chuyenSangSo(<span
+                            class="string">"abc"</span>); <span class="comment">// Sẽ throw exception</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                        (NumberFormatException e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                            class="string">"Bắt được lỗi: "</span> + e.getMessage());<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <h4>1.3.5 IndexOutOfBoundsException - LỖI CHỈ SỐ</h4>
+                    <div class="note">
+                        <p><strong>Định nghĩa:</strong> Dùng khi truy cập chỉ số ngoài phạm vi mảng/list.</p>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> ViduIndexOutOfBoundsException.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> ViduIndexOutOfBoundsException {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public int</span> layPhanTu(<span
+                            class="keyword">int</span>[] arr, <span class="keyword">int</span> index) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//
+                            IndexOutOfBoundsException: Dùng khi index không hợp lệ</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (index < <span
+                            class="number">0</span> || index >= arr.length) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                class="keyword">throw new</span> IndexOutOfBoundsException(<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String.format(<span
+                                class="string">"Index %d không hợp lệ. Độ dài mảng: %d"</span>, index, arr.length)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>
+                            arr[index];<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ViduIndexOutOfBoundsException obj = <span
+                                class="keyword">new</span> ViduIndexOutOfBoundsException();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span>[] arr =
+                            {<span class="number">1</span>, <span class="number">2</span>, <span
+                                class="number">3</span>};<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;obj.layPhanTu(arr,
+                            <span class="number">5</span>); <span class="comment">// Sẽ throw exception</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                            (IndexOutOfBoundsException e) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Bắt được lỗi: "</span> + e.getMessage());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                    </div>
+
+                    <h3>1.4 THROW TRONG CÁC TÌNH HUỐNG CỤ THỂ</h3>
+
+                    <h4>1.4.1 Throw trong constructor</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SinhVien.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> SinhVien {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String maSV;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String ten;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private int</span> tuoi;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> SinhVien(String maSV, String ten,
+                        <span class="keyword">int</span> tuoi) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Kiểm tra mã sinh
+                            viên</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (maSV == <span
+                            class="keyword">null</span> || maSV.trim().isEmpty()) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">throw new</span> IllegalArgumentException(<span class="string">"Mã sinh viên
+                            không được để trống"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Kiểm tra tên</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (ten == <span
+                            class="keyword">null</span> || ten.trim().isEmpty()) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">throw new</span> IllegalArgumentException(<span class="string">"Tên sinh
+                            viên không được để trống"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Kiểm tra
+                            tuổi</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (tuoi < <span
+                            class="number">18</span> || tuoi > <span class="number">100</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                class="keyword">throw new</span> IllegalArgumentException(<span class="string">"Tuổi
+                                phải từ 18-100. Nhận được: "</span> + tuoi);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.maSV =
+                            maSV;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.ten =
+                            ten;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.tuoi =
+                            tuoi;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Tạo
+                                sinh viên thành công: "</span> + ten);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SinhVien sv1 = <span
+                                class="keyword">new</span> SinhVien(<span class="string">"SV001"</span>, <span
+                                class="string">"Nguyễn Văn A"</span>, <span class="number">20</span>); <span
+                                class="comment">// OK</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SinhVien sv2 = <span
+                                class="keyword">new</span> SinhVien(<span class="string">""</span>, <span
+                                class="string">"Nguyễn Văn B"</span>, <span class="number">20</span>); <span
+                                class="comment">// Lỗi</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                            (IllegalArgumentException e) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Lỗi tạo sinh viên: "</span> + e.getMessage());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SinhVien sv3 = <span
+                                class="keyword">new</span> SinhVien(<span class="string">"SV002"</span>, <span
+                                class="keyword">null</span>, <span class="number">20</span>); <span class="comment">//
+                                Lỗi</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                            (IllegalArgumentException e) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Lỗi tạo sinh viên: "</span> + e.getMessage());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SinhVien sv4 = <span
+                                class="keyword">new</span> SinhVien(<span class="string">"SV003"</span>, <span
+                                class="string">"Nguyễn Văn C"</span>, <span class="number">150</span>); <span
+                                class="comment">// Lỗi</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                            (IllegalArgumentException e) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Lỗi tạo sinh viên: "</span> + e.getMessage());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                    </div>
+
+                    <h4>1.4.2 Throw trong method static</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> TinhToan.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> TinhToan {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static int</span> giaiThua(<span
+                            class="keyword">int</span> n) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (n < <span
+                            class="number">0</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                class="keyword">throw new</span> IllegalArgumentException(<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String.format(<span
+                                class="string">"Không thể tính giai thừa của số âm: %d"</span>, n)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (n > <span
+                                class="number">20</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                class="keyword">throw new</span> IllegalArgumentException(<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String.format(<span
+                                class="string">"Số quá lớn (tối đa 20). Nhận được: %d"</span>, n)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> ketQua =
+                            <span class="number">1</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span
+                                class="keyword">int</span> i = <span class="number">1</span>; i <= n; i++) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ketQua *= i;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>
+                                ketQua;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[]
+                                args) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                    class="string">"5! = "</span> + giaiThua(<span class="number">5</span>)); <span
+                                    class="comment">// OK</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                    class="string">"-3! = "</span> + giaiThua(-<span class="number">3</span>)); <span
+                                    class="comment">// Lỗi</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                                (IllegalArgumentException e) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                    class="string">"Lỗi: "</span> + e.getMessage());<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                    class="string">"25! = "</span> + giaiThua(<span class="number">25</span>)); <span
+                                    class="comment">// Lỗi</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                                (IllegalArgumentException e) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                    class="string">"Lỗi: "</span> + e.getMessage());<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                }
+                    </div>
+
+                    <h3>1.5 THROW VỚI CHECKED VS UNCHECKED - GIẢI THÍCH CHI TIẾT</h3>
+
+                    <h4>1.5.1 Unchecked Exception (RuntimeException)</h4>
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Đặc điểm:</h4>
+                        <ul>
+                            <li>KHÔNG bắt buộc khai báo throws</li>
+                            <li>KHÔNG bắt buộc xử lý try-catch</li>
+                            <li>Thường dùng cho lỗi lập trình</li>
+                        </ul>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> UncheckedExample.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> UncheckedExample {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// KHÔNG cần throws trong khai báo</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> validateAge(<span
+                            class="keyword">int</span> age) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (age < <span
+                            class="number">0</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                class="comment">// Unchecked exception - không cần khai báo</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                class="keyword">throw new</span> IllegalArgumentException(<span class="string">"Tuổi
+                                không thể âm: "</span> + age);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> process(String data) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Unchecked exception
+                                - không cần khai báo</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (data ==
+                            <span class="keyword">null</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                class="keyword">throw new</span> NullPointerException(<span class="string">"Dữ liệu
+                                không được null"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UncheckedExample ex = <span
+                                class="keyword">new</span> UncheckedExample();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Có thể xử lý hoặc
+                                không</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex.validateAge(-<span
+                                class="number">5</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                            (IllegalArgumentException e) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Bắt lỗi: "</span> + e.getMessage());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Hoặc không xử lý -
+                                chương trình vẫn compile</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex.process(<span
+                                class="keyword">null</span>); <span class="comment">// Sẽ crash khi chạy</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                    </div>
+
+                    <h4>1.5.2 Checked Exception</h4>
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Đặc điểm:</h4>
+                        <ul>
+                            <li>BẮT BUỘC khai báo throws</li>
+                            <li>BẮT BUỘC xử lý try-catch hoặc throws tiếp</li>
+                            <li>Thường dùng cho lỗi từ bên ngoài (file, network, database)</li>
+                        </ul>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> CheckedExample.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">import</span> java.io.*;<br>
+                        <br>
+                        <span class="keyword">public class</span> CheckedExample {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// PHẢI khai báo throws</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> readFile(String filename) <span
+                            class="keyword">throws</span> FileNotFoundException, IOException {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FileReader fr = <span class="keyword">new</span>
+                        FileReader(filename); <span class="comment">// Có thể throw FileNotFoundException</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BufferedReader br = <span
+                            class="keyword">new</span> BufferedReader(fr);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String line = br.readLine(); <span
+                            class="comment">// Có thể throw IOException</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(line);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;br.close();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Cách 1: Xử lý bằng try-catch</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> processFile1(String filename)
+                        {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;readFile(filename);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                        (FileNotFoundException e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                            class="string">"Không tìm thấy file: "</span> + filename);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                        (IOException e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                            class="string">"Lỗi đọc file: "</span> + e.getMessage());<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Cách 2: throws tiếp cho caller xử lý</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> processFile2(String filename)
+                        <span class="keyword">throws</span> FileNotFoundException, IOException {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;readFile(filename);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                        {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CheckedExample ex = <span
+                            class="keyword">new</span> CheckedExample();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Cách 1:
+                            try-catch</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex.processFile1(<span
+                            class="string">"test.txt"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Cách 2: phải try-catch
+                            ở đây</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex.processFile2(<span
+                            class="string">"test.txt"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                        (FileNotFoundException e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                            class="string">"File không tồn tại"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                        (IOException e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                            class="string">"Lỗi IO"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <h3>1.6 SO SÁNH CÁC LOẠI EXCEPTION THƯỜNG DÙNG</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Exception</th>
+                                    <th>Khi nào dùng</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge badge-info">IllegalArgumentException</span></td>
+                                    <td>Tham số không hợp lệ</td>
+                                    <td>setAge(-5)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-info">NullPointerException</span></td>
+                                    <td>Đối tượng null</td>
+                                    <td>str.length() với str = null</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-info">ArithmeticException</span></td>
+                                    <td>Lỗi toán học</td>
+                                    <td>10 / 0</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-info">NumberFormatException</span></td>
+                                    <td>Chuỗi không phải số</td>
+                                    <td>Integer.parseInt("abc")</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-info">IndexOutOfBoundsException</span></td>
+                                    <td>Index ngoài phạm vi</td>
+                                    <td>Mảng[10] với mảng dài 3</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-warning">FileNotFoundException</span></td>
+                                    <td>Không tìm thấy file</td>
+                                    <td>Đọc file không tồn tại</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-warning">IOException</span></td>
+                                    <td>Lỗi vào/ra</td>
+                                    <td>Lỗi đọc/ghi file</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- PHẦN 2: THROW TRONG THỰC TẾ -->
+                <section id="part2" class="section">
+                    <h2><i class="fas fa-users"></i> PHẦN 2: THROW TRONG THỰC TẾ - VÍ DỤ ỨNG DỤNG</h2>
+
+                    <h3>2.1 HỆ THỐNG QUẢN LÝ NHÂN VIÊN</h3>
+
+                    <h2>I. Mục tiêu</h2>
+                    <p>Xây dựng chương trình quản lý nhân viên bằng Java, sử dụng:</p>
+                    <ul>
+                        <li>Mảng đối tượng (Employee[])</li>
+                        <li>Xử lý ngoại lệ (Exception Handling)</li>
+                        <li>Kiểm tra dữ liệu đầu vào (Validation)</li>
+                        <li>Menu console cho phép thao tác</li>
+                    </ul>
+
+                    <h2>II. Yêu cầu chức năng</h2>
+
+                    <h3>1. Thêm nhân viên</h3>
+                    <p>Cho phép nhập:</p>
+                    <ul>
+                        <li>Mã nhân viên (String)</li>
+                        <li>Tên nhân viên (String)</li>
+                        <li>Tuổi (int)</li>
+                        <li>Lương (double)</li>
+                    </ul>
+
+                    <p><strong>Điều kiện kiểm tra:</strong></p>
+                    <ul>
+                        <li>Mã không được để trống</li>
+                        <li>Mã không được trùng trong mảng</li>
+                        <li>Tên không được để trống</li>
+                        <li>Tên từ 2–50 ký tự</li>
+                        <li>Tuổi từ 18–100</li>
+                        <li>Lương >= 0</li>
+                    </ul>
+
+                    <p>Nếu sai, ném IllegalArgumentException.</p>
+
+                    <hr>
+
+                    <h3>2. Tìm nhân viên theo mã</h3>
+                    <ul>
+                        <li>Nhập mã nhân viên</li>
+                        <li>Duyệt mảng để tìm</li>
+                        <li>Nếu không tìm thấy, ném NullPointerException</li>
+                        <li>Nếu tìm thấy, in thông tin nhân viên</li>
+                    </ul>
+
+                    <hr>
+
+                    <h3>3. Tăng lương nhân viên</h3>
+                    <ul>
+                        <li>Nhập mã nhân viên</li>
+                        <li>Nhập phần trăm tăng (1–100%)</li>
+                        <li>Cập nhật lương theo công thức:</li>
+                    </ul>
+
+                    <pre>
+Lương mới = Lương cũ * (1 + percent / 100)
+    </pre>
+
+                    <p>Nếu phần trăm không hợp lệ, ném IllegalArgumentException.</p>
+
+                    <hr>
+
+                    <h3>4. Xóa nhân viên</h3>
+                    <ul>
+                        <li>Nhập mã nhân viên cần xóa</li>
+                        <li>Nếu không tồn tại, ném NullPointerException</li>
+                        <li>Nếu tồn tại:
+                            <ul>
+                                <li>Dịch các phần tử phía sau lên trước</li>
+                                <li>Giảm số lượng nhân viên</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <hr>
+
+                    <h2>III. Yêu cầu kỹ thuật</h2>
+                    <ul>
+                        <li>Khai báo mảng: Employee[] employees;</li>
+                        <li>Biến quản lý số lượng: int count;</li>
+                        <li>Số lượng tối đa: ví dụ 100 nhân viên</li>
+                        <li>Không sử dụng ArrayList</li>
+                        <li>Không sử dụng HashMap</li>
+                        <li>Phải duyệt mảng bằng vòng lặp for</li>
+                    </ul>
+
+                    <hr>
+
+                    <h2>IV. Menu chương trình</h2>
+
+                    <pre>
+=== QUẢN LÝ NHÂN VIÊN ===
+1. Thêm nhân viên
+2. Tìm nhân viên
+3. Tăng lương
+4. Xóa nhân viên
+0. Thoát
+    </pre>
+
+                    <p>Chương trình chạy lặp cho đến khi người dùng chọn 0.</p>
+
+                    <hr>
+     <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Employee.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <i class="far fa-copy"></i> Copy
+                            </button>
+                        </div>
+
+                        <span class="keyword">public class</span> Employee {<br><br>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String id;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String name;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private int</span> age;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private double</span> salary;<br><br>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> Employee(String id, String name,
+                        <span class="keyword">int</span> age, <span class="keyword">double</span> salary) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.id = id;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.name =
+                        name;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.age = age;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.salary =
+                        salary;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String getId() { <span
+                            class="keyword">return</span> id; }<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="keyword">double</span>
+                        getSalary() { <span class="keyword">return</span> salary; }<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> setSalary(<span
+                            class="keyword">double</span> salary) { <span class="keyword">this</span>.salary = salary;
+                        }<br>
+                        }<br>
+
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> EmployeeManager.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <i class="far fa-copy"></i> Copy
+                            </button>
+                        </div>
+
+                        <span class="keyword">import</span> java.util.Scanner;<br><br>
+
+                        <span class="keyword">public class</span> EmployeeManager {<br><br>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> Employee[] employees =
+                        <span class="keyword">new</span> Employee[<span class="number">100</span>];<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private int</span> count =
+                        <span class="number">0</span>;<br><br>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> addEmployee(String id, String
+                        name,
+                        <span class="keyword">int</span> age, <span class="keyword">double</span> salary) {<br>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (findIndex(id)
+                        != -<span class="number">1</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">throw new</span> IllegalArgumentException(<span class="string">"Mã đã tồn
+                            tại"</span>);<br><br>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;employees[count++] =
+                        <span class="keyword">new</span> Employee(id, name, age, salary);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> Employee findEmployee(String id)
+                        {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> index =
+                        findIndex(id);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (index == -<span
+                            class="number">1</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">throw new</span> NullPointerException(<span class="string">"Không tìm
+                            thấy"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>
+                        employees[index];<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> increaseSalary(String id,
+                        <span class="keyword">double</span> percent) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Employee emp = findEmployee(id);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> newSalary =
+                        emp.getSalary() * (<span class="number">1</span> + percent / <span
+                            class="number">100</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emp.setSalary(newSalary);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> deleteEmployee(String id) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> index =
+                        findIndex(id);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (index == -<span
+                            class="number">1</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">throw new</span> NullPointerException(<span class="string">"Không tìm
+                            thấy"</span>);<br><br>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span
+                            class="keyword">int</span> i = index; i &lt; count - <span class="number">1</span>; i++)
+                        {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;employees[i] =
+                        employees[i + <span class="number">1</span>];<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count--;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private int</span> findIndex(String id) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span
+                            class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">if</span> (employees[i].getId().equals(id))<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">return</span> i;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> -<span
+                            class="number">1</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }<br>
+
+                    </div>
+               
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Main.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <i class="far fa-copy"></i> Copy
+                            </button>
+                        </div>
+
+                        <span class="keyword">import</span> java.util.Scanner;<br><br>
+
+                        <span class="keyword">public class</span> Main {<br>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                        {<br>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EmployeeManager manager =
+                        <span class="keyword">new</span> EmployeeManager();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scanner sc =
+                        <span class="keyword">new</span> Scanner(System.in);<br><br>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;manager.addEmployee(<span
+                            class="string">"E01"</span>,
+                        <span class="string">"Nam"</span>, <span class="number">25</span>, <span
+                            class="number">5000</span>);<br>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;manager.increaseSalary(<span
+                            class="string">"E01"</span>,
+                        <span class="number">10</span>);<br>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(
+                        manager.findEmployee(<span class="string">"E01"</span>).getSalary());<br>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }<br>
+
+                    </div>
+
+                </section>
+
+                <!-- PHẦN 3: BEST PRACTICES -->
+                <section id="part3" class="section">
+                    <h2><i class="fas fa-check-double"></i> PHẦN 3: BEST PRACTICES</h2>
+
+                    <h3>3.1 NGUYÊN TẮC 1: THROW EARLY (NÉM SỚM)</h3>
+
+                    <div class="principle-box">
+                        <h4><i class="fas fa-clock principle-icon"></i> Nguyên tắc: Kiểm tra và ném exception NGAY KHI
+                            PHÁT HIỆN LỖI, không để chương trình chạy tiếp.</h4>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-times-circle" style="color: #e74c3c;"></i> ❌ TỆ - Phát hiện
+                                muộn</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public double</span> tinhTrungBinh(<span class="keyword">int</span>[]
+                        numbers) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> sum = <span
+                            class="number">0</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Tính tổng trước - Nếu numbers null, sẽ lỗi ở
+                            đây</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> num :
+                        numbers) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sum += num;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Mãi sau mới kiểm tra</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (numbers == <span
+                            class="keyword">null</span>) { <span class="comment">// ❌ Quá muộn! Chương trình đã
+                            lỗi</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span>
+                        IllegalArgumentException(<span class="string">"Mảng không được null"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> (<span
+                            class="keyword">double</span>) sum / numbers.length;<br>
+                        }
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-check-circle" style="color: #27ae60;"></i> ✅ TỐT - Kiểm tra ngay
+                                đầu</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public double</span> tinhTrungBinhTot(<span class="keyword">int</span>[]
+                        numbers) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Kiểm tra NGAY LẬP TỨC</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (numbers == <span
+                            class="keyword">null</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span>
+                        IllegalArgumentException(<span class="string">"Mảng không được null"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (numbers.length == <span
+                            class="number">0</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span>
+                        IllegalArgumentException(<span class="string">"Mảng không được rỗng"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> sum = <span
+                            class="number">0</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> num :
+                        numbers) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sum += num;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> (<span
+                            class="keyword">double</span>) sum / numbers.length;<br>
+                        }
+                    </div>
+
+                    <h3>3.2 NGUYÊN TẮC 2: THROW MEANINGFUL EXCEPTIONS (NÉM EXCEPTION CÓ Ý NGHĨA)</h3>
+
+                    <div class="principle-box">
+                        <h4><i class="fas fa-comment-dots principle-icon"></i> Nguyên tắc: Chọn đúng loại exception và
+                            message phải rõ ràng, chi tiết.</h4>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-times-circle" style="color: #e74c3c;"></i> ❌ TỆ - Dùng sai loại
+                                exception</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public void</span> setTuoi(<span class="keyword">int</span> tuoi) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (tuoi < <span class="number">0</span>)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span>
+                            RuntimeException(<span class="string">"Lỗi"</span>); <span class="comment">// Quá chung
+                                chung</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-times-circle" style="color: #e74c3c;"></i> ❌ CŨNG TỆ - Message không
+                                rõ ràng</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public void</span> setTuoi2(<span class="keyword">int</span> tuoi) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (tuoi < <span class="number">0</span>)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span>
+                            IllegalArgumentException(<span class="string">"Tuổi không hợp lệ"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-check-circle" style="color: #27ae60;"></i> ✅ TỐT - Đúng loại, message
+                                chi tiết</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public void</span> setTuoi3(<span class="keyword">int</span> tuoi) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (tuoi < <span class="number">0</span>)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span>
+                            IllegalArgumentException(<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String.format(<span
+                                class="string">"Tuổi không thể âm. Nhận được: %d"</span>, tuoi)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (tuoi > <span
+                                class="number">150</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span>
+                            IllegalArgumentException(<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String.format(<span
+                                class="string">"Tuổi quá lớn (tối đa 150). Nhận được: %d"</span>, tuoi)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                    </div>
+
+                    <h3>3.3 NGUYÊN TẮC 3: NEVER SWALLOW EXCEPTIONS (KHÔNG NUỐT EXCEPTION)</h3>
+
+                    <div class="principle-box">
+                        <h4><i class="fas fa-dragon principle-icon"></i> Nuốt exception là gì? Bắt exception nhưng không
+                            làm gì hoặc làm không đúng.</h4>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-times-circle" style="color: #e74c3c;"></i> ❌ TỆ NHẤT - Nuốt hoàn
+                                toàn</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> result = <span class="number">10</span>
+                        / <span class="number">0</span>;<br>
+                        } <span class="keyword">catch</span> (Exception e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Không làm gì - RẤT NGUY HIỂM!</span><br>
+                        }
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-times-circle" style="color: #e74c3c;"></i> ❌ TỆ - Chỉ in ra nhưng vẫn
+                                nuốt</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;processData();<br>
+                        } <span class="keyword">catch</span> (Exception e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;e.printStackTrace(); <span class="comment">// Chương trình vẫn chạy tiếp
+                            với state sai</span><br>
+                        }
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-times-circle" style="color: #e74c3c;"></i> ❌ TỆ - Trả về giá trị mặc
+                                định sai</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public int</span> divide(<span class="keyword">int</span> a, <span
+                            class="keyword">int</span> b) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> a / b;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (ArithmeticException e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span
+                            class="number">0</span>; <span class="comment">// ❌ Trả về kết quả sai, che giấu
+                            lỗi</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-check-circle" style="color: #27ae60;"></i> ✅ TỐT - Xử lý có ý
+                                nghĩa</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public void</span> processData() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Code có thể gây
+                            lỗi</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;readFromDatabase();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (SQLException e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 1. Log lỗi</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logger.error(<span class="string">"Lỗi
+                            database"</span>, e);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 2. Thông báo cho
+                            user</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showError(<span class="string">"Không thể đọc dữ
+                            liệu từ database"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 3. Rollback
+                            transaction</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rollback();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 4. Ném lại exception
+                            nếu cần</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span>
+                        ApplicationException(<span class="string">"Xử lý dữ liệu thất bại"</span>, e);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <h3>3.4 NGUYÊN TẮC 4: PRESERVE CAUSE (GIỮ NGUYÊN NGUYÊN NHÂN)</h3>
+
+                    <div class="principle-box">
+                        <h4><i class="fas fa-link principle-icon"></i> Nguyên tắc: Khi chuyển exception này thành
+                            exception khác, phải giữ nguyên cause.</h4>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-times-circle" style="color: #e74c3c;"></i> ❌ TỆ - Mất cause</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public void</span> badMethod() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;readFromDatabase();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (SQLException e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span>
+                        DataAccessException(<span class="string">"Lỗi database"</span>); <span class="comment">// Mất
+                            thông tin gốc</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-times-circle" style="color: #e74c3c;"></i> ❌ CŨNG TỆ - Chỉ lấy
+                                message</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public void</span> worseMethod() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;readFromDatabase();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (SQLException e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span>
+                        DataAccessException(<span class="string">"Lỗi database: "</span> + e.getMessage()); <span
+                            class="comment">// Mất stack trace</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-check-circle" style="color: #27ae60;"></i> ✅ TỐT - Giữ cause</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public void</span> goodMethod() <span class="keyword">throws</span>
+                        DataAccessException {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;readFromDatabase();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (SQLException e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span>
+                        DataAccessException(<span class="string">"Không thể đọc dữ liệu từ database"</span>, e);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">class</span> DataAccessException <span class="keyword">extends</span>
+                        Exception {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> DataAccessException(String message,
+                        Throwable cause) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">super</span>(message,
+                        cause); <span class="comment">// ✅ Giữ nguyên cause</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <h3>3.5 NGUYÊN TẮC 5: DON'T USE EXCEPTIONS FOR FLOW CONTROL</h3>
+
+                    <div class="principle-box">
+                        <h4><i class="fas fa-random principle-icon"></i> Nguyên tắc: Không dùng exception để điều khiển
+                            luồng chương trình.</h4>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-times-circle" style="color: #e74c3c;"></i> ❌ TỆ - Dùng exception để
+                                điều khiển</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> BadExample {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> User findUser(String id) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//
+                            Giả sử database.find throws exception nếu không tìm thấy</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">return</span> database.find(id);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                        (UserNotFoundException e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">return</span> <span class="keyword">null</span>; <span class="comment">//
+                            Dùng exception để trả về null</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public int</span> getLength(String str) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">return</span> str.length();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                        (NullPointerException e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="keyword">return</span> <span class="number">0</span>; <span class="comment">// Dùng
+                            exception để xử lý null</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-check-circle" style="color: #27ae60;"></i> ✅ TỐT - Dùng cách thông
+                                thường</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> GoodExample {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> Optional<User> findUser(String id)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>
+                            database.findOptional(id); <span class="comment">// Trả về Optional</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public int</span> getLength(String str) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> str !=
+                            <span class="keyword">null</span> ? str.length() : <span class="number">0</span>; <span
+                                class="comment">// Kiểm tra null</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                    </div>
+
+                    <h3>3.6 CHECKLIST KIỂM TRA</h3>
+
+                    <div class="success-box">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span><i class="fas fa-clipboard-check"></i> ChecklistExample.java</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i>
+                                    Copy</button>
+                            </div>
+                            <span class="keyword">public class</span> ChecklistExample {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> process(String data, <span
+                                class="keyword">int</span> value) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// [ ] 1. Đã kiểm tra
+                                null chưa?</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (data ==
+                            <span class="keyword">null</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                class="keyword">throw new</span> IllegalArgumentException(<span class="string">"Data
+                                cannot be null"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// [ ] 2. Đã kiểm tra
+                                giá trị hợp lệ chưa?</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (value <
+                                <span class="number">0</span> || value > <span class="number">100</span>) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                    class="keyword">throw new</span> IllegalArgumentException(<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String.format(<span
+                                    class="string">"Value must be 0-100, but was: %d"</span>, value)<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// [ ] 3. Có dùng
+                                    đúng loại exception không?</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Dùng
+                                    IllegalArgumentException cho lỗi tham số</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Dùng
+                                    NullPointerException cho lỗi null</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Dùng
+                                    ArithmeticException cho lỗi toán học</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// [ ] 4. Message
+                                    có rõ ràng không?</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// throw new
+                                    IllegalArgumentException("Error"); // ❌</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// throw new
+                                    IllegalArgumentException("Value invalid: " + value); // ✅</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// [ ] 5. Có nuốt
+                                    exception không?</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                    class="comment">// code</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                                (Exception e) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logger.error(<span
+                                    class="string">"Error processing data: "</span> + data, e); <span class="comment">//
+                                    Log đầy đủ</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                    class="keyword">throw</span> e; <span class="comment">// Hoặc throw lại</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                }
+                        </div>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-star"></i> Tổng kết Best Practices</h4>
+                        <div class="demo-box">
+                            <p style="font-size: 1.3rem;"><i class="fas fa-throw"></i> 5 Nguyên tắc vàng khi xử lý
+                                Exception <i class="fas fa-tools"></i></p>
+                            <div
+                                style="display: flex; gap: 12px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+                                <span class="badge badge-gold">Throw Early</span>
+                                <span class="badge badge-gold">Meaningful</span>
+                                <span class="badge badge-gold">Never Swallow</span>
+                                <span class="badge badge-gold">Preserve Cause</span>
+                                <span class="badge badge-gold">No Flow Control</span>
+                            </div>
+                            <p style="margin-top: 20px;"><i class="fas fa-quote-right"></i> "Exceptions are for
+                                exceptional situations, not for normal flow control."</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p><i class="fas fa-throw"></i> BUỔI 24: CUSTOM EXCEPTIONS & BEST PRACTICES -GV: Nguyễn Đình Mạnh <i class="fas fa-gem"></i></p>
+        </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng với hiệu ứng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // Xóa class active từ tất cả các link và section
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    // Thêm class active cho link được click với hiệu ứng
+                    this.classList.add('active');
+
+                    // Thêm hiệu ứng rung nhẹ khi click
+                    this.style.animation = 'none';
+                    this.offsetHeight; // Trigger reflow
+                    this.style.animation = 'slideInLeft 0.3s ease';
+
+                    // Hiển thị section tương ứng
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+
+                    // Cuộn lên đầu section
+                    document.querySelector('.main-content').scrollTop = 0;
+                });
+            });
+        });
+
+        // Hàm copy code với hiệu ứng
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+
+            // Hiệu ứng copy
+            button.innerHTML = '<i class="fas fa-check"></i> Đã copy!';
+            button.style.background = '#27ae60';
+
+            navigator.clipboard.writeText(text).then(() => {
+                setTimeout(() => {
+                    button.innerHTML = '<i class="far fa-copy"></i> Copy';
+                    button.style.background = '#555';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUỔI 37: ADVANCED SQL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../main.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-chart-simple"></i> BUỔI 37: ADVANCED SQL </h1>
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#part0" class="nav-link active"><i class="fas fa-database"></i> <span> CHUẨN BỊ DỮ LIỆU</span></a></li>
+                    <li class="nav-item"><a href="#part1" class="nav-link"><i class="fas fa-chart-simple"></i> <span>PHẦN 1: AGGREGATE FUNCTIONS</span></a></li>
+                    <li class="nav-item"><a href="#part2" class="nav-link"><i class="fas fa-link"></i> <span>PHẦN 2: JOINS</span></a></li>
+                    <li class="nav-item"><a href="#part3" class="nav-link"><i class="fas fa-magnifying-glass"></i> <span>PHẦN 3: SUBQUERIES</span></a></li>
+                    <li class="nav-item"><a href="#part4" class="nav-link"><i class="fas fa-project-diagram"></i> <span>PHẦN 4: VÍ DỤ TỔNG HỢP</span></a></li>
+                    <li class="nav-item"><a href="#part5" class="nav-link"><i class="fas fa-star"></i> <span>PHẦN 5: TỔNG KẾT</span></a></li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!--  CHUẨN BỊ DỮ LIỆU MẪU -->
+                <section id="part0" class="section active">
+                    <h2><i class="fas fa-database"></i>  CHUẨN BỊ DỮ LIỆU MẪU</h2>
+
+                    <div class="info-box">
+                        <p>Cho CSDL <strong>QuanLyBanHang</strong> gồm các bảng sau:</p>
+                    </div>
+
+                    <h3>🔹 Bảng KhachHang</h3>
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>MaKH</th>
+                                    <th>TenKH</th>
+                                    <th>DiaChi</th>
+                                    <th>DienThoai</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>Nguyễn Văn An</td><td>Hà Nội</td><td>0912345678</td><td>an@gmail.com</td></tr>
+                                <tr><td>2</td><td>Trần Thị Bích</td><td>TP HCM</td><td>0987654321</td><td>bich@gmail.com</td></tr>
+                                <tr><td>3</td><td>Lê Văn Cường</td><td>Đà Nẵng</td><td>0905123456</td><td>cuong@gmail.com</td></tr>
+                                <tr><td>4</td><td>Phạm Thị Dung</td><td>Hải Phòng</td><td>0933123456</td><td>dung@gmail.com</td></tr>
+                                <tr><td>5</td><td>Hoàng Văn Em</td><td>Cần Thơ</td><td>0977123456</td><td>em@gmail.com</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>🔹 Bảng SanPham</h3>
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>MaSP</th>
+                                    <th>TenSP</th>
+                                    <th>DonGia</th>
+                                    <th>SoLuongTon</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>Laptop Dell</td><td>15000000</td><td>50</td></tr>
+                                <tr><td>2</td><td>iPhone 14</td><td>25000000</td><td>30</td></tr>
+                                <tr><td>3</td><td>Tai nghe Sony</td><td>2000000</td><td>100</td></tr>
+                                <tr><td>4</td><td>Bàn phím cơ</td><td>1500000</td><td>80</td></tr>
+                                <tr><td>5</td><td>Chuột Logitech</td><td>800000</td><td>120</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>🔹 Bảng HoaDon</h3>
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>MaHD</th>
+                                    <th>MaKH</th>
+                                    <th>NgayLap</th>
+                                    <th>TongTien</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>1</td><td>2024-01-15</td><td>45000000</td></tr>
+                                <tr><td>2</td><td>2</td><td>2024-01-20</td><td>27000000</td></tr>
+                                <tr><td>3</td><td>1</td><td>2024-02-10</td><td>30000000</td></tr>
+                                <tr><td>4</td><td>3</td><td>2024-02-15</td><td>2300000</td></tr>
+                                <tr><td>5</td><td>4</td><td>2024-03-01</td><td>8000000</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>🔹 Bảng ChiTietHD</h3>
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>MaHD</th>
+                                    <th>MaSP</th>
+                                    <th>SoLuong</th>
+                                    <th>DonGia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>1</td><td>2</td><td>15000000</td></tr>
+                                <tr><td>1</td><td>3</td><td>3</td><td>2000000</td></tr>
+                                <tr><td>2</td><td>2</td><td>1</td><td>25000000</td></tr>
+                                <tr><td>2</td><td>5</td><td>2</td><td>800000</td></tr>
+                                <tr><td>3</td><td>1</td><td>1</td><td>15000000</td></tr>
+                                <tr><td>3</td><td>4</td><td>2</td><td>1500000</td></tr>
+                                <tr><td>4</td><td>3</td><td>1</td><td>2000000</td></tr>
+                                <tr><td>4</td><td>5</td><td>1</td><td>800000</td></tr>
+                                <tr><td>5</td><td>4</td><td>2</td><td>1500000</td></tr>
+                                <tr><td>5</td><td>5</td><td>5</td><td>800000</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Code tham khảo</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Tạo database và bảng</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tạo database</span><br>
+                        <span class="keyword">CREATE DATABASE</span> QuanLyBanHang;<br>
+                        <span class="keyword">USE</span> QuanLyBanHang;<br>
+                        <br>
+                        <span class="comment">-- Bảng KhachHang</span><br>
+                        <span class="keyword">CREATE TABLE</span> KhachHang (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaKH <span class="type">INT</span> <span class="keyword">PRIMARY KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;TenKH <span class="type">VARCHAR</span>(<span class="number">100</span>) <span class="keyword">NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;DiaChi <span class="type">VARCHAR</span>(<span class="number">200</span>),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;DienThoai <span class="type">VARCHAR</span>(<span class="number">15</span>),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Email <span class="type">VARCHAR</span>(<span class="number">100</span>)<br>
+                        );<br>
+                        <br>
+                        <span class="comment">-- Bảng SanPham</span><br>
+                        <span class="keyword">CREATE TABLE</span> SanPham (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSP <span class="type">INT</span> <span class="keyword">PRIMARY KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;TenSP <span class="type">VARCHAR</span>(<span class="number">100</span>) <span class="keyword">NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;DonGia <span class="type">DECIMAL</span>(<span class="number">10</span>,<span class="number">2</span>),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;SoLuongTon <span class="type">INT</span><br>
+                        );<br>
+                        <br>
+                        <span class="comment">-- Bảng HoaDon</span><br>
+                        <span class="keyword">CREATE TABLE</span> HoaDon (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaHD <span class="type">INT</span> <span class="keyword">PRIMARY KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaKH <span class="type">INT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;NgayLap <span class="type">DATE</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;TongTien <span class="type">DECIMAL</span>(<span class="number">12</span>,<span class="number">2</span>),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">FOREIGN KEY</span> (MaKH) <span class="keyword">REFERENCES</span> KhachHang(MaKH)<br>
+                        );<br>
+                        <br>
+                        <span class="comment">-- Bảng ChiTietHD</span><br>
+                        <span class="keyword">CREATE TABLE</span> ChiTietHD (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaHD <span class="type">INT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSP <span class="type">INT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;SoLuong <span class="type">INT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;DonGia <span class="type">DECIMAL</span>(<span class="number">10</span>,<span class="number">2</span>),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">PRIMARY KEY</span> (MaHD, MaSP),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">FOREIGN KEY</span> (MaHD) <span class="keyword">REFERENCES</span> HoaDon(MaHD),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">FOREIGN KEY</span> (MaSP) <span class="keyword">REFERENCES</span> SanPham(MaSP)<br>
+                        );<br>
+                        <br>
+                        <span class="comment">-- Thêm dữ liệu mẫu</span><br>
+                        <span class="keyword">INSERT INTO</span> KhachHang <span class="keyword">VALUES</span><br>
+                        (<span class="number">1</span>, <span class="string">'Nguyễn Văn An'</span>, <span class="string">'Hà Nội'</span>, <span class="string">'0912345678'</span>, <span class="string">'an@gmail.com'</span>),<br>
+                        (<span class="number">2</span>, <span class="string">'Trần Thị Bích'</span>, <span class="string">'TP HCM'</span>, <span class="string">'0987654321'</span>, <span class="string">'bich@gmail.com'</span>),<br>
+                        (<span class="number">3</span>, <span class="string">'Lê Văn Cường'</span>, <span class="string">'Đà Nẵng'</span>, <span class="string">'0905123456'</span>, <span class="string">'cuong@gmail.com'</span>),<br>
+                        (<span class="number">4</span>, <span class="string">'Phạm Thị Dung'</span>, <span class="string">'Hải Phòng'</span>, <span class="string">'0933123456'</span>, <span class="string">'dung@gmail.com'</span>),<br>
+                        (<span class="number">5</span>, <span class="string">'Hoàng Văn Em'</span>, <span class="string">'Cần Thơ'</span>, <span class="string">'0977123456'</span>, <span class="string">'em@gmail.com'</span>);<br>
+                        <br>
+                        <span class="keyword">INSERT INTO</span> SanPham <span class="keyword">VALUES</span><br>
+                        (<span class="number">1</span>, <span class="string">'Laptop Dell'</span>, <span class="number">15000000</span>, <span class="number">50</span>),<br>
+                        (<span class="number">2</span>, <span class="string">'iPhone 14'</span>, <span class="number">25000000</span>, <span class="number">30</span>),<br>
+                        (<span class="number">3</span>, <span class="string">'Tai nghe Sony'</span>, <span class="number">2000000</span>, <span class="number">100</span>),<br>
+                        (<span class="number">4</span>, <span class="string">'Bàn phím cơ'</span>, <span class="number">1500000</span>, <span class="number">80</span>),<br>
+                        (<span class="number">5</span>, <span class="string">'Chuột Logitech'</span>, <span class="number">800000</span>, <span class="number">120</span>);<br>
+                        <br>
+                        <span class="keyword">INSERT INTO</span> HoaDon <span class="keyword">VALUES</span><br>
+                        (<span class="number">1</span>, <span class="number">1</span>, <span class="string">'2024-01-15'</span>, <span class="number">45000000</span>),<br>
+                        (<span class="number">2</span>, <span class="number">2</span>, <span class="string">'2024-01-20'</span>, <span class="number">27000000</span>),<br>
+                        (<span class="number">3</span>, <span class="number">1</span>, <span class="string">'2024-02-10'</span>, <span class="number">30000000</span>),<br>
+                        (<span class="number">4</span>, <span class="number">3</span>, <span class="string">'2024-02-15'</span>, <span class="number">2300000</span>),<br>
+                        (<span class="number">5</span>, <span class="number">4</span>, <span class="string">'2024-03-01'</span>, <span class="number">8000000</span>);<br>
+                        <br>
+                        <span class="keyword">INSERT INTO</span> ChiTietHD <span class="keyword">VALUES</span><br>
+                        (<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">15000000</span>),<br>
+                        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">2000000</span>),<br>
+                        (<span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">25000000</span>),<br>
+                        (<span class="number">2</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">800000</span>),<br>
+                        (<span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">15000000</span>),<br>
+                        (<span class="number">3</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1500000</span>),<br>
+                        (<span class="number">4</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2000000</span>),<br>
+                        (<span class="number">4</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">800000</span>),<br>
+                        (<span class="number">5</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1500000</span>),<br>
+                        (<span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">800000</span>);
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-tasks"></i> Yêu cầu</h4>
+                        <p>Viết câu lệnh SQL thực hiện:</p>
+                        <ul>
+                            <li><strong>a)</strong> Hiển thị danh sách các hóa đơn gồm: MaHD, TenKH, NgayLap, TongTien</li>
+                            <li><strong>b)</strong> Hiển thị tổng số lượng sản phẩm mà mỗi khách hàng đã mua, gồm: MaKH, TenKH, TongSoLuong</li>
+                            <li><strong>c)</strong> Hiển thị khách hàng có tổng tiền mua hàng lớn hơn 30.000.000, gồm: MaKH, TenKH, TongTienDaMua</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Đáp án tham khảo</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- a) Hiển thị danh sách các hóa đơn</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd.MaHD,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.TenKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd.NgayLap,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd.TongTien<br>
+                        <span class="keyword">FROM</span> HoaDon hd<br>
+                        <span class="keyword">INNER JOIN</span> KhachHang kh <span class="keyword">ON</span> hd.MaKH = kh.MaKH;<br>
+                        <br>
+                        <span class="comment">-- b) Tổng số lượng sản phẩm mỗi khách hàng đã mua</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.MaKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.TenKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">SUM</span>(cthd.SoLuong) <span class="keyword">AS</span> TongSoLuong<br>
+                        <span class="keyword">FROM</span> KhachHang kh<br>
+                        <span class="keyword">LEFT JOIN</span> HoaDon hd <span class="keyword">ON</span> kh.MaKH = hd.MaKH<br>
+                        <span class="keyword">LEFT JOIN</span> ChiTietHD cthd <span class="keyword">ON</span> hd.MaHD = cthd.MaHD<br>
+                        <span class="keyword">GROUP BY</span> kh.MaKH, kh.TenKH;<br>
+                        <br>
+                        <span class="comment">-- c) Khách hàng có tổng tiền mua hàng > 30.000.000</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.MaKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.TenKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">SUM</span>(hd.TongTien) <span class="keyword">AS</span> TongTienDaMua<br>
+                        <span class="keyword">FROM</span> KhachHang kh<br>
+                        <span class="keyword">INNER JOIN</span> HoaDon hd <span class="keyword">ON</span> kh.MaKH = hd.MaKH<br>
+                        <span class="keyword">GROUP BY</span> kh.MaKH, kh.TenKH<br>
+                        <span class="keyword">HAVING</span> <span class="function">SUM</span>(hd.TongTien) > <span class="number">30000000</span>;
+                    </div>
+                </section>
+
+                <!-- PHẦN 1: AGGREGATE FUNCTIONS -->
+                <section id="part1" class="section">
+                    <h2><i class="fas fa-chart-simple"></i> PHẦN 1: AGGREGATE FUNCTIONS (HÀM TỔNG HỢP)</h2>
+
+                    <h3>1.1 TỔNG QUAN VỀ AGGREGATE FUNCTIONS</h3>
+                    
+                    <div class="info-box">
+                        <h4><i class="fas fa-lightbulb"></i> Định nghĩa:</h4>
+                        <p><strong>Aggregate Functions</strong> là các hàm thực hiện tính toán trên một tập hợp các hàng và trả về một giá trị duy nhất.</p>
+                    </div>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Tính tổng, trung bình, đếm số lượng</li>
+                        <li>Tìm giá trị lớn nhất, nhỏ nhất</li>
+                        <li>Thống kê dữ liệu</li>
+                    </ul>
+
+                    <h4>Đặc điểm:</h4>
+                    <ul>
+                        <li>Thường kết hợp với GROUP BY để nhóm dữ liệu</li>
+                        <li>Bỏ qua các giá trị NULL (trừ COUNT(*))</li>
+                        <li>Trả về một hàng duy nhất cho mỗi nhóm</li>
+                    </ul>
+
+                    <h4>Các hàm aggregate cơ bản:</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Hàm</th>
+                                    <th>Mô tả</th>
+                                    <th>Kiểu trả về</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge badge-aggregate">COUNT()</span></td>
+                                    <td>Đếm số lượng</td>
+                                    <td>INT</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-aggregate">SUM()</span></td>
+                                    <td>Tính tổng</td>
+                                    <td>Số</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-aggregate">AVG()</span></td>
+                                    <td>Tính trung bình</td>
+                                    <td>Số</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-aggregate">MAX()</span></td>
+                                    <td>Tìm giá trị lớn nhất</td>
+                                    <td>Cùng kiểu dữ liệu</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-aggregate">MIN()</span></td>
+                                    <td>Tìm giá trị nhỏ nhất</td>
+                                    <td>Cùng kiểu dữ liệu</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>1.2 COUNT() - ĐẾM SỐ LƯỢNG</h3>
+                    
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Đếm số lượng hàng hoặc số lượng giá trị không NULL trong một cột.</p>
+                    </div>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="function">COUNT</span>(*)           <span class="comment">-- Đếm tất cả hàng (kể cả NULL)</span><br>
+                        <span class="function">COUNT</span>(column)      <span class="comment">-- Đếm các giá trị không NULL của cột</span><br>
+                        <span class="function">COUNT</span>(<span class="keyword">DISTINCT</span> column) <span class="comment">-- Đếm các giá trị duy nhất</span>
+                    </div>
+
+                    <h4>Ví dụ 1: COUNT cơ bản</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Đếm tổng số khách hàng</span><br>
+                        <span class="keyword">SELECT</span> <span class="function">COUNT</span>(*) <span class="keyword">AS</span> SoKhachHang<br>
+                        <span class="keyword">FROM</span> KhachHang;<br>
+                        <span class="comment">-- Kết quả: 5</span><br>
+                        <br>
+                        <span class="comment">-- Đếm số khách hàng có email</span><br>
+                        <span class="keyword">SELECT</span> <span class="function">COUNT</span>(Email) <span class="keyword">AS</span> CoEmail<br>
+                        <span class="keyword">FROM</span> KhachHang;<br>
+                        <span class="comment">-- Kết quả: 5 (tất cả đều có email)</span>
+                    </div>
+
+                    <h4>Ví dụ 2: COUNT với DISTINCT</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Đếm số lượng khách hàng đã mua hàng</span><br>
+                        <span class="keyword">SELECT</span> <span class="function">COUNT</span>(<span class="keyword">DISTINCT</span> MaKH) <span class="keyword">AS</span> KhachHangMuaHang<br>
+                        <span class="keyword">FROM</span> HoaDon;<br>
+                        <span class="comment">-- Kết quả: 4 (khách hàng 1,2,3,4 - khách 5 chưa mua)</span><br>
+                        <br>
+                        <span class="comment">-- Đếm số lượng sản phẩm đã được bán</span><br>
+                        <span class="keyword">SELECT</span> <span class="function">COUNT</span>(<span class="keyword">DISTINCT</span> MaSP) <span class="keyword">AS</span> SanPhamDaBan<br>
+                        <span class="keyword">FROM</span> ChiTietHD;<br>
+                        <span class="comment">-- Kết quả: 5 (tất cả sản phẩm đều đã được bán)</span>
+                    </div>
+
+                    <h4>Ví dụ 3: COUNT với điều kiện</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Đếm số hóa đơn trong tháng 1/2024</span><br>
+                        <span class="keyword">SELECT</span> <span class="function">COUNT</span>(*) <span class="keyword">AS</span> HoaDonThang1<br>
+                        <span class="keyword">FROM</span> HoaDon<br>
+                        <span class="keyword">WHERE</span> NgayLap <span class="keyword">BETWEEN</span> <span class="string">'2024-01-01'</span> <span class="keyword">AND</span> <span class="string">'2024-01-31'</span>;<br>
+                        <span class="comment">-- Kết quả: 2</span><br>
+                        <br>
+                        <span class="comment">-- Đếm số sản phẩm có giá > 10 triệu</span><br>
+                        <span class="keyword">SELECT</span> <span class="function">COUNT</span>(*) <span class="keyword">AS</span> SanPhamDatien<br>
+                        <span class="keyword">FROM</span> SanPham<br>
+                        <span class="keyword">WHERE</span> DonGia > <span class="number">10000000</span>;<br>
+                        <span class="comment">-- Kết quả: 2 (Laptop và iPhone)</span>
+                    </div>
+
+                    <h3>1.3 SUM() - TÍNH TỔNG</h3>
+                    
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Tính tổng các giá trị của một cột (chỉ áp dụng cho kiểu số).</p>
+                    </div>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="function">SUM</span>(column)<br>
+                        <span class="function">SUM</span>(<span class="keyword">DISTINCT</span> column)  <span class="comment">-- Tính tổng các giá trị duy nhất</span>
+                    </div>
+
+                    <h4>Ví dụ 1: SUM cơ bản</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tính tổng doanh thu từ tất cả hóa đơn</span><br>
+                        <span class="keyword">SELECT</span> <span class="function">SUM</span>(TongTien) <span class="keyword">AS</span> TongDoanhThu<br>
+                        <span class="keyword">FROM</span> HoaDon;<br>
+                        <span class="comment">-- Kết quả: 112300000 (45tr + 27tr + 30tr + 2.3tr + 8tr)</span><br>
+                        <br>
+                        <span class="comment">-- Tính tổng số lượng tồn kho</span><br>
+                        <span class="keyword">SELECT</span> <span class="function">SUM</span>(SoLuongTon) <span class="keyword">AS</span> TongTonKho<br>
+                        <span class="keyword">FROM</span> SanPham;<br>
+                        <span class="comment">-- Kết quả: 380 (50+30+100+80+120)</span>
+                    </div>
+
+                    <h4>Ví dụ 2: SUM với điều kiện</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tính tổng doanh thu trong tháng 1/2024</span><br>
+                        <span class="keyword">SELECT</span> <span class="function">SUM</span>(TongTien) <span class="keyword">AS</span> DoanhThuThang1<br>
+                        <span class="keyword">FROM</span> HoaDon<br>
+                        <span class="keyword">WHERE</span> NgayLap <span class="keyword">BETWEEN</span> <span class="string">'2024-01-01'</span> <span class="keyword">AND</span> <span class="string">'2024-01-31'</span>;<br>
+                        <span class="comment">-- Kết quả: 72000000 (45tr + 27tr)</span><br>
+                        <br>
+                        <span class="comment">-- Tính tổng doanh thu của khách hàng có mã 1</span><br>
+                        <span class="keyword">SELECT</span> <span class="function">SUM</span>(TongTien) <span class="keyword">AS</span> TongTienKH1<br>
+                        <span class="keyword">FROM</span> HoaDon<br>
+                        <span class="keyword">WHERE</span> MaKH = <span class="number">1</span>;<br>
+                        <span class="comment">-- Kết quả: 75000000 (45tr + 30tr)</span>
+                    </div>
+
+                    <h3>1.4 AVG() - TÍNH TRUNG BÌNH</h3>
+                    
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Tính giá trị trung bình của một cột (chỉ áp dụng cho kiểu số).</p>
+                    </div>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="function">AVG</span>(column)<br>
+                        <span class="function">AVG</span>(<span class="keyword">DISTINCT</span> column)  <span class="comment">-- Trung bình của các giá trị duy nhất</span>
+                    </div>
+
+                    <h4>Ví dụ 1: AVG cơ bản</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tính giá trung bình của các sản phẩm</span><br>
+                        <span class="keyword">SELECT</span> <span class="function">AVG</span>(DonGia) <span class="keyword">AS</span> GiaTrungBinh<br>
+                        <span class="keyword">FROM</span> SanPham;<br>
+                        <span class="comment">-- Kết quả: 8760000 (tổng 43.8tr / 5 sản phẩm)</span><br>
+                        <br>
+                        <span class="comment">-- Tính số lượng trung bình mỗi lần mua</span><br>
+                        <span class="keyword">SELECT</span> <span class="function">AVG</span>(SoLuong) <span class="keyword">AS</span> SoLuongTB<br>
+                        <span class="keyword">FROM</span> ChiTietHD;<br>
+                        <span class="comment">-- Kết quả: 1.9 (tổng 19 / 10 dòng)</span>
+                    </div>
+
+                    <h4>Ví dụ 2: AVG với điều kiện</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tính giá trung bình của sản phẩm > 5 triệu</span><br>
+                        <span class="keyword">SELECT</span> <span class="function">AVG</span>(DonGia) <span class="keyword">AS</span> GiaTBCao<br>
+                        <span class="keyword">FROM</span> SanPham<br>
+                        <span class="keyword">WHERE</span> DonGia > <span class="number">5000000</span>;<br>
+                        <span class="comment">-- Kết quả: 20000000 (chỉ Laptop và iPhone)</span><br>
+                        <br>
+                        <span class="comment">-- Tính số lượng trung bình của sản phẩm có mã 1 trong hóa đơn</span><br>
+                        <span class="keyword">SELECT</span> <span class="function">AVG</span>(SoLuong) <span class="keyword">AS</span> SoLuongTB_SP1<br>
+                        <span class="keyword">FROM</span> ChiTietHD<br>
+                        <span class="keyword">WHERE</span> MaSP = <span class="number">1</span>;<br>
+                        <span class="comment">-- Kết quả: 1.5 (2 và 1)</span>
+                    </div>
+
+                    <h3>1.5 MAX() và MIN() - LỚN NHẤT VÀ NHỎ NHẤT</h3>
+                    
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Tìm giá trị lớn nhất và nhỏ nhất trong một cột.</p>
+                    </div>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="function">MAX</span>(column)<br>
+                        <span class="function">MIN</span>(column)
+                    </div>
+
+                    <h4>Ví dụ 1: MAX và MIN với số</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tìm sản phẩm đắt nhất và rẻ nhất</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">MAX</span>(DonGia) <span class="keyword">AS</span> GiaDatNhat,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">MIN</span>(DonGia) <span class="keyword">AS</span> GiaReNhat<br>
+                        <span class="keyword">FROM</span> SanPham;<br>
+                        <span class="comment">-- Kết quả: GiaDatNhat = 25000000, GiaReNhat = 800000</span><br>
+                        <br>
+                        <span class="comment">-- Tìm hóa đơn có tổng tiền lớn nhất và nhỏ nhất</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">MAX</span>(TongTien) <span class="keyword">AS</span> HoaDonLonNhat,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">MIN</span>(TongTien) <span class="keyword">AS</span> HoaDonNhoNhat<br>
+                        <span class="keyword">FROM</span> HoaDon;<br>
+                        <span class="comment">-- Kết quả: 45000000 và 2300000</span>
+                    </div>
+
+                    <h4>Ví dụ 2: MAX và MIN với ngày tháng</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tìm ngày lập hóa đơn đầu tiên và gần nhất</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">MIN</span>(NgayLap) <span class="keyword">AS</span> HoaDonDauTien,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">MAX</span>(NgayLap) <span class="keyword">AS</span> HoaDonGanNhat<br>
+                        <span class="keyword">FROM</span> HoaDon;<br>
+                        <span class="comment">-- Kết quả: 2024-01-15 và 2024-03-01</span><br>
+                        <br>
+                        <span class="comment">-- Tìm khách hàng có tên đầu và cuối trong bảng chữ cái</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">MIN</span>(TenKH) <span class="keyword">AS</span> TenDauTien,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">MAX</span>(TenKH) <span class="keyword">AS</span> TenCuoiCung<br>
+                        <span class="keyword">FROM</span> KhachHang;<br>
+                        <span class="comment">-- Kết quả: Hoàng Văn Em và Trần Thị Bích (theo alphabet)</span>
+                    </div>
+
+                    <h3>1.6 GROUP BY - NHÓM DỮ LIỆU</h3>
+                    
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Nhóm các hàng có cùng giá trị thành một nhóm để thực hiện các hàm aggregate.</p>
+                    </div>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> column1, aggregate_function(column2)<br>
+                        <span class="keyword">FROM</span> table_name<br>
+                        <span class="keyword">GROUP BY</span> column1;
+                    </div>
+
+                    <h4>Ví dụ 1: GROUP BY cơ bản</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tính tổng tiền mỗi khách hàng đã chi tiêu</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">SUM</span>(TongTien) <span class="keyword">AS</span> TongChiTieu<br>
+                        <span class="keyword">FROM</span> HoaDon<br>
+                        <span class="keyword">GROUP BY</span> MaKH;<br>
+                        <br>
+                        <span class="comment">-- Kết quả:</span><br>
+                        <span class="comment">-- MaKH = 1: 75000000</span><br>
+                        <span class="comment">-- MaKH = 2: 27000000</span><br>
+                        <span class="comment">-- MaKH = 3: 2300000</span><br>
+                        <span class="comment">-- MaKH = 4: 8000000</span><br>
+                        <span class="comment">-- MaKH = 5: NULL (không có hóa đơn)</span>
+                    </div>
+
+                    <h4>Ví dụ 2: GROUP BY với nhiều cột</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tính tổng số lượng bán của mỗi sản phẩm</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSP,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">SUM</span>(SoLuong) <span class="keyword">AS</span> TongSoLuong<br>
+                        <span class="keyword">FROM</span> ChiTietHD<br>
+                        <span class="keyword">GROUP BY</span> MaSP<br>
+                        <span class="keyword">ORDER BY</span> MaSP;<br>
+                        <br>
+                        <span class="comment">-- Kết quả:</span><br>
+                        <span class="comment">-- MaSP 1: 3 (2+1)</span><br>
+                        <span class="comment">-- MaSP 2: 1</span><br>
+                        <span class="comment">-- MaSP 3: 4 (3+1)</span><br>
+                        <span class="comment">-- MaSP 4: 4 (2+2)</span><br>
+                        <span class="comment">-- MaSP 5: 8 (2+1+5)</span>
+                    </div>
+
+                    <h4>Ví dụ 3: GROUP BY với JOIN</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tính tổng tiền theo từng khách hàng (có tên)</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.TenKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">SUM</span>(hd.TongTien) <span class="keyword">AS</span> TongChiTieu<br>
+                        <span class="keyword">FROM</span> KhachHang kh<br>
+                        <span class="keyword">LEFT JOIN</span> HoaDon hd <span class="keyword">ON</span> kh.MaKH = hd.MaKH<br>
+                        <span class="keyword">GROUP BY</span> kh.MaKH, kh.TenKH<br>
+                        <span class="keyword">ORDER BY</span> TongChiTieu <span class="keyword">DESC</span>;<br>
+                        <br>
+                        <span class="comment">-- Kết quả:</span><br>
+                        <span class="comment">-- Nguyễn Văn An: 75000000</span><br>
+                        <span class="comment">-- Trần Thị Bích: 27000000</span><br>
+                        <span class="comment">-- Phạm Thị Dung: 8000000</span><br>
+                        <span class="comment">-- Lê Văn Cường: 2300000</span><br>
+                        <span class="comment">-- Hoàng Văn Em: NULL</span>
+                    </div>
+
+                    <h3>1.7 HAVING - LỌC NHÓM</h3>
+                    
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Lọc các nhóm sau khi đã GROUP BY (giống WHERE nhưng dùng cho nhóm).</p>
+                    </div>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> column1, aggregate_function(column2)<br>
+                        <span class="keyword">FROM</span> table_name<br>
+                        <span class="keyword">GROUP BY</span> column1<br>
+                        <span class="keyword">HAVING</span> condition;
+                    </div>
+
+                    <h4>Ví dụ 1: HAVING cơ bản</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy các khách hàng có tổng chi tiêu > 10 triệu</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">SUM</span>(TongTien) <span class="keyword">AS</span> TongChiTieu<br>
+                        <span class="keyword">FROM</span> HoaDon<br>
+                        <span class="keyword">GROUP BY</span> MaKH<br>
+                        <span class="keyword">HAVING</span> <span class="function">SUM</span>(TongTien) > <span class="number">10000000</span>;<br>
+                        <br>
+                        <span class="comment">-- Kết quả: khách hàng 1 (75tr) và 2 (27tr)</span><br>
+                        <br>
+                        <span class="comment">-- Không thể dùng WHERE vì WHERE không dùng được với aggregate</span><br>
+                        <span class="comment">-- WHERE SUM(TongTien) > 10000000 là SAI</span>
+                    </div>
+
+                    <h4>Ví dụ 2: HAVING với điều kiện phức tạp</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy các sản phẩm có tổng số lượng bán > 3</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSP,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">SUM</span>(SoLuong) <span class="keyword">AS</span> TongSoLuong<br>
+                        <span class="keyword">FROM</span> ChiTietHD<br>
+                        <span class="keyword">GROUP BY</span> MaSP<br>
+                        <span class="keyword">HAVING</span> <span class="function">SUM</span>(SoLuong) > <span class="number">3</span>;<br>
+                        <br>
+                        <span class="comment">-- Kết quả:</span><br>
+                        <span class="comment">-- MaSP 3: 4</span><br>
+                        <span class="comment">-- MaSP 4: 4</span><br>
+                        <span class="comment">-- MaSP 5: 8</span>
+                    </div>
+
+                    <h4>Ví dụ 3: WHERE và HAVING kết hợp</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy các khách hàng ở Hà Nội có tổng chi tiêu > 10 triệu</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.TenKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.DiaChi,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">SUM</span>(hd.TongTien) <span class="keyword">AS</span> TongChiTieu<br>
+                        <span class="keyword">FROM</span> KhachHang kh<br>
+                        <span class="keyword">LEFT JOIN</span> HoaDon hd <span class="keyword">ON</span> kh.MaKH = hd.MaKH<br>
+                        <span class="keyword">WHERE</span> kh.DiaChi = <span class="string">'Hà Nội'</span>        <span class="comment">-- Lọc trước khi nhóm</span><br>
+                        <span class="keyword">GROUP BY</span> kh.MaKH, kh.TenKH, kh.DiaChi<br>
+                        <span class="keyword">HAVING</span> <span class="function">SUM</span>(hd.TongTien) > <span class="number">10000000</span>;  <span class="comment">-- Lọc sau khi nhóm</span><br>
+                        <br>
+                        <span class="comment">-- Kết quả: Nguyễn Văn An - 75tr</span>
+                    </div>
+                </section>
+
+                <!-- PHẦN 2: JOINS -->
+                <section id="part2" class="section">
+                    <h2><i class="fas fa-link"></i> PHẦN 2: JOINS</h2>
+
+                    <h3>2.1 TỔNG QUAN VỀ JOINS</h3>
+                    
+                    <div class="info-box">
+                        <h4><i class="fas fa-lightbulb"></i> Định nghĩa:</h4>
+                        <p><strong>JOIN</strong> là câu lệnh dùng để kết hợp dữ liệu từ hai hoặc nhiều bảng dựa trên mối quan hệ giữa các cột.</p>
+                    </div>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Lấy dữ liệu từ nhiều bảng cùng lúc</li>
+                        <li>Kết hợp thông tin có liên quan</li>
+                        <li>Tránh lặp lại dữ liệu</li>
+                    </ul>
+
+                    <h4>Các loại JOIN:</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Loại JOIN</th>
+                                    <th>Mô tả</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge badge-join">INNER JOIN</span></td>
+                                    <td>Lấy các hàng có giá trị khớp ở cả hai bảng</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-join">LEFT JOIN</span></td>
+                                    <td>Lấy tất cả từ bảng trái, khớp với bảng phải (NULL nếu không khớp)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-join">RIGHT JOIN</span></td>
+                                    <td>Lấy tất cả từ bảng phải, khớp với bảng trái (NULL nếu không khớp)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-join">FULL JOIN</span></td>
+                                    <td>Lấy tất cả từ cả hai bảng (NULL nếu không khớp)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-join">CROSS JOIN</span></td>
+                                    <td>Tích Descartes - mỗi hàng bảng A ghép với mỗi hàng bảng B</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>2.2 INNER JOIN</h3>
+                    
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Chỉ lấy các hàng có giá trị khớp ở cả hai bảng.</p>
+                    </div>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> columns<br>
+                        <span class="keyword">FROM</span> table1<br>
+                        <span class="keyword">INNER JOIN</span> table2 <span class="keyword">ON</span> table1.column = table2.column;
+                    </div>
+
+                    <h4>Ví dụ 1: INNER JOIN cơ bản</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy thông tin hóa đơn kèm tên khách hàng</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd.MaHD,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd.NgayLap,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.TenKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd.TongTien<br>
+                        <span class="keyword">FROM</span> HoaDon hd<br>
+                        <span class="keyword">INNER JOIN</span> KhachHang kh <span class="keyword">ON</span> hd.MaKH = kh.MaKH;<br>
+                        <br>
+                        <span class="comment">-- Kết quả: 5 hóa đơn (khách 5 không có hóa đơn nên không xuất hiện)</span>
+                    </div>
+
+                    <h4>Ví dụ 2: INNER JOIN nhiều bảng</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy chi tiết hóa đơn kèm tên sản phẩm và tên khách hàng</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd.MaHD,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.TenKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;sp.TenSP,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;cthd.SoLuong,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;cthd.DonGia,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;(cthd.SoLuong * cthd.DonGia) <span class="keyword">AS</span> ThanhTien<br>
+                        <span class="keyword">FROM</span> HoaDon hd<br>
+                        <span class="keyword">INNER JOIN</span> KhachHang kh <span class="keyword">ON</span> hd.MaKH = kh.MaKH<br>
+                        <span class="keyword">INNER JOIN</span> ChiTietHD cthd <span class="keyword">ON</span> hd.MaHD = cthd.MaHD<br>
+                        <span class="keyword">INNER JOIN</span> SanPham sp <span class="keyword">ON</span> cthd.MaSP = sp.MaSP<br>
+                        <span class="keyword">ORDER BY</span> hd.MaHD, sp.TenSP;
+                    </div>
+
+                    <h4>Ví dụ 3: INNER JOIN với điều kiện</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy hóa đơn của khách hàng ở Hà Nội</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd.MaHD,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.TenKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.DiaChi,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd.TongTien<br>
+                        <span class="keyword">FROM</span> HoaDon hd<br>
+                        <span class="keyword">INNER JOIN</span> KhachHang kh <span class="keyword">ON</span> hd.MaKH = kh.MaKH<br>
+                        <span class="keyword">WHERE</span> kh.DiaChi = <span class="string">'Hà Nội'</span>;<br>
+                        <span class="comment">-- Kết quả: hóa đơn của Nguyễn Văn An</span>
+                    </div>
+
+                    <h3>2.3 LEFT JOIN (LEFT OUTER JOIN)</h3>
+                    
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Lấy tất cả hàng từ bảng trái (bảng đầu tiên) và các hàng khớp từ bảng phải. Nếu không khớp, các cột từ bảng phải sẽ là NULL.</p>
+                    </div>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> columns<br>
+                        <span class="keyword">FROM</span> table1<br>
+                        <span class="keyword">LEFT JOIN</span> table2 <span class="keyword">ON</span> table1.column = table2.column;
+                    </div>
+
+                    <h4>Ví dụ 1: LEFT JOIN cơ bản</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy tất cả khách hàng và hóa đơn (nếu có)</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.MaKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.TenKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd.MaHD,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd.TongTien<br>
+                        <span class="keyword">FROM</span> KhachHang kh<br>
+                        <span class="keyword">LEFT JOIN</span> HoaDon hd <span class="keyword">ON</span> kh.MaKH = hd.MaKH;<br>
+                        <br>
+                        <span class="comment">-- Kết quả: </span><br>
+                        <span class="comment">-- KH 1-4 có hóa đơn, KH 5 không có hóa đơn (các cột hóa đơn NULL)</span>
+                    </div>
+
+                    <h4>Ví dụ 2: LEFT JOIN để tìm dữ liệu không khớp</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tìm khách hàng chưa từng mua hàng</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.MaKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.TenKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.DiaChi<br>
+                        <span class="keyword">FROM</span> KhachHang kh<br>
+                        <span class="keyword">LEFT JOIN</span> HoaDon hd <span class="keyword">ON</span> kh.MaKH = hd.MaKH<br>
+                        <span class="keyword">WHERE</span> hd.MaHD <span class="keyword">IS NULL</span>;<br>
+                        <br>
+                        <span class="comment">-- Kết quả: Hoàng Văn Em (chưa có hóa đơn)</span>
+                    </div>
+
+                    <h4>Ví dụ 3: LEFT JOIN với aggregate</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tính tổng chi tiêu của mỗi khách hàng (kể cả chưa mua)</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.MaKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.TenKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">SUM</span>(hd.TongTien) <span class="keyword">AS</span> TongChiTieu<br>
+                        <span class="keyword">FROM</span> KhachHang kh<br>
+                        <span class="keyword">LEFT JOIN</span> HoaDon hd <span class="keyword">ON</span> kh.MaKH = hd.MaKH<br>
+                        <span class="keyword">GROUP BY</span> kh.MaKH, kh.TenKH<br>
+                        <span class="keyword">ORDER BY</span> TongChiTieu <span class="keyword">DESC</span>;<br>
+                        <br>
+                        <span class="comment">-- Kết quả: KH 5 có tổng = NULL (có thể dùng COALESCE để thay bằng 0)</span>
+                    </div>
+
+                    <h3>2.4 RIGHT JOIN (RIGHT OUTER JOIN)</h3>
+                    
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Lấy tất cả hàng từ bảng phải (bảng thứ hai) và các hàng khớp từ bảng trái. Ngược lại với LEFT JOIN.</p>
+                    </div>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> columns<br>
+                        <span class="keyword">FROM</span> table1<br>
+                        <span class="keyword">RIGHT JOIN</span> table2 <span class="keyword">ON</span> table1.column = table2.column;
+                    </div>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy tất cả hóa đơn và thông tin khách hàng (tương đương LEFT JOIN)</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.MaKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.TenKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd.MaHD,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd.TongTien<br>
+                        <span class="keyword">FROM</span> KhachHang kh<br>
+                        <span class="keyword">RIGHT JOIN</span> HoaDon hd <span class="keyword">ON</span> kh.MaKH = hd.MaKH;<br>
+                        <br>
+                        <span class="comment">-- Kết quả: giống INNER JOIN vì mọi hóa đơn đều có khách hàng</span>
+                    </div>
+
+                    <div class="warning-box">
+                        <p><strong>Lưu ý:</strong> RIGHT JOIN ít dùng hơn LEFT JOIN vì có thể đảo ngược thứ tự bảng.</p>
+                    </div>
+
+                    <h3>2.5 FULL JOIN (FULL OUTER JOIN)</h3>
+                    
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Lấy tất cả hàng từ cả hai bảng, điền NULL nếu không khớp.</p>
+                    </div>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> columns<br>
+                        <span class="keyword">FROM</span> table1<br>
+                        <span class="keyword">FULL JOIN</span> table2 <span class="keyword">ON</span> table1.column = table2.column;
+                    </div>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy tất cả khách hàng và tất cả hóa đơn</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.MaKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.TenKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd.MaHD,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd.TongTien<br>
+                        <span class="keyword">FROM</span> KhachHang kh<br>
+                        <span class="keyword">FULL JOIN</span> HoaDon hd <span class="keyword">ON</span> kh.MaKH = hd.MaKH;<br>
+                        <br>
+                        <span class="comment">-- Kết quả (MySQL không hỗ trợ FULL JOIN trực tiếp, phải dùng UNION)</span>
+                    </div>
+
+                    <div class="warning-box">
+                        <p><strong>Lưu ý:</strong> MySQL không hỗ trợ FULL JOIN, có thể thay thế bằng UNION của LEFT JOIN và RIGHT JOIN.</p>
+                    </div>
+
+                    <h3>2.6 CROSS JOIN</h3>
+                    
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Tạo tích Descartes - mỗi hàng từ bảng A kết hợp với mỗi hàng từ bảng B.</p>
+                    </div>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> columns<br>
+                        <span class="keyword">FROM</span> table1<br>
+                        <span class="keyword">CROSS JOIN</span> table2;
+                    </div>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tạo tất cả cặp (khách hàng, sản phẩm) có thể</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.TenKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;sp.TenSP<br>
+                        <span class="keyword">FROM</span> KhachHang kh<br>
+                        <span class="keyword">CROSS JOIN</span> SanPham sp<br>
+                        <span class="keyword">ORDER BY</span> kh.TenKH, sp.TenSP;<br>
+                        <br>
+                        <span class="comment">-- Kết quả: 5 khách * 5 sản phẩm = 25 dòng</span>
+                    </div>
+
+                    <h3>2.7 SELF JOIN</h3>
+                    
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>JOIN một bảng với chính nó, dùng alias để phân biệt.</p>
+                    </div>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> columns<br>
+                        <span class="keyword">FROM</span> table t1<br>
+                        <span class="keyword">JOIN</span> table t2 <span class="keyword">ON</span> t1.column = t2.column;
+                    </div>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Giả sử bảng nhân viên có cấu trúc: MaNV, TenNV, MaNQL (mã quản lý)</span><br>
+                        <span class="comment">-- Tìm tên nhân viên và tên quản lý của họ</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;nv.TenNV <span class="keyword">AS</span> NhanVien,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;ql.TenNV <span class="keyword">AS</span> QuanLy<br>
+                        <span class="keyword">FROM</span> NhanVien nv<br>
+                        <span class="keyword">LEFT JOIN</span> NhanVien ql <span class="keyword">ON</span> nv.MaNQL = ql.MaNV;
+                    </div>
+                </section>
+
+                <!-- PHẦN 3: SUBQUERIES -->
+                <section id="part3" class="section">
+                    <h2><i class="fas fa-magnifying-glass"></i> PHẦN 3: SUBQUERIES</h2>
+
+                    <h3>3.1 TỔNG QUAN VỀ SUBQUERIES</h3>
+                    
+                    <div class="info-box">
+                        <h4><i class="fas fa-lightbulb"></i> Định nghĩa:</h4>
+                        <p><strong>Subquery (truy vấn con)</strong> là một câu lệnh SELECT nằm bên trong một câu lệnh SELECT, INSERT, UPDATE, DELETE khác.</p>
+                    </div>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Lấy dữ liệu để so sánh với kết quả truy vấn khác</li>
+                        <li>Tính toán giá trị trung gian</li>
+                        <li>Thay thế cho JOIN trong một số trường hợp</li>
+                    </ul>
+
+                    <h4>Các loại subquery:</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Loại</th>
+                                    <th>Mô tả</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge badge-subquery">Scalar Subquery</span></td>
+                                    <td>Trả về một giá trị duy nhất</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-subquery">Row Subquery</span></td>
+                                    <td>Trả về một hàng</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-subquery">Table Subquery</span></td>
+                                    <td>Trả về một bảng</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-subquery">Correlated Subquery</span></td>
+                                    <td>Tham chiếu đến bảng bên ngoài</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>3.2 SCALAR SUBQUERY</h3>
+                    
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Subquery trả về một giá trị duy nhất (một cột, một hàng).</p>
+                    </div>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> column1, (<span class="keyword">SELECT</span> ...) <span class="keyword">AS</span> alias<br>
+                        <span class="keyword">FROM</span> table;
+                    </div>
+
+                    <h4>Ví dụ 1: Scalar Subquery trong SELECT</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy thông tin hóa đơn và tổng doanh thu trung bình</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaHD,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;TongTien,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;(<span class="keyword">SELECT</span> <span class="function">AVG</span>(TongTien) <span class="keyword">FROM</span> HoaDon) <span class="keyword">AS</span> TB_DoanhThu,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;TongTien - (<span class="keyword">SELECT</span> <span class="function">AVG</span>(TongTien) <span class="keyword">FROM</span> HoaDon) <span class="keyword">AS</span> ChenhLech<br>
+                        <span class="keyword">FROM</span> HoaDon;<br>
+                        <br>
+                        <span class="comment">-- Kết quả: mỗi hóa đơn được so sánh với giá trị trung bình</span>
+                    </div>
+
+                    <h4>Ví dụ 2: Scalar Subquery trong WHERE</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy các hóa đơn có tổng tiền lớn hơn trung bình</span><br>
+                        <span class="keyword">SELECT</span> MaHD, TongTien<br>
+                        <span class="keyword">FROM</span> HoaDon<br>
+                        <span class="keyword">WHERE</span> TongTien > (<span class="keyword">SELECT</span> <span class="function">AVG</span>(TongTien) <span class="keyword">FROM</span> HoaDon);<br>
+                        <br>
+                        <span class="comment">-- Kết quả: các hóa đơn > 22.46tr</span>
+                    </div>
+
+                    <h4>Ví dụ 3: Scalar Subquery trong HAVING</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy khách hàng có tổng chi tiêu lớn hơn trung bình</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">SUM</span>(TongTien) <span class="keyword">AS</span> TongChiTieu<br>
+                        <span class="keyword">FROM</span> HoaDon<br>
+                        <span class="keyword">GROUP BY</span> MaKH<br>
+                        <span class="keyword">HAVING</span> <span class="function">SUM</span>(TongTien) > (<span class="keyword">SELECT</span> <span class="function">AVG</span>(TongTien) <span class="keyword">FROM</span> HoaDon);
+                    </div>
+
+                    <h3>3.3 SUBQUERY VỚI IN</h3>
+                    
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Kiểm tra giá trị có nằm trong tập kết quả của subquery không.</p>
+                    </div>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">WHERE</span> column <span class="keyword">IN</span> (subquery)
+                    </div>
+
+                    <h4>Ví dụ 1: IN với subquery</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy thông tin khách hàng đã mua hàng</span><br>
+                        <span class="keyword">SELECT</span> *<br>
+                        <span class="keyword">FROM</span> KhachHang<br>
+                        <span class="keyword">WHERE</span> MaKH <span class="keyword">IN</span> (<span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> MaKH <span class="keyword">FROM</span> HoaDon);<br>
+                        <br>
+                        <span class="comment">-- Kết quả: 4 khách hàng (trừ khách 5)</span>
+                    </div>
+
+                    <h4>Ví dụ 2: NOT IN với subquery</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy khách hàng chưa mua hàng</span><br>
+                        <span class="keyword">SELECT</span> *<br>
+                        <span class="keyword">FROM</span> KhachHang<br>
+                        <span class="keyword">WHERE</span> MaKH <span class="keyword">NOT IN</span> (<span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> MaKH <span class="keyword">FROM</span> HoaDon);<br>
+                        <br>
+                        <span class="comment">-- Kết quả: khách hàng 5</span>
+                    </div>
+
+                    <h4>Ví dụ 3: IN với subquery nhiều cột</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy chi tiết hóa đơn của sản phẩm đắt nhất</span><br>
+                        <span class="keyword">SELECT</span> *<br>
+                        <span class="keyword">FROM</span> ChiTietHD<br>
+                        <span class="keyword">WHERE</span> MaSP <span class="keyword">IN</span> (<span class="keyword">SELECT</span> MaSP <span class="keyword">FROM</span> SanPham <span class="keyword">WHERE</span> DonGia > <span class="number">10000000</span>);<br>
+                        <span class="comment">-- Kết quả: chi tiết của sản phẩm 1 và 2</span>
+                    </div>
+
+                    <h3>3.4 SUBQUERY VỚI EXISTS</h3>
+                    
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Kiểm tra subquery có trả về ít nhất một hàng hay không.</p>
+                    </div>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">WHERE EXISTS</span> (subquery)
+                    </div>
+
+                    <h4>Ví dụ 1: EXISTS cơ bản</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy khách hàng có ít nhất một hóa đơn</span><br>
+                        <span class="keyword">SELECT</span> *<br>
+                        <span class="keyword">FROM</span> KhachHang kh<br>
+                        <span class="keyword">WHERE EXISTS</span> (<span class="keyword">SELECT</span> <span class="number">1</span> <span class="keyword">FROM</span> HoaDon hd <span class="keyword">WHERE</span> hd.MaKH = kh.MaKH);<br>
+                        <br>
+                        <span class="comment">-- Tương đương với IN nhưng EXISTS thường nhanh hơn với dữ liệu lớn</span>
+                    </div>
+
+                    <h4>Ví dụ 2: NOT EXISTS</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy khách hàng không có hóa đơn nào</span><br>
+                        <span class="keyword">SELECT</span> *<br>
+                        <span class="keyword">FROM</span> KhachHang kh<br>
+                        <span class="keyword">WHERE NOT EXISTS</span> (<span class="keyword">SELECT</span> <span class="number">1</span> <span class="keyword">FROM</span> HoaDon hd <span class="keyword">WHERE</span> hd.MaKH = kh.MaKH);<br>
+                        <br>
+                        <span class="comment">-- Kết quả: khách hàng 5</span>
+                    </div>
+
+                    <h4>Ví dụ 3: EXISTS với điều kiện phức tạp</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy khách hàng có mua sản phẩm giá > 20 triệu</span><br>
+                        <span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> kh.*<br>
+                        <span class="keyword">FROM</span> KhachHang kh<br>
+                        <span class="keyword">WHERE EXISTS</span> (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">SELECT</span> <span class="number">1</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">FROM</span> HoaDon hd<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">JOIN</span> ChiTietHD cthd <span class="keyword">ON</span> hd.MaHD = cthd.MaHD<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">JOIN</span> SanPham sp <span class="keyword">ON</span> cthd.MaSP = sp.MaSP<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">WHERE</span> hd.MaKH = kh.MaKH <span class="keyword">AND</span> sp.DonGia > <span class="number">20000000</span><br>
+                        );<br>
+                        <span class="comment">-- Kết quả: khách hàng 1 và 2</span>
+                    </div>
+
+                    <h3>3.5 CORRELATED SUBQUERY</h3>
+                    
+                    <div class="info-box">
+                        <h4><i class="fas fa-lightbulb"></i> Định nghĩa:</h4>
+                        <p><strong>Correlated Subquery</strong> là subquery có tham chiếu đến các cột từ truy vấn bên ngoài.</p>
+                    </div>
+
+                    <h4>Đặc điểm:</h4>
+                    <ul>
+                        <li>Chạy lại cho mỗi hàng của truy vấn bên ngoài</li>
+                        <li>Thường chậm hơn non-correlated subquery</li>
+                    </ul>
+
+                    <h4>Ví dụ 1: Correlated Subquery với SELECT</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy thông tin mỗi hóa đơn và số hóa đơn của cùng khách hàng</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd1.MaHD,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd1.MaKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd1.TongTien,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;(<span class="keyword">SELECT</span> <span class="function">COUNT</span>(*) <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">FROM</span> HoaDon hd2 <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">WHERE</span> hd2.MaKH = hd1.MaKH) <span class="keyword">AS</span> SoHoaDonCuaKH<br>
+                        <span class="keyword">FROM</span> HoaDon hd1;
+                    </div>
+
+                    <h4>Ví dụ 2: Correlated Subquery với WHERE</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy hóa đơn có tổng tiền lớn hơn tổng tiền trung bình của khách hàng đó</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd1.MaHD,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd1.MaKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;hd1.TongTien<br>
+                        <span class="keyword">FROM</span> HoaDon hd1<br>
+                        <span class="keyword">WHERE</span> hd1.TongTien > (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">SELECT</span> <span class="function">AVG</span>(hd2.TongTien)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">FROM</span> HoaDon hd2<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">WHERE</span> hd2.MaKH = hd1.MaKH<br>
+                        );
+                    </div>
+
+                    <h3>3.6 SUBQUERY TRONG FROM</h3>
+                    
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Sử dụng kết quả của subquery như một bảng tạm (derived table).</p>
+                    </div>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> columns<br>
+                        <span class="keyword">FROM</span> (subquery) <span class="keyword">AS</span> alias;
+                    </div>
+
+                    <h4>Ví dụ 1: Subquery trong FROM</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tính tổng chi tiêu theo khách hàng, sau đó lấy trung bình</span><br>
+                        <span class="keyword">SELECT</span> <span class="function">AVG</span>(TongChiTieu) <span class="keyword">AS</span> TB_ChiTieu<br>
+                        <span class="keyword">FROM</span> (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MaKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="function">SUM</span>(TongTien) <span class="keyword">AS</span> TongChiTieu<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">FROM</span> HoaDon<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">GROUP BY</span> MaKH<br>
+                        ) <span class="keyword">AS</span> ThongKe;
+                    </div>
+
+                    <h4>Ví dụ 2: Subquery trong FROM với JOIN</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy thông tin khách hàng và tổng chi tiêu</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.TenKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;tk.TongChiTieu<br>
+                        <span class="keyword">FROM</span> KhachHang kh<br>
+                        <span class="keyword">LEFT JOIN</span> (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MaKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="function">SUM</span>(TongTien) <span class="keyword">AS</span> TongChiTieu<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">FROM</span> HoaDon<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">GROUP BY</span> MaKH<br>
+                        ) <span class="keyword">AS</span> tk <span class="keyword">ON</span> kh.MaKH = tk.MaKH;
+                    </div>
+
+                    <h3>3.7 SUBQUERY VỚI ANY VÀ ALL</h3>
+                    
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>So sánh giá trị với bất kỳ (ANY) hoặc tất cả (ALL) giá trị từ subquery.</p>
+                    </div>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">WHERE</span> column > <span class="keyword">ANY</span> (subquery)  <span class="comment">-- Lớn hơn ít nhất một giá trị</span><br>
+                        <span class="keyword">WHERE</span> column > <span class="keyword">ALL</span> (subquery)  <span class="comment">-- Lớn hơn tất cả giá trị</span>
+                    </div>
+
+                    <h4>Ví dụ 1: ANY</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy sản phẩm có giá lớn hơn ít nhất một sản phẩm của một loại nào đó</span><br>
+                        <span class="comment">-- Ví dụ: sản phẩm có giá > ít nhất một sản phẩm giá rẻ</span><br>
+                        <span class="keyword">SELECT</span> *<br>
+                        <span class="keyword">FROM</span> SanPham<br>
+                        <span class="keyword">WHERE</span> DonGia > <span class="keyword">ANY</span> (<span class="keyword">SELECT</span> DonGia <span class="keyword">FROM</span> SanPham <span class="keyword">WHERE</span> DonGia < <span class="number">2000000</span>);<br>
+                        <span class="comment">-- Tương đương: > giá trị nhỏ nhất trong nhóm rẻ</span>
+                    </div>
+
+                    <h4>Ví dụ 2: ALL</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy sản phẩm có giá lớn hơn tất cả sản phẩm giá rẻ</span><br>
+                        <span class="keyword">SELECT</span> *<br>
+                        <span class="keyword">FROM</span> SanPham<br>
+                        <span class="keyword">WHERE</span> DonGia > <span class="keyword">ALL</span> (<span class="keyword">SELECT</span> DonGia <span class="keyword">FROM</span> SanPham <span class="keyword">WHERE</span> DonGia < <span class="number">2000000</span>);<br>
+                        <span class="comment">-- Tương đương: > giá trị lớn nhất trong nhóm rẻ</span>
+                    </div>
+                </section>
+
+                <!-- PHẦN 4: VÍ DỤ TỔNG HỢP -->
+                <section id="part4" class="section">
+                    <h2><i class="fas fa-project-diagram"></i> PHẦN 4: VÍ DỤ TỔNG HỢP</h2>
+
+                    <h3>4.1 Kết hợp Aggregate Functions, Joins và Subqueries</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL - Phân tích doanh số bán hàng</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- 1. Doanh thu theo từng sản phẩm</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;sp.TenSP,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">SUM</span>(cthd.SoLuong) <span class="keyword">AS</span> SoLuongBan,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">SUM</span>(cthd.SoLuong * cthd.DonGia) <span class="keyword">AS</span> DoanhThu<br>
+                        <span class="keyword">FROM</span> SanPham sp<br>
+                        <span class="keyword">LEFT JOIN</span> ChiTietHD cthd <span class="keyword">ON</span> sp.MaSP = cthd.MaSP<br>
+                        <span class="keyword">GROUP BY</span> sp.MaSP, sp.TenSP<br>
+                        <span class="keyword">ORDER BY</span> DoanhThu <span class="keyword">DESC</span>;<br>
+                        <br>
+                        <span class="comment">-- 2. Top 3 sản phẩm bán chạy nhất</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;sp.TenSP,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">SUM</span>(cthd.SoLuong) <span class="keyword">AS</span> SoLuongBan<br>
+                        <span class="keyword">FROM</span> SanPham sp<br>
+                        <span class="keyword">JOIN</span> ChiTietHD cthd <span class="keyword">ON</span> sp.MaSP = cthd.MaSP<br>
+                        <span class="keyword">GROUP BY</span> sp.MaSP, sp.TenSP<br>
+                        <span class="keyword">ORDER BY</span> SoLuongBan <span class="keyword">DESC</span><br>
+                        <span class="keyword">LIMIT</span> <span class="number">3</span>;<br>
+                        <br>
+                        <span class="comment">-- 3. Khách hàng VIP (chi tiêu > trung bình)</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.TenKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">SUM</span>(hd.TongTien) <span class="keyword">AS</span> TongChiTieu<br>
+                        <span class="keyword">FROM</span> KhachHang kh<br>
+                        <span class="keyword">JOIN</span> HoaDon hd <span class="keyword">ON</span> kh.MaKH = hd.MaKH<br>
+                        <span class="keyword">GROUP BY</span> kh.MaKH, kh.TenKH<br>
+                        <span class="keyword">HAVING</span> <span class="function">SUM</span>(hd.TongTien) > (<span class="keyword">SELECT</span> <span class="function">AVG</span>(TongTien) <span class="keyword">FROM</span> HoaDon);<br>
+                        <br>
+                        <span class="comment">-- 4. Tháng có doanh thu cao nhất</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">MONTH</span>(NgayLap) <span class="keyword">AS</span> Thang,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">SUM</span>(TongTien) <span class="keyword">AS</span> DoanhThu<br>
+                        <span class="keyword">FROM</span> HoaDon<br>
+                        <span class="keyword">GROUP BY</span> <span class="function">MONTH</span>(NgayLap)<br>
+                        <span class="keyword">ORDER BY</span> DoanhThu <span class="keyword">DESC</span><br>
+                        <span class="keyword">LIMIT</span> <span class="number">1</span>;<br>
+                        <br>
+                        <span class="comment">-- 5. Sản phẩm chưa từng bán được</span><br>
+                        <span class="keyword">SELECT</span> *<br>
+                        <span class="keyword">FROM</span> SanPham<br>
+                        <span class="keyword">WHERE</span> MaSP <span class="keyword">NOT IN</span> (<span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> MaSP <span class="keyword">FROM</span> ChiTietHD);<br>
+                        <br>
+                        <span class="comment">-- 6. Khách hàng mua nhiều loại sản phẩm nhất</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;kh.TenKH,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">COUNT</span>(<span class="keyword">DISTINCT</span> cthd.MaSP) <span class="keyword">AS</span> SoLoaiSP<br>
+                        <span class="keyword">FROM</span> KhachHang kh<br>
+                        <span class="keyword">JOIN</span> HoaDon hd <span class="keyword">ON</span> kh.MaKH = hd.MaKH<br>
+                        <span class="keyword">JOIN</span> ChiTietHD cthd <span class="keyword">ON</span> hd.MaHD = cthd.MaHD<br>
+                        <span class="keyword">GROUP BY</span> kh.MaKH, kh.TenKH<br>
+                        <span class="keyword">ORDER BY</span> SoLoaiSP <span class="keyword">DESC</span><br>
+                        <span class="keyword">LIMIT</span> <span class="number">1</span>;
+                    </div>
+                </section>
+
+                <!-- PHẦN 5: TỔNG KẾT -->
+                <section id="part5" class="section">
+                    <h2><i class="fas fa-star"></i> PHẦN 5: TỔNG KẾT</h2>
+
+                    <h3>5.1 BẢNG TÓM TẮT AGGREGATE FUNCTIONS</h3>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Hàm</th>
+                                    <th>Mô tả</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge badge-aggregate">COUNT(*)</span></td>
+                                    <td>Đếm số hàng</td>
+                                    <td>SELECT COUNT(*) FROM HoaDon</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-aggregate">SUM(column)</span></td>
+                                    <td>Tính tổng</td>
+                                    <td>SELECT SUM(TongTien) FROM HoaDon</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-aggregate">AVG(column)</span></td>
+                                    <td>Tính trung bình</td>
+                                    <td>SELECT AVG(DonGia) FROM SanPham</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-aggregate">MAX(column)</span></td>
+                                    <td>Tìm lớn nhất</td>
+                                    <td>SELECT MAX(TongTien) FROM HoaDon</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-aggregate">MIN(column)</span></td>
+                                    <td>Tìm nhỏ nhất</td>
+                                    <td>SELECT MIN(TongTien) FROM HoaDon</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>5.2 BẢNG TÓM TẮT JOINS</h3>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Loại JOIN</th>
+                                    <th>Mô tả</th>
+                                    <th>Số hàng kết quả</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge badge-join">INNER JOIN</span></td>
+                                    <td>Chỉ lấy hàng khớp</td>
+                                    <td>Ít hơn hoặc bằng</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-join">LEFT JOIN</span></td>
+                                    <td>Tất cả bảng trái + khớp bảng phải</td>
+                                    <td>Bằng số bảng trái</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-join">RIGHT JOIN</span></td>
+                                    <td>Tất cả bảng phải + khớp bảng trái</td>
+                                    <td>Bằng số bảng phải</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-join">CROSS JOIN</span></td>
+                                    <td>Tích Descartes</td>
+                                    <td>Bảng A * Bảng B</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>5.3 BẢNG TÓM TẮT SUBQUERIES</h3>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Loại</th>
+                                    <th>Vị trí</th>
+                                    <th>Đặc điểm</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge badge-subquery">Scalar</span></td>
+                                    <td>SELECT, WHERE, HAVING</td>
+                                    <td>Trả về 1 giá trị</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-subquery">Table</span></td>
+                                    <td>FROM</td>
+                                    <td>Trả về bảng, cần alias</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-subquery">IN</span></td>
+                                    <td>WHERE</td>
+                                    <td>Kiểm tra trong tập hợp</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-subquery">EXISTS</span></td>
+                                    <td>WHERE</td>
+                                    <td>Kiểm tra tồn tại</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-subquery">Correlated</span></td>
+                                    <td>WHERE, SELECT</td>
+                                    <td>Tham chiếu bảng ngoài</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="comparison-box">
+                        <h4><i class="fas fa-lightbulb"></i> Tóm tắt nhanh:</h4>
+                        <ul>
+                            <li><span class="badge badge-aggregate">Aggregate Functions</span> - Tổng hợp dữ liệu: SUM, AVG, COUNT, MAX, MIN</li>
+                            <li><span class="badge badge-join">Joins</span> - Kết hợp dữ liệu từ nhiều bảng: INNER, LEFT, RIGHT</li>
+                            <li><span class="badge badge-subquery">Subqueries</span> - Truy vấn lồng nhau để xử lý phức tạp</li>
+                        </ul>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-star"></i> Tổng kết Advanced SQL</h4>
+                        <div class="demo-box">
+                            <p style="font-size: 1.3rem;"><i class="fas fa-chart-simple"></i> Aggregate <i class="fas fa-arrow-right"></i> <i class="fas fa-link"></i> Joins <i class="fas fa-arrow-right"></i> <i class="fas fa-magnifying-glass"></i> Subqueries</p>
+                            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+                                <span class="badge badge-aggregate">COUNT</span>
+                                <span class="badge badge-aggregate">SUM</span>
+                                <span class="badge badge-join">INNER JOIN</span>
+                                <span class="badge badge-join">LEFT JOIN</span>
+                                <span class="badge badge-subquery">IN</span>
+                                <span class="badge badge-subquery">EXISTS</span>
+                            </div>
+                            <p style="margin-top: 20px;"><i class="fas fa-quote-right"></i> "Advanced SQL giúp bạn phân tích dữ liệu chuyên sâu và hiệu quả!"</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p><i class="fas fa-chart-simple"></i> BUỔI 37: ADVANCED SQL - GV : Nguyễn Đình Mạnh   </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng với hiệu ứng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // Xóa class active từ tất cả các link và section
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    // Thêm class active cho link được click với hiệu ứng
+                    this.classList.add('active');
+                    
+                    // Thêm hiệu ứng rung nhẹ khi click
+                    this.style.animation = 'none';
+                    this.offsetHeight; // Trigger reflow
+                    this.style.animation = 'slideInLeft 0.3s ease';
+
+                    // Hiển thị section tương ứng
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+                    
+                    // Cuộn lên đầu section
+                    document.querySelector('.main-content').scrollTop = 0;
+                });
+            });
+        });
+
+        // Hàm copy code với hiệu ứng
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            
+            // Hiệu ứng copy
+            button.innerHTML = '<i class="fas fa-check"></i> Đã copy!';
+            button.style.background = '#27ae60';
+            
+            navigator.clipboard.writeText(text).then(() => {
+                setTimeout(() => {
+                    button.innerHTML = '<i class="far fa-copy"></i> Copy';
+                    button.style.background = '#555';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+
+</html>

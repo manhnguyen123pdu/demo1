@@ -1,0 +1,2591 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUỔI 28: QUEUE & UTILITIES </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            overflow: hidden;
+
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 80vh;
+        }
+
+        .sidebar {
+            height: 80vh;
+            overflow: scroll;
+            background: var(--light);
+            padding: 20px;
+            border-right: 3px solid var(--secondary);
+        }
+
+        .nav-list {
+            list-style: none;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h4 {
+            color: var(--info);
+            margin: 20px 0 10px;
+        }
+
+        h5 {
+            color: var(--dark);
+            margin: 15px 0 8px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.4;
+            border: 2px solid #444;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid var(--info);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .interactive-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .sidebar ul {
+            padding: 0;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+
+        .btn-run {
+            background: var(--success);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid var(--warning);
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 1400px) {
+            body {
+                padding: 0;
+            }
+
+            footer {
+
+                padding: 8px 20px;
+
+            }
+
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 3px solid var(--secondary);
+            }
+        }
+
+        .method-detail {
+            background: #f8f9fa;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .method-detail h5 {
+            color: var(--success);
+            margin-top: 0;
+        }
+
+        .tree-structure {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+        }
+
+        .tree-item {
+            margin-left: 20px;
+            padding: 2px 0;
+        }
+
+        .tree-item::before {
+            content: "├── ";
+            color: #666;
+        }
+
+        .tree-item:last-child::before {
+            content: "└── ";
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+
+        .timezone-demo {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .pattern-table {
+            font-size: 0.9rem;
+        }
+
+        .pattern-table code {
+            background: #f5f5f5;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fab fa-java"></i> BUỔI 28: QUEUE & UTILITIES </h1>
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#phan1" class="nav-link active"><i class="fas fa-layer-group"></i>
+                            PHẦN 1: QUEUE INTERFACE</a></li>
+
+
+                    <li class="nav-item"><a href="#phan2" class="nav-link"><i class="fas fa-sort-numeric-up-alt"></i>
+                            PHẦN 2: PRIORITY QUEUE</a></li>
+
+
+                    <li class="nav-item"><a href="#phan3" class="nav-link"><i class="fas fa-arrows-alt-h"></i> PHẦN 3:
+                            DEQUE INTERFACE</a></li>
+
+                    <li class="nav-item"><a href="#phan4" class="nav-link"><i class="fas fa-array"></i> PHẦN 4: ARRAY
+                            DEQUE</a></li>
+
+
+                    <li class="nav-item"><a href="#phan5" class="nav-link"><i class="fas fa-tools"></i> PHẦN 5:
+                            COLLECTIONS UTILITIES</a></li>
+
+
+                    <li class="nav-item"><a href="#phan6" class="nav-link"><i class="fas fa-brackets-curly"></i> PHẦN 6:
+                            ARRAYS UTILITIES</a></li>
+
+
+                    <li class="nav-item"><a href="#phan7" class="nav-link"><i class="fas fa-flag-checkered"></i> PHẦN 7:
+                            TỔNG KẾT</a></li>
+
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- PHẦN 1: QUEUE INTERFACE -->
+                <section id="phan1" class="section active">
+                    <h2><i class="fas fa-layer-group"></i> PHẦN 1: QUEUE INTERFACE</h2>
+
+                    <div id="phan1-1">
+                        <h3>1.1 QUEUE LÀ GÌ?</h3>
+                        <p><strong>Định nghĩa:</strong> Queue là interface trong Java, đại diện cho một hàng đợi - cấu
+                            trúc dữ liệu hoạt động theo nguyên tắc FIFO (First-In-First-Out) - Vào trước ra trước.</p>
+
+                        <h4>Đặc điểm:</h4>
+                        <ul>
+                            <li>✅ Phần tử được thêm vào cuối hàng đợi</li>
+                            <li>✅ Phần tử được lấy ra từ đầu hàng đợi</li>
+                            <li>✅ Có thể giới hạn dung lượng (bounded) hoặc không giới hạn (unbounded)</li>
+                            <li>✅ Hỗ trợ các thao tác: thêm, lấy, xóa, kiểm tra</li>
+                        </ul>
+
+                        <h4>Hình dung:</h4>
+                        <div class="flow-diagram">
+                            Thêm vào → [ 5 ][ 3 ][ 8 ][ 1 ] → Lấy ra
+                            (cuối) (đầu)
+                        </div>
+                    </div>
+
+                    <div id="phan1-2">
+                        <h3>1.2 CÚ PHÁP KHAI BÁO QUEUE</h3>
+
+                        <h4>1.2.1 Cú pháp tổng quát</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Khai báo Queue</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="comment">// Cách 1: Dùng interface Queue (khuyến nghị)</span><br>
+                            Queue&lt;KiểuDữLiệu&gt; tênBiến = <span class="keyword">new</span>
+                            PriorityQueue&lt;&gt;();<br>
+                            Queue&lt;KiểuDữLiệu&gt; tênBiến = <span class="keyword">new</span> LinkedList&lt;&gt;();
+                            <span class="comment">// LinkedList implements Queue</span><br>
+                            Queue&lt;KiểuDữLiệu&gt; tênBiến = <span class="keyword">new</span> ArrayDeque&lt;&gt;();
+                            <span class="comment">// ArrayDeque implements Queue</span><br>
+                            <br>
+                            <span class="comment">// Cách 2: Dùng class cụ thể</span><br>
+                            PriorityQueue&lt;KiểuDữLiệu&gt; tênBiến = <span class="keyword">new</span>
+                            PriorityQueue&lt;&gt;();<br>
+                            LinkedList&lt;KiểuDữLiệu&gt; tênBiến = <span class="keyword">new</span>
+                            LinkedList&lt;&gt;(); <span class="comment">// LinkedList cũng là Queue</span><br>
+                            ArrayDeque&lt;KiểuDữLiệu&gt; tênBiến = <span class="keyword">new</span>
+                            ArrayDeque&lt;&gt;();
+                        </div>
+
+                        <h4>1.2.2 Ví dụ khai báo</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ khai báo</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="comment">// Queue với kiểu String</span><br>
+                            Queue&lt;String&gt; stringQueue = <span class="keyword">new</span>
+                            PriorityQueue&lt;&gt;();<br>
+                            Queue&lt;String&gt; linkedListQueue = <span class="keyword">new</span>
+                            LinkedList&lt;&gt;();<br>
+                            Queue&lt;String&gt; arrayDequeQueue = <span class="keyword">new</span>
+                            ArrayDeque&lt;&gt;();<br>
+                            <br>
+                            <span class="comment">// Queue với kiểu Integer</span><br>
+                            Queue&lt;Integer&gt; intQueue = <span class="keyword">new</span>
+                            PriorityQueue&lt;&gt;();<br>
+                            Queue&lt;Integer&gt; linkedIntQueue = <span class="keyword">new</span>
+                            LinkedList&lt;&gt;();<br>
+                            <br>
+                            <span class="comment">// Queue với kiểu đối tượng tự định nghĩa</span><br>
+                            Queue&lt;Customer&gt; customerQueue = <span class="keyword">new</span>
+                            PriorityQueue&lt;&gt;(); <span class="comment">// Customer phải implements Comparable</span>
+                        </div>
+                    </div>
+
+                    <div id="phan1-3">
+                        <h3>1.3 CÁC PHƯƠNG THỨC CỦA QUEUE</h3>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Thao tác</th>
+                                        <th>Ném exception</th>
+                                        <th>Trả về giá trị đặc biệt</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Thêm</td>
+                                        <td>add(e)</td>
+                                        <td>offer(e)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lấy và xóa</td>
+                                        <td>remove()</td>
+                                        <td>poll()</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lấy (không xóa)</td>
+                                        <td>element()</td>
+                                        <td>peek()</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h4>1.3.1 Phương thức add(E e)</h4>
+                        <p><strong>Cú pháp:</strong> <code>boolean add(E e)</code></p>
+                        <p><strong>Giải thích:</strong> Thêm phần tử vào cuối hàng đợi. Nếu thêm thành công: trả về
+                            true. Nếu không thể thêm (do giới hạn dung lượng): ném IllegalStateException.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ add()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            Queue&lt;String&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();<br>
+                            queue.add(<span class="string">"Java"</span>);<br>
+                            queue.add(<span class="string">"Python"</span>);<br>
+                            queue.add(<span class="string">"JavaScript"</span>);<br>
+                            <br>
+                            System.out.println(queue); <span class="comment">// [Java, Python, JavaScript]</span>
+                        </div>
+
+                        <h4>1.3.2 Phương thức offer(E e)</h4>
+                        <p><strong>Cú pháp:</strong> <code>boolean offer(E e)</code></p>
+                        <p><strong>Giải thích:</strong> Thêm phần tử vào cuối hàng đợi. Nếu thêm thành công: trả về
+                            true. Nếu không thể thêm: trả về false (không ném exception).</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ offer()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            Queue&lt;String&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();<br>
+                            System.out.println(queue.offer(<span class="string">"Java"</span>)); <span
+                                class="comment">// true</span><br>
+                            System.out.println(queue.offer(<span class="string">"Python"</span>)); <span
+                                class="comment">// true</span><br>
+                            System.out.println(queue); <span class="comment">// [Java, Python]</span>
+                        </div>
+
+                        <h4>1.3.3 Phương thức remove()</h4>
+                        <p><strong>Cú pháp:</strong> <code>E remove()</code></p>
+                        <p><strong>Giải thích:</strong> Lấy và xóa phần tử đầu hàng đợi. Nếu hàng đợi không rỗng: trả về
+                            phần tử đầu. Nếu hàng đợi rỗng: ném NoSuchElementException.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ remove()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            Queue&lt;String&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();<br>
+                            queue.offer(<span class="string">"Java"</span>);<br>
+                            queue.offer(<span class="string">"Python"</span>);<br>
+                            queue.offer(<span class="string">"JavaScript"</span>);<br>
+                            <br>
+                            String element = queue.remove();<br>
+                            System.out.println(<span class="string">"Phần tử lấy ra: "</span> + element); <span
+                                class="comment">// Java</span><br>
+                            System.out.println(<span class="string">"Queue còn lại: "</span> + queue); <span
+                                class="comment">// [Python, JavaScript]</span><br>
+                            <br>
+                            <span class="comment">// queue.remove(); // Sẽ ném exception nếu queue rỗng</span>
+                        </div>
+
+                        <h4>1.3.4 Phương thức poll()</h4>
+                        <p><strong>Cú pháp:</strong> <code>E poll()</code></p>
+                        <p><strong>Giải thích:</strong> Lấy và xóa phần tử đầu hàng đợi. Nếu hàng đợi không rỗng: trả về
+                            phần tử đầu. Nếu hàng đợi rỗng: trả về null (không ném exception).</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ poll()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            Queue&lt;String&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();<br>
+                            queue.offer(<span class="string">"Java"</span>);<br>
+                            queue.offer(<span class="string">"Python"</span>);<br>
+                            <br>
+                            String element = queue.poll();<br>
+                            System.out.println(<span class="string">"Phần tử lấy ra: "</span> + element); <span
+                                class="comment">// Java</span><br>
+                            System.out.println(<span class="string">"Queue còn lại: "</span> + queue); <span
+                                class="comment">// [Python]</span><br>
+                            <br>
+                            String empty = queue.poll(); <span class="comment">// Lấy tiếp</span><br>
+                            System.out.println(empty); <span class="comment">// Python</span><br>
+                            System.out.println(queue.poll()); <span class="comment">// null (queue rỗng)</span>
+                        </div>
+
+                        <h4>1.3.5 Phương thức element()</h4>
+                        <p><strong>Cú pháp:</strong> <code>E element()</code></p>
+                        <p><strong>Giải thích:</strong> Lấy (không xóa) phần tử đầu hàng đợi. Nếu hàng đợi không rỗng:
+                            trả về phần tử đầu. Nếu hàng đợi rỗng: ném NoSuchElementException.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ element()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            Queue&lt;String&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();<br>
+                            queue.offer(<span class="string">"Java"</span>);<br>
+                            queue.offer(<span class="string">"Python"</span>);<br>
+                            <br>
+                            String head = queue.element();<br>
+                            System.out.println(<span class="string">"Phần tử đầu: "</span> + head); <span
+                                class="comment">// Java</span><br>
+                            System.out.println(<span class="string">"Queue vẫn giữ nguyên: "</span> + queue); <span
+                                class="comment">// [Java, Python]</span>
+                        </div>
+
+                        <h4>1.3.6 Phương thức peek()</h4>
+                        <p><strong>Cú pháp:</strong> <code>E peek()</code></p>
+                        <p><strong>Giải thích:</strong> Lấy (không xóa) phần tử đầu hàng đợi. Nếu hàng đợi không rỗng:
+                            trả về phần tử đầu. Nếu hàng đợi rỗng: trả về null (không ném exception).</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ peek()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            Queue&lt;String&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();<br>
+                            queue.offer(<span class="string">"Java"</span>);<br>
+                            queue.offer(<span class="string">"Python"</span>);<br>
+                            <br>
+                            String head = queue.peek();<br>
+                            System.out.println(<span class="string">"Phần tử đầu: "</span> + head); <span
+                                class="comment">// Java</span><br>
+                            System.out.println(<span class="string">"Queue vẫn giữ nguyên: "</span> + queue); <span
+                                class="comment">// [Java, Python]</span><br>
+                            <br>
+                            Queue&lt;String&gt; emptyQueue = <span class="keyword">new</span> LinkedList&lt;&gt;();<br>
+                            System.out.println(emptyQueue.peek()); <span class="comment">// null</span>
+                        </div>
+                    </div>
+
+                    <div id="phan1-4">
+                        <h3>1.4 SO SÁNH HAI BỘ PHƯƠNG THỨC</h3>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Tình huống</th>
+                                        <th>add/remove/element</th>
+                                        <th>offer/poll/peek</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Thêm thành công</td>
+                                        <td>add() → true</td>
+                                        <td>offer() → true</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Thêm thất bại</td>
+                                        <td>Ném exception</td>
+                                        <td>Trả về false</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lấy từ queue không rỗng</td>
+                                        <td>remove() → phần tử</td>
+                                        <td>poll() → phần tử</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lấy từ queue rỗng</td>
+                                        <td>Ném exception</td>
+                                        <td>Trả về null</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Xem đầu queue không rỗng</td>
+                                        <td>element() → phần tử</td>
+                                        <td>peek() → phần tử</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Xem đầu queue rỗng</td>
+                                        <td>Ném exception</td>
+                                        <td>Trả về null</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>QueueComparison.java</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">public class</span> <span class="class-name">QueueComparison</span>
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Queue&lt;String&gt; queue = <span
+                                class="keyword">new</span> LinkedList&lt;&gt;();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Bộ ném
+                                exception</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queue.add(<span
+                                class="string">"A"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String head =
+                            queue.element();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String removed =
+                            queue.remove();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span>
+                            (Exception e) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Exception: "</span> + e);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Bộ trả về giá trị
+                                đặc biệt</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queue.offer(<span
+                                class="string">"A"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String head = queue.peek();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String removed = queue.poll();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String null_value = queue.poll(); <span
+                                class="comment">// queue rỗng → null</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Khi
+                                queue rỗng, poll(): "</span> + null_value);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 2: PRIORITY QUEUE -->
+                <section id="phan2" class="section">
+                    <h2><i class="fas fa-sort-numeric-up-alt"></i> PHẦN 2: PRIORITY QUEUE</h2>
+
+                    <div id="phan2-1">
+                        <h3>2.1 PRIORITY QUEUE LÀ GÌ?</h3>
+                        <p><strong>Định nghĩa:</strong> PriorityQueue là class triển khai Queue interface, nhưng không
+                            theo FIFO mà sắp xếp phần tử theo độ ưu tiên.</p>
+
+                        <h4>Đặc điểm:</h4>
+                        <ul>
+                            <li>✅ Phần tử được sắp xếp theo thứ tự ưu tiên</li>
+                            <li>✅ Phần tử có độ ưu tiên cao nhất được lấy ra trước</li>
+                            <li>❌ Không cho phép null</li>
+                            <li>✅ Không thread-safe</li>
+                            <li>⚡ Hiệu suất: O(log n) cho thêm/xóa</li>
+                        </ul>
+
+                        <h4>Nguyên tắc hoạt động:</h4>
+                        <ul>
+                            <li>Mặc định: sắp xếp theo thứ tự tự nhiên (tăng dần với số, alphabet với String)</li>
+                            <li>Có thể dùng Comparator để định nghĩa thứ tự ưu tiên</li>
+                            <li>Phần tử nhỏ nhất (theo thứ tự) được lấy ra trước</li>
+                        </ul>
+                    </div>
+
+                    <div id="phan2-2">
+                        <h3>2.2 CÚ PHÁP KHAI BÁO PRIORITY QUEUE</h3>
+
+                        <h4>2.2.1 Cú pháp tổng quát</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Khai báo PriorityQueue</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="comment">// Cách 1: Dùng interface Queue (khuyến nghị)</span><br>
+                            Queue&lt;KiểuDữLiệu&gt; tênBiến = <span class="keyword">new</span>
+                            PriorityQueue&lt;&gt;();<br>
+                            <br>
+                            <span class="comment">// Cách 2: Dùng class cụ thể</span><br>
+                            PriorityQueue&lt;KiểuDữLiệu&gt; tênBiến = <span class="keyword">new</span>
+                            PriorityQueue&lt;&gt;();<br>
+                            <br>
+                            <span class="comment">// Cách 3: Với Comparator tùy chỉnh</span><br>
+                            Queue&lt;KiểuDữLiệu&gt; tênBiến = <span class="keyword">new</span>
+                            PriorityQueue&lt;&gt;(comparator);<br>
+                            PriorityQueue&lt;KiểuDữLiệu&gt; tênBiến = <span class="keyword">new</span>
+                            PriorityQueue&lt;&gt;(comparator);
+                        </div>
+
+                        <h4>2.2.2 Các constructor</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Constructors</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="comment">// 1. Constructor mặc định (thứ tự tự nhiên)</span><br>
+                            PriorityQueue&lt;Integer&gt; pq1 = <span class="keyword">new</span>
+                            PriorityQueue&lt;&gt;();<br>
+                            <br>
+                            <span class="comment">// 2. Constructor với initial capacity</span><br>
+                            PriorityQueue&lt;Integer&gt; pq2 = <span class="keyword">new</span>
+                            PriorityQueue&lt;&gt;(20);<br>
+                            <br>
+                            <span class="comment">// 3. Constructor với Comparator</span><br>
+                            PriorityQueue&lt;Integer&gt; pq3 = <span class="keyword">new</span>
+                            PriorityQueue&lt;&gt;(Comparator.reverseOrder());<br>
+                            <br>
+                            <span class="comment">// 4. Constructor từ Collection khác</span><br>
+                            List&lt;Integer&gt; list = Arrays.asList(5, 1, 3, 2, 4);<br>
+                            PriorityQueue&lt;Integer&gt; pq4 = <span class="keyword">new</span>
+                            PriorityQueue&lt;&gt;(list);<br>
+                            <br>
+                            <span class="comment">// 5. Constructor từ PriorityQueue khác</span><br>
+                            PriorityQueue&lt;Integer&gt; pq5 = <span class="keyword">new</span>
+                            PriorityQueue&lt;&gt;(pq4);
+                        </div>
+
+                        <h4>2.2.3 Ví dụ khai báo</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ khai báo</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="comment">// PriorityQueue với thứ tự tự nhiên (tăng dần)</span><br>
+                            Queue&lt;Integer&gt; minHeap = <span class="keyword">new</span> PriorityQueue&lt;&gt;();<br>
+                            minHeap.offer(5);<br>
+                            minHeap.offer(1);<br>
+                            minHeap.offer(3);<br>
+                            System.out.println(minHeap); <span class="comment">// [1, 5, 3] (không đảm bảo thứ tự in,
+                                nhưng lấy ra đúng)</span><br>
+                            <br>
+                            <span class="comment">// PriorityQueue với Comparator giảm dần (ưu tiên số lớn
+                                trước)</span><br>
+                            Queue&lt;Integer&gt; maxHeap = <span class="keyword">new</span>
+                            PriorityQueue&lt;&gt;(Comparator.reverseOrder());<br>
+                            maxHeap.offer(5);<br>
+                            maxHeap.offer(1);<br>
+                            maxHeap.offer(3);<br>
+                            <br>
+                            <span class="comment">// PriorityQueue với String (thứ tự alphabet)</span><br>
+                            Queue&lt;String&gt; stringPQ = <span class="keyword">new</span> PriorityQueue&lt;&gt;();<br>
+                            stringPQ.offer(<span class="string">"Java"</span>);<br>
+                            stringPQ.offer(<span class="string">"Python"</span>);<br>
+                            stringPQ.offer(<span class="string">"C++"</span>);
+                        </div>
+                    </div>
+
+                    <div id="phan2-3">
+                        <h3>2.3 VÍ DỤ VỀ PRIORITY QUEUE</h3>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>PriorityQueueExample.java</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">public class</span> <span
+                                class="class-name">PriorityQueueExample</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Tạo PriorityQueue
+                                với thứ tự tự nhiên (tăng dần)</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Queue&lt;Integer&gt; pq = <span
+                                class="keyword">new</span> PriorityQueue&lt;&gt;();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Thêm phần
+                                tử</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pq.offer(30);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pq.offer(10);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pq.offer(50);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pq.offer(20);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pq.offer(40);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"PriorityQueue: "</span> + pq); <span class="comment">// [10, 20, 50, 30,
+                                40] (cấu trúc heap)</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Lấy phần tử theo
+                                thứ tự ưu tiên</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Lấy
+                                lần 1: "</span> + pq.poll()); <span class="comment">// 10</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Lấy
+                                lần 2: "</span> + pq.poll()); <span class="comment">// 20</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Lấy
+                                lần 3: "</span> + pq.poll()); <span class="comment">// 30</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Lấy
+                                lần 4: "</span> + pq.poll()); <span class="comment">// 40</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Lấy
+                                lần 5: "</span> + pq.poll()); <span class="comment">// 50</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Lấy
+                                lần 6: "</span> + pq.poll()); <span class="comment">// null</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+
+                    <div id="phan2-4">
+                        <h3>2.4 PRIORITY QUEUE VỚI COMPARATOR TÙY CHỈNH</h3>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>PriorityQueueWithComparator.java</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">public class</span> <span
+                                class="class-name">PriorityQueueWithComparator</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 1. Ưu tiên số lớn
+                                trước (max heap)</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Queue&lt;Integer&gt; maxHeap = <span
+                                class="keyword">new</span> PriorityQueue&lt;&gt;(Comparator.reverseOrder());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxHeap.offer(30);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxHeap.offer(10);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxHeap.offer(50);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxHeap.offer(20);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Max
+                                heap (lấy số lớn trước):"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span>
+                            (!maxHeap.isEmpty()) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.print(maxHeap.poll()
+                            + <span class="string">" "</span>); <span class="comment">// 50 30 20 10</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 2. Ưu tiên chuỗi
+                                theo độ dài (ngắn nhất trước)</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Queue&lt;String&gt; byLength = <span
+                                class="keyword">new</span>
+                            PriorityQueue&lt;&gt;(Comparator.comparingInt(String::length));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;byLength.offer(<span
+                                class="string">"Java"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;byLength.offer(<span
+                                class="string">"Python"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;byLength.offer(<span
+                                class="string">"C"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;byLength.offer(<span
+                                class="string">"JavaScript"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;byLength.offer(<span
+                                class="string">"Go"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Ưu
+                                tiên độ dài ngắn nhất:"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span>
+                            (!byLength.isEmpty()) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.print(byLength.poll()
+                            + <span class="string">" "</span>); <span class="comment">// C Go Java Python
+                                JavaScript</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 3. Kết hợp nhiều
+                                tiêu chí</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Queue&lt;String&gt; complex = <span
+                                class="keyword">new</span> PriorityQueue&lt;&gt;(<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Comparator.comparingInt(String::length)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.thenComparing(Comparator.naturalOrder())<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;complex.offer(<span
+                                class="string">"Banana"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;complex.offer(<span
+                                class="string">"Apple"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;complex.offer(<span
+                                class="string">"Kiwi"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;complex.offer(<span
+                                class="string">"Pear"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Ưu
+                                tiên độ dài, sau đó alphabet:"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span>
+                            (!complex.isEmpty()) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.print(complex.poll()
+                            + <span class="string">" "</span>); <span class="comment">// Kiwi Pear Apple
+                                Banana</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+
+                    <div id="phan2-5">
+                        <h3>2.5 PRIORITY QUEUE VỚI ĐỐI TƯỢNG TỰ ĐỊNH NGHĨA</h3>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Task.java</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">class</span> <span class="class-name">Task</span> <span
+                                class="keyword">implements</span> Comparable&lt;Task&gt; {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String name;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> <span
+                                class="keyword">int</span> priority;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span
+                                class="class-name">Task</span>(String name, <span class="keyword">int</span> priority)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.name =
+                            name;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.priority =
+                            priority;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;@Override<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public int</span> compareTo(Task other) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Ưu tiên số priority
+                                lớn hơn (cao hơn)</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>
+                            Integer.compare(other.priority, <span class="keyword">this</span>.priority);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;@Override<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String toString() {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> name +
+                            <span class="string">"("</span> + priority + <span class="string">")"</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }<br>
+                            <br>
+                            <span class="keyword">public class</span> <span
+                                class="class-name">PriorityQueueWithObjects</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Queue&lt;Task&gt; taskQueue = <span
+                                class="keyword">new</span> PriorityQueue&lt;&gt;();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;taskQueue.offer(<span
+                                class="keyword">new</span> <span class="class-name">Task</span>(<span
+                                class="string">"Học Java"</span>, 5));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;taskQueue.offer(<span
+                                class="keyword">new</span> <span class="class-name">Task</span>(<span
+                                class="string">"Làm bài tập"</span>, 3));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;taskQueue.offer(<span
+                                class="keyword">new</span> <span class="class-name">Task</span>(<span
+                                class="string">"Nộp báo cáo"</span>, 5));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;taskQueue.offer(<span
+                                class="keyword">new</span> <span class="class-name">Task</span>(<span class="string">"Đi
+                                họp"</span>, 4));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;taskQueue.offer(<span
+                                class="keyword">new</span> <span class="class-name">Task</span>(<span
+                                class="string">"Nghỉ trưa"</span>, 1));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Công việc theo độ ưu tiên:"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span>
+                            (!taskQueue.isEmpty()) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">" "</span> + taskQueue.poll());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+
+                    <div id="phan2-6">
+                        <h3>2.6 ỨNG DỤNG THỰC TẾ CỦA PRIORITY QUEUE</h3>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>EmergencyRoom.java</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">class</span> <span class="class-name">Patient</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String name;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> <span
+                                class="keyword">int</span> severity; <span class="comment">// 1: nhẹ, 5: nguy
+                                kịch</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span
+                                class="class-name">Patient</span>(String name, <span class="keyword">int</span>
+                            severity) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.name =
+                            name;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.severity =
+                            severity;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;@Override<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> String toString() {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> name +
+                            <span class="string">" (mức "</span> + severity + <span class="string">")"</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }<br>
+                            <br>
+                            <span class="keyword">public class</span> <span class="class-name">EmergencyRoom</span>
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Bệnh nhân nguy kịch
+                                được ưu tiên trước</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Queue&lt;Patient&gt; emergencyQueue = <span
+                                class="keyword">new</span> PriorityQueue&lt;&gt;(<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(p1, p2) -&gt;
+                            Integer.compare(p2.severity, p1.severity)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emergencyQueue.offer(<span
+                                class="keyword">new</span> <span class="class-name">Patient</span>(<span
+                                class="string">"Nguyễn Văn A"</span>, 3));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emergencyQueue.offer(<span
+                                class="keyword">new</span> <span class="class-name">Patient</span>(<span
+                                class="string">"Trần Thị B"</span>, 5)); <span class="comment">// Nguy kịch</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emergencyQueue.offer(<span
+                                class="keyword">new</span> <span class="class-name">Patient</span>(<span
+                                class="string">"Lê Văn C"</span>, 2));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emergencyQueue.offer(<span
+                                class="keyword">new</span> <span class="class-name">Patient</span>(<span
+                                class="string">"Phạm Thị D"</span>, 4));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emergencyQueue.offer(<span
+                                class="keyword">new</span> <span class="class-name">Patient</span>(<span
+                                class="string">"Hoàng Văn E"</span>, 1));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Thứ
+                                tự khám bệnh:"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span>
+                            (!emergencyQueue.isEmpty()) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">" "</span> + emergencyQueue.poll());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 3: DEQUE INTERFACE -->
+                <section id="phan3" class="section">
+                    <h2><i class="fas fa-arrows-alt-h"></i> PHẦN 3: DEQUE INTERFACE</h2>
+
+                    <div id="phan3-1">
+                        <h3>3.1 DEQUE LÀ GÌ?</h3>
+                        <p><strong>Định nghĩa:</strong> Deque (phát âm là "deck") là interface trong Java, đại diện cho
+                            một hàng đợi hai đầu (Double-Ended Queue). Cho phép thêm và lấy phần tử ở cả hai đầu.</p>
+
+                        <h4>Đặc điểm:</h4>
+                        <ul>
+                            <li>✅ Có thể dùng như Queue (FIFO) - thêm ở cuối, lấy ở đầu</li>
+                            <li>✅ Có thể dùng như Stack (LIFO) - thêm và lấy ở cùng một đầu</li>
+                            <li>✅ Hỗ trợ thao tác ở cả đầu và cuối</li>
+                            <li>✅ Có thể giới hạn dung lượng hoặc không</li>
+                        </ul>
+
+                        <h4>Hình dung:</h4>
+                        <div class="flow-diagram">
+                            Thêm/lấy ở đầu ← [ 5 ][ 3 ][ 8 ][ 1 ] → Thêm/lấy ở cuối
+                        </div>
+                    </div>
+
+                    <div id="phan3-2">
+                        <h3>3.2 CÚ PHÁP KHAI BÁO DEQUE</h3>
+
+                        <h4>3.2.1 Cú pháp tổng quát</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Khai báo Deque</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="comment">// Cách 1: Dùng interface Deque (khuyến nghị)</span><br>
+                            Deque&lt;KiểuDữLiệu&gt; tênBiến = <span class="keyword">new</span> ArrayDeque&lt;&gt;();<br>
+                            Deque&lt;KiểuDữLiệu&gt; tênBiến = <span class="keyword">new</span> LinkedList&lt;&gt;();
+                            <span class="comment">// LinkedList implements Deque</span><br>
+                            <br>
+                            <span class="comment">// Cách 2: Dùng class cụ thể</span><br>
+                            ArrayDeque&lt;KiểuDữLiệu&gt; tênBiến = <span class="keyword">new</span>
+                            ArrayDeque&lt;&gt;();<br>
+                            LinkedList&lt;KiểuDữLiệu&gt; tênBiến = <span class="keyword">new</span>
+                            LinkedList&lt;&gt;(); <span class="comment">// LinkedList cũng là Deque</span>
+                        </div>
+
+                        <h4>3.2.2 Ví dụ khai báo</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ khai báo</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="comment">// Deque với ArrayDeque (khuyến nghị)</span><br>
+                            Deque&lt;String&gt; arrayDeque = <span class="keyword">new</span> ArrayDeque&lt;&gt;();<br>
+                            Deque&lt;Integer&gt; intDeque = <span class="keyword">new</span> ArrayDeque&lt;&gt;();<br>
+                            <br>
+                            <span class="comment">// Deque với LinkedList</span><br>
+                            Deque&lt;String&gt; linkedDeque = <span class="keyword">new</span> LinkedList&lt;&gt;();<br>
+                            Deque&lt;Double&gt; doubleDeque = <span class="keyword">new</span> LinkedList&lt;&gt;();
+                        </div>
+                    </div>
+
+                    <div id="phan3-3">
+                        <h3>3.3 CÁC PHƯƠNG THỨC CỦA DEQUE</h3>
+
+                        <h4>3.3.1 Thao tác ở ĐẦU (First)</h4>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Thao tác</th>
+                                        <th>Ném exception</th>
+                                        <th>Trả về giá trị đặc biệt</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Thêm</td>
+                                        <td>addFirst(e)</td>
+                                        <td>offerFirst(e)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lấy và xóa</td>
+                                        <td>removeFirst()</td>
+                                        <td>pollFirst()</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lấy (không xóa)</td>
+                                        <td>getFirst()</td>
+                                        <td>peekFirst()</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ thao tác đầu</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            Deque&lt;String&gt; deque = <span class="keyword">new</span> ArrayDeque&lt;&gt;();<br>
+                            <br>
+                            <span class="comment">// Thêm ở đầu</span><br>
+                            deque.addFirst(<span class="string">"C"</span>);<br>
+                            deque.offerFirst(<span class="string">"B"</span>);<br>
+                            deque.offerFirst(<span class="string">"A"</span>);<br>
+                            System.out.println(deque); <span class="comment">// [A, B, C]</span><br>
+                            <br>
+                            <span class="comment">// Xem đầu</span><br>
+                            System.out.println(deque.getFirst()); <span class="comment">// A</span><br>
+                            System.out.println(deque.peekFirst()); <span class="comment">// A</span><br>
+                            <br>
+                            <span class="comment">// Lấy và xóa đầu</span><br>
+                            System.out.println(deque.removeFirst()); <span class="comment">// A</span><br>
+                            System.out.println(deque.pollFirst()); <span class="comment">// B</span><br>
+                            System.out.println(deque); <span class="comment">// [C]</span>
+                        </div>
+
+                        <h4>3.3.2 Thao tác ở CUỐI (Last)</h4>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Thao tác</th>
+                                        <th>Ném exception</th>
+                                        <th>Trả về giá trị đặc biệt</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Thêm</td>
+                                        <td>addLast(e)</td>
+                                        <td>offerLast(e)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lấy và xóa</td>
+                                        <td>removeLast()</td>
+                                        <td>pollLast()</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lấy (không xóa)</td>
+                                        <td>getLast()</td>
+                                        <td>peekLast()</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ thao tác cuối</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            Deque&lt;String&gt; deque = <span class="keyword">new</span> ArrayDeque&lt;&gt;();<br>
+                            <br>
+                            <span class="comment">// Thêm ở cuối</span><br>
+                            deque.addLast(<span class="string">"A"</span>);<br>
+                            deque.offerLast(<span class="string">"B"</span>);<br>
+                            deque.offerLast(<span class="string">"C"</span>);<br>
+                            System.out.println(deque); <span class="comment">// [A, B, C]</span><br>
+                            <br>
+                            <span class="comment">// Xem cuối</span><br>
+                            System.out.println(deque.getLast()); <span class="comment">// C</span><br>
+                            System.out.println(deque.peekLast()); <span class="comment">// C</span><br>
+                            <br>
+                            <span class="comment">// Lấy và xóa cuối</span><br>
+                            System.out.println(deque.removeLast()); <span class="comment">// C</span><br>
+                            System.out.println(deque.pollLast()); <span class="comment">// B</span><br>
+                            System.out.println(deque); <span class="comment">// [A]</span>
+                        </div>
+                    </div>
+
+                    <div id="phan3-4">
+                        <h3>3.4 DEQUE NHƯ QUEUE (FIFO)</h3>
+
+                        <p>Khi dùng Deque như Queue (hàng đợi):</p>
+                        <ul>
+                            <li>Thêm ở cuối: addLast(e) hoặc offerLast(e)</li>
+                            <li>Lấy ở đầu: removeFirst() hoặc pollFirst()</li>
+                            <li>Xem đầu: getFirst() hoặc peekFirst()</li>
+                        </ul>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>DequeAsQueue.java</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">public class</span> <span class="class-name">DequeAsQueue</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Deque&lt;String&gt; queue = <span
+                                class="keyword">new</span> ArrayDeque&lt;&gt;();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Thêm vào cuối
+                                (enqueue)</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queue.offerLast(<span
+                                class="string">"Java"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queue.offerLast(<span
+                                class="string">"Python"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queue.offerLast(<span
+                                class="string">"JavaScript"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Queue: "</span> + queue); <span class="comment">// [Java, Python,
+                                JavaScript]</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Lấy từ đầu
+                                (dequeue)</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span>
+                            (!queue.isEmpty()) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Lấy: "</span> + queue.pollFirst());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+
+                    <div id="phan3-5">
+                        <h3>3.5 DEQUE NHƯ STACK (LIFO)</h3>
+
+                        <p>Khi dùng Deque như Stack (ngăn xếp):</p>
+                        <ul>
+                            <li>Thêm ở đầu: addFirst(e) hoặc offerFirst(e)</li>
+                            <li>Lấy ở đầu: removeFirst() hoặc pollFirst()</li>
+                            <li>Xem đầu: getFirst() hoặc peekFirst()</li>
+                        </ul>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>DequeAsStack.java</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">public class</span> <span class="class-name">DequeAsStack</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Deque&lt;String&gt; stack = <span
+                                class="keyword">new</span> ArrayDeque&lt;&gt;();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Push - thêm vào
+                                đầu</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stack.offerFirst(<span
+                                class="string">"Java"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stack.offerFirst(<span
+                                class="string">"Python"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stack.offerFirst(<span
+                                class="string">"JavaScript"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Stack: "</span> + stack); <span class="comment">// [JavaScript, Python,
+                                Java]</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Pop - lấy từ
+                                đầu</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span>
+                            (!stack.isEmpty()) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Pop: "</span> + stack.pollFirst());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 4: ARRAY DEQUE -->
+                <section id="phan4" class="section">
+                    <h2><i class="fas fa-array"></i> PHẦN 4: ARRAY DEQUE</h2>
+
+                    <div id="phan4-1">
+                        <h3>4.1 ARRAY DEQUE LÀ GÌ?</h3>
+                        <p><strong>Định nghĩa:</strong> ArrayDeque là class triển khai Deque interface, sử dụng mảng
+                            động để lưu trữ. Đây là lựa chọn tốt nhất cho Queue và Stack trong hầu hết trường hợp.</p>
+
+                        <h4>Đặc điểm:</h4>
+                        <ul>
+                            <li>✅ Nhanh hơn LinkedList cho hầu hết thao tác</li>
+                            <li>✅ Không cho phép null</li>
+                            <li>✅ Tự động mở rộng kích thước</li>
+                            <li>✅ Có thể dùng làm Queue (FIFO) hoặc Stack (LIFO)</li>
+                            <li>❌ Không thread-safe</li>
+                        </ul>
+                    </div>
+
+                    <div id="phan4-2">
+                        <h3>4.2 CÚ PHÁP KHAI BÁO ARRAY DEQUE</h3>
+
+                        <h4>4.2.1 Cú pháp tổng quát</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Khai báo ArrayDeque</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="comment">// Cách 1: Dùng interface Deque (khuyến nghị)</span><br>
+                            Deque&lt;KiểuDữLiệu&gt; tênBiến = <span class="keyword">new</span> ArrayDeque&lt;&gt;();<br>
+                            <br>
+                            <span class="comment">// Cách 2: Dùng class cụ thể</span><br>
+                            ArrayDeque&lt;KiểuDữLiệu&gt; tênBiến = <span class="keyword">new</span>
+                            ArrayDeque&lt;&gt;();
+                        </div>
+
+                        <h4>4.2.2 Các constructor</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Constructors</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="comment">// 1. Constructor mặc định (capacity 16)</span><br>
+                            ArrayDeque&lt;String&gt; deque1 = <span class="keyword">new</span> ArrayDeque&lt;&gt;();<br>
+                            <br>
+                            <span class="comment">// 2. Constructor với initial capacity</span><br>
+                            ArrayDeque&lt;String&gt; deque2 = <span class="keyword">new</span>
+                            ArrayDeque&lt;&gt;(32);<br>
+                            <br>
+                            <span class="comment">// 3. Constructor từ Collection khác</span><br>
+                            List&lt;String&gt; list = Arrays.asList(<span class="string">"A"</span>, <span
+                                class="string">"B"</span>, <span class="string">"C"</span>);<br>
+                            ArrayDeque&lt;String&gt; deque3 = <span class="keyword">new</span> ArrayDeque&lt;&gt;(list);
+                        </div>
+
+                        <h4>4.2.3 Ví dụ khai báo</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ khai báo</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="comment">// ArrayDeque với kiểu String</span><br>
+                            Deque&lt;String&gt; stringDeque = <span class="keyword">new</span> ArrayDeque&lt;&gt;();<br>
+                            stringDeque.add(<span class="string">"Java"</span>);<br>
+                            stringDeque.add(<span class="string">"Python"</span>);<br>
+                            <br>
+                            <span class="comment">// ArrayDeque với kiểu Integer</span><br>
+                            Deque&lt;Integer&gt; intDeque = <span class="keyword">new</span> ArrayDeque&lt;&gt;();<br>
+                            intDeque.add(10);<br>
+                            intDeque.add(20);<br>
+                            <br>
+                            <span class="comment">// ArrayDeque với initial capacity</span><br>
+                            Deque&lt;Double&gt; doubleDeque = <span class="keyword">new</span> ArrayDeque&lt;&gt;(100);
+                        </div>
+                    </div>
+
+                    <div id="phan4-3">
+                        <h3>4.3 VÍ DỤ TỔNG HỢP ARRAY DEQUE</h3>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>ArrayDequeExample.java</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">public class</span> <span class="class-name">ArrayDequeExample</span>
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Tạo
+                                ArrayDeque</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Deque&lt;String&gt; deque = <span
+                                class="keyword">new</span> ArrayDeque&lt;&gt;();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Thêm phần tử ở cả
+                                hai đầu</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deque.addFirst(<span class="string">"Đầu
+                                1"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deque.addLast(<span class="string">"Cuối
+                                1"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deque.offerFirst(<span class="string">"Đầu
+                                2"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deque.offerLast(<span class="string">"Cuối
+                                2"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Deque: "</span> + deque);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Xem phần
+                                tử</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Phần tử đầu: "</span> + deque.getFirst());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Phần tử cuối: "</span> + deque.getLast());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Peek đầu: "</span> + deque.peekFirst());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Peek cuối: "</span> + deque.peekLast());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Lấy và
+                                xóa</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Lấy
+                                đầu: "</span> + deque.removeFirst());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Lấy
+                                cuối: "</span> + deque.pollLast());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Duyệt và
+                                xóa</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Duyệt và xóa:"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span>
+                            (!deque.isEmpty()) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">" "</span> + deque.pollFirst());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Kích
+                                thước</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Kích thước cuối: "</span> + deque.size()); <span class="comment">//
+                                0</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+
+                    <div id="phan4-4">
+                        <h3>4.4 SO SÁNH ARRAY DEQUE VỚI STACK VÀ QUEUE</h3>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>ArrayDequeComparison.java</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">public class</span> <span
+                                class="class-name">ArrayDequeComparison</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 1. Dùng như Queue
+                                (FIFO) - nhanh hơn LinkedList</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Deque&lt;String&gt; queue = <span
+                                class="keyword">new</span> ArrayDeque&lt;&gt;();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queue.offer(<span
+                                class="string">"A"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queue.offer(<span
+                                class="string">"B"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queue.offer(<span
+                                class="string">"C"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Queue FIFO:"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span>
+                            (!queue.isEmpty()) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">" "</span> + queue.poll()); <span class="comment">// A, B, C</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 2. Dùng như Stack
+                                (LIFO) - nhanh hơn Stack class</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Deque&lt;String&gt; stack = <span
+                                class="keyword">new</span> ArrayDeque&lt;&gt;();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stack.push(<span class="string">"A"</span>);
+                            <span class="comment">// push = addFirst</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stack.push(<span
+                                class="string">"B"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stack.push(<span
+                                class="string">"C"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Stack LIFO:"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span>
+                            (!stack.isEmpty()) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">" "</span> + stack.pop()); <span class="comment">// C, B, A</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 3. So sánh tốc
+                                độ</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">long</span> start,
+                            end;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//
+                                ArrayDeque</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Deque&lt;Integer&gt; arrayDeque = <span
+                                class="keyword">new</span> ArrayDeque&lt;&gt;();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start = System.nanoTime();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span
+                                class="keyword">int</span> i = 0; i < 1000000; i++) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arrayDeque.addFirst(i);<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end = System.nanoTime();<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                    class="string">"ArrayDeque thêm 1 triệu phần tử: "</span> + (end - start) + <span
+                                    class="string">" ns"</span>);<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//
+                                    LinkedList</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Deque&lt;Integer&gt; linkedList = <span
+                                    class="keyword">new</span> LinkedList&lt;&gt;();<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start = System.nanoTime();<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span
+                                    class="keyword">int</span> i = 0; i < 1000000; i++) {<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;linkedList.addFirst(i);<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end = System.nanoTime();<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                        class="string">"LinkedList thêm 1 triệu phần tử: "</span> + (end - start) +
+                                    <span class="string">" ns"</span>);<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                    }
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 5: COLLECTIONS UTILITIES -->
+                <section id="phan5" class="section">
+                    <h2><i class="fas fa-tools"></i> PHẦN 5: COLLECTIONS UTILITIES</h2>
+
+                    <div id="phan5-1">
+                        <h3>5.1 COLLECTIONS LÀ GÌ?</h3>
+                        <p><strong>Định nghĩa:</strong> Collections là class tiện ích (utility class) trong Java, cung
+                            cấp các phương thức static để thao tác với các Collection như List, Set.</p>
+
+                        <h4>Đặc điểm:</h4>
+                        <ul>
+                            <li>✅ Chứa các thuật toán hữu ích: sắp xếp, tìm kiếm, đảo ngược, v.v.</li>
+                            <li>✅ Là class tiện ích, không thể khởi tạo (private constructor)</li>
+                            <li>✅ Tất cả phương thức đều là static</li>
+                        </ul>
+                    </div>
+
+                    <div id="phan5-2">
+                        <h3>5.2 CÁC PHƯƠNG THỨC QUAN TRỌNG CỦA COLLECTIONS</h3>
+
+                        <h4>5.2.1 Phương thức sort()</h4>
+                        <p><strong>Cú pháp:</strong> <code>Collections.sort(List&lt;T&gt; list)</code> và
+                            <code>Collections.sort(List&lt;T&gt; list, Comparator&lt;? super T&gt; c)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ sort()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            List&lt;Integer&gt; numbers = <span class="keyword">new</span>
+                            ArrayList&lt;&gt;(Arrays.asList(5, 2, 8, 1, 9, 3));<br>
+                            System.out.println(<span class="string">"Trước sort: "</span> + numbers);<br>
+                            <br>
+                            Collections.sort(numbers);<br>
+                            System.out.println(<span class="string">"Sau sort tăng: "</span> + numbers); <span
+                                class="comment">// [1, 2, 3, 5, 8, 9]</span><br>
+                            <br>
+                            Collections.sort(numbers, Comparator.reverseOrder());<br>
+                            System.out.println(<span class="string">"Sau sort giảm: "</span> + numbers); <span
+                                class="comment">// [9, 8, 5, 3, 2, 1]</span><br>
+                            <br>
+                            <span class="comment">// Với String</span><br>
+                            List&lt;String&gt; names = <span class="keyword">new</span>
+                            ArrayList&lt;&gt;(Arrays.asList(<span class="string">"John"</span>, <span
+                                class="string">"Alice"</span>, <span class="string">"Bob"</span>, <span
+                                class="string">"David"</span>));<br>
+                            Collections.sort(names);<br>
+                            System.out.println(<span class="string">"Tên sau sort: "</span> + names); <span
+                                class="comment">// [Alice, Bob, David, John]</span>
+                        </div>
+
+                        <h4>5.2.2 Phương thức binarySearch()</h4>
+                        <p><strong>Cú pháp:</strong>
+                            <code>int binarySearch(List&lt;? extends Comparable&lt;? super T&gt;&gt; list, T key)</code>
+                        </p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ binarySearch()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            List&lt;Integer&gt; numbers = <span class="keyword">new</span>
+                            ArrayList&lt;&gt;(Arrays.asList(10, 20, 30, 40, 50));<br>
+                            Collections.sort(numbers);<br>
+                            <br>
+                            <span class="keyword">int</span> index = Collections.binarySearch(numbers, 30);<br>
+                            System.out.println(<span class="string">"Vị trí của 30: "</span> + index); <span
+                                class="comment">// 2</span><br>
+                            <br>
+                            index = Collections.binarySearch(numbers, 35);<br>
+                            System.out.println(<span class="string">"Vị trí chèn của 35: "</span> + index); <span
+                                class="comment">// -4 (chèn ở vị trí 3)</span><br>
+                            <br>
+                            <span class="comment">// Phải sort trước khi tìm</span><br>
+                            List&lt;Integer&gt; unsorted = <span class="keyword">new</span>
+                            ArrayList&lt;&gt;(Arrays.asList(50, 10, 40, 20, 30));<br>
+                            <span class="keyword">int</span> wrong = Collections.binarySearch(unsorted, 30); <span
+                                class="comment">// Kết quả không xác định</span>
+                        </div>
+
+                        <h4>5.2.3 Phương thức reverse()</h4>
+                        <p><strong>Cú pháp:</strong> <code>void reverse(List&lt;?&gt; list)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ reverse()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            List&lt;Integer&gt; numbers = <span class="keyword">new</span>
+                            ArrayList&lt;&gt;(Arrays.asList(1, 2, 3, 4, 5));<br>
+                            System.out.println(<span class="string">"Trước reverse: "</span> + numbers);<br>
+                            <br>
+                            Collections.reverse(numbers);<br>
+                            System.out.println(<span class="string">"Sau reverse: "</span> + numbers); <span
+                                class="comment">// [5, 4, 3, 2, 1]</span><br>
+                            <br>
+                            List&lt;String&gt; names = <span class="keyword">new</span>
+                            ArrayList&lt;&gt;(Arrays.asList(<span class="string">"A"</span>, <span
+                                class="string">"B"</span>, <span class="string">"C"</span>, <span
+                                class="string">"D"</span>));<br>
+                            Collections.reverse(names);<br>
+                            System.out.println(names); <span class="comment">// [D, C, B, A]</span>
+                        </div>
+
+                        <h4>5.2.4 Phương thức shuffle()</h4>
+                        <p><strong>Cú pháp:</strong> <code>void shuffle(List&lt;?&gt; list)</code> và
+                            <code>void shuffle(List&lt;?&gt; list, Random random)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ shuffle()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            List&lt;Integer&gt; numbers = <span class="keyword">new</span>
+                            ArrayList&lt;&gt;(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));<br>
+                            System.out.println(<span class="string">"Trước shuffle: "</span> + numbers);<br>
+                            <br>
+                            Collections.shuffle(numbers);<br>
+                            System.out.println(<span class="string">"Sau shuffle lần 1: "</span> + numbers);<br>
+                            <br>
+                            Collections.shuffle(numbers);<br>
+                            System.out.println(<span class="string">"Sau shuffle lần 2: "</span> + numbers);<br>
+                            <br>
+                            <span class="comment">// Với Random seed</span><br>
+                            Collections.shuffle(numbers, <span class="keyword">new</span> <span
+                                class="class-name">Random</span>(123));<br>
+                            System.out.println(<span class="string">"Shuffle với seed: "</span> + numbers);
+                        </div>
+
+                        <h4>5.2.5 Phương thức swap()</h4>
+                        <p><strong>Cú pháp:</strong> <code>void swap(List&lt;?&gt; list, int i, int j)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ swap()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            List&lt;String&gt; list = <span class="keyword">new</span>
+                            ArrayList&lt;&gt;(Arrays.asList(<span class="string">"A"</span>, <span
+                                class="string">"B"</span>, <span class="string">"C"</span>, <span
+                                class="string">"D"</span>, <span class="string">"E"</span>));<br>
+                            System.out.println(<span class="string">"Trước swap: "</span> + list);<br>
+                            <br>
+                            Collections.swap(list, 1, 3);<br>
+                            System.out.println(<span class="string">"Sau swap vị trí 1 và 3: "</span> + list); <span
+                                class="comment">// [A, D, C, B, E]</span>
+                        </div>
+
+                        <h4>5.2.6 Phương thức fill()</h4>
+                        <p><strong>Cú pháp:</strong> <code>void fill(List&lt;? super T&gt; list, T obj)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ fill()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            List&lt;String&gt; list = <span class="keyword">new</span>
+                            ArrayList&lt;&gt;(Arrays.asList(<span class="string">"A"</span>, <span
+                                class="string">"B"</span>, <span class="string">"C"</span>, <span
+                                class="string">"D"</span>, <span class="string">"E"</span>));<br>
+                            System.out.println(<span class="string">"Trước fill: "</span> + list);<br>
+                            <br>
+                            Collections.fill(list, <span class="string">"X"</span>);<br>
+                            System.out.println(<span class="string">"Sau fill với X: "</span> + list); <span
+                                class="comment">// [X, X, X, X, X]</span>
+                        </div>
+
+                        <h4>5.2.7 Phương thức copy()</h4>
+                        <p><strong>Cú pháp:</strong>
+                            <code>void copy(List&lt;? super T&gt; dest, List&lt;? extends T&gt; src)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ copy()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            List&lt;String&gt; src = <span class="keyword">new</span>
+                            ArrayList&lt;&gt;(Arrays.asList(<span class="string">"A"</span>, <span
+                                class="string">"B"</span>, <span class="string">"C"</span>));<br>
+                            List&lt;String&gt; dest = <span class="keyword">new</span>
+                            ArrayList&lt;&gt;(Arrays.asList(<span class="string">"X"</span>, <span
+                                class="string">"Y"</span>, <span class="string">"Z"</span>, <span
+                                class="string">"W"</span>));<br>
+                            <br>
+                            System.out.println(<span class="string">"Nguồn: "</span> + src);<br>
+                            System.out.println(<span class="string">"Đích trước copy: "</span> + dest);<br>
+                            <br>
+                            Collections.copy(dest, src);<br>
+                            System.out.println(<span class="string">"Đích sau copy: "</span> + dest); <span
+                                class="comment">// [A, B, C, W]</span>
+                        </div>
+
+                        <h4>5.2.8 Phương thức min() và max()</h4>
+                        <p><strong>Cú pháp:</strong> <code>T min(Collection&lt;? extends T&gt; coll)</code> và
+                            <code>T max(Collection&lt;? extends T&gt; coll)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ min() và max()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            List&lt;Integer&gt; numbers = <span class="keyword">new</span>
+                            ArrayList&lt;&gt;(Arrays.asList(45, 12, 78, 34, 23, 89, 67));<br>
+                            <br>
+                            <span class="keyword">int</span> min = Collections.min(numbers);<br>
+                            <span class="keyword">int</span> max = Collections.max(numbers);<br>
+                            <br>
+                            System.out.println(<span class="string">"Số nhỏ nhất: "</span> + min); <span
+                                class="comment">// 12</span><br>
+                            System.out.println(<span class="string">"Số lớn nhất: "</span> + max); <span
+                                class="comment">// 89</span><br>
+                            <br>
+                            List&lt;String&gt; names = <span class="keyword">new</span>
+                            ArrayList&lt;&gt;(Arrays.asList(<span class="string">"John"</span>, <span
+                                class="string">"Alice"</span>, <span class="string">"Bob"</span>, <span
+                                class="string">"David"</span>));<br>
+                            System.out.println(<span class="string">"Tên nhỏ nhất (alphabet): "</span> +
+                            Collections.min(names)); <span class="comment">// Alice</span><br>
+                            System.out.println(<span class="string">"Tên lớn nhất (alphabet): "</span> +
+                            Collections.max(names)); <span class="comment">// John</span>
+                        </div>
+
+                        <h4>5.2.9 Phương thức frequency()</h4>
+                        <p><strong>Cú pháp:</strong> <code>int frequency(Collection&lt;?&gt; c, Object o)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ frequency()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            List&lt;String&gt; list = <span class="keyword">new</span>
+                            ArrayList&lt;&gt;(Arrays.asList(<span class="string">"A"</span>, <span
+                                class="string">"B"</span>, <span class="string">"A"</span>, <span
+                                class="string">"C"</span>, <span class="string">"A"</span>, <span
+                                class="string">"B"</span>, <span class="string">"D"</span>));<br>
+                            <br>
+                            <span class="keyword">int</span> countA = Collections.frequency(list, <span
+                                class="string">"A"</span>);<br>
+                            <span class="keyword">int</span> countB = Collections.frequency(list, <span
+                                class="string">"B"</span>);<br>
+                            <span class="keyword">int</span> countE = Collections.frequency(list, <span
+                                class="string">"E"</span>);<br>
+                            <br>
+                            System.out.println(<span class="string">"Số lần xuất hiện của A: "</span> + countA); <span
+                                class="comment">// 3</span><br>
+                            System.out.println(<span class="string">"Số lần xuất hiện của B: "</span> + countB); <span
+                                class="comment">// 2</span><br>
+                            System.out.println(<span class="string">"Số lần xuất hiện của E: "</span> + countE); <span
+                                class="comment">// 0</span>
+                        </div>
+
+                        <h4>5.2.10 Phương thức disjoint()</h4>
+                        <p><strong>Cú pháp:</strong>
+                            <code>boolean disjoint(Collection&lt;?&gt; c1, Collection&lt;?&gt; c2)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ disjoint()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            List&lt;Integer&gt; list1 = <span class="keyword">new</span>
+                            ArrayList&lt;&gt;(Arrays.asList(1, 2, 3, 4, 5));<br>
+                            List&lt;Integer&gt; list2 = <span class="keyword">new</span>
+                            ArrayList&lt;&gt;(Arrays.asList(6, 7, 8, 9, 10));<br>
+                            List&lt;Integer&gt; list3 = <span class="keyword">new</span>
+                            ArrayList&lt;&gt;(Arrays.asList(5, 6, 7, 8));<br>
+                            <br>
+                            System.out.println(<span class="string">"list1 và list2 không chung? "</span> +
+                            Collections.disjoint(list1, list2)); <span class="comment">// true</span><br>
+                            System.out.println(<span class="string">"list1 và list3 không chung? "</span> +
+                            Collections.disjoint(list1, list3)); <span class="comment">// false (có 5)</span>
+                        </div>
+
+                        <h4>5.2.11 Phương thức addAll()</h4>
+                        <p><strong>Cú pháp:</strong>
+                            <code>boolean addAll(Collection&lt;? super T&gt; c, T... elements)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ addAll()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();<br>
+                            <br>
+                            Collections.addAll(list, <span class="string">"Java"</span>, <span
+                                class="string">"Python"</span>, <span class="string">"JavaScript"</span>, <span
+                                class="string">"C++"</span>);<br>
+                            System.out.println(list); <span class="comment">// [Java, Python, JavaScript,
+                                C++]</span><br>
+                            <br>
+                            <span class="comment">// Nhanh hơn list.add() nhiều lần</span><br>
+                            String[] arr = {<span class="string">"A"</span>, <span class="string">"B"</span>, <span
+                                class="string">"C"</span>};<br>
+                            Collections.addAll(list, arr);<br>
+                            System.out.println(list); <span class="comment">// [Java, Python, JavaScript, C++, A, B,
+                                C]</span>
+                        </div>
+
+                        <h4>5.2.12 Phương thức tạo Collection bất biến (immutable)</h4>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ immutable collections</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="comment">// Tạo Collection rỗng bất biến</span><br>
+                            List&lt;String&gt; empty = Collections.emptyList();<br>
+                            <span class="comment">// empty.add("X"); // Sẽ ném UnsupportedOperationException</span><br>
+                            <br>
+                            <span class="comment">// Tạo Collection với một phần tử</span><br>
+                            List&lt;String&gt; single = Collections.singletonList(<span
+                                class="string">"Java"</span>);<br>
+                            <span class="comment">// single.add("Python"); // Sẽ ném exception</span><br>
+                            <br>
+                            <span class="comment">// Tạo bản sao bất biến từ Collection có sẵn</span><br>
+                            List&lt;String&gt; mutable = <span class="keyword">new</span>
+                            ArrayList&lt;&gt;(Arrays.asList(<span class="string">"A"</span>, <span
+                                class="string">"B"</span>, <span class="string">"C"</span>));<br>
+                            List&lt;String&gt; immutable = Collections.unmodifiableList(mutable);<br>
+                            <span class="comment">// immutable.add("D"); // Sẽ ném exception</span>
+                        </div>
+                    </div>
+
+                    <div id="phan5-3">
+                        <h3>5.3 VÍ DỤ TỔNG HỢP COLLECTIONS</h3>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>CollectionsUtilsExample.java</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">public class</span> <span
+                                class="class-name">CollectionsUtilsExample</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Tạo danh
+                                sách</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List&lt;Integer&gt; numbers = <span
+                                class="keyword">new</span> ArrayList&lt;&gt;(Arrays.asList(5, 2, 8, 1, 9, 3, 7, 4,
+                            6));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Danh sách gốc: "</span> + numbers);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Sắp xếp</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Collections.sort(numbers);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Sau
+                                sort: "</span> + numbers);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Tìm kiếm</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> index =
+                            Collections.binarySearch(numbers, 7);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Vị
+                                trí của 7: "</span> + index);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Đảo
+                                ngược</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Collections.reverse(numbers);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Sau
+                                reverse: "</span> + numbers);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Trộn</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Collections.shuffle(numbers);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Sau
+                                shuffle: "</span> + numbers);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Min, Max</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Min: "</span> + Collections.min(numbers));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Max: "</span> + Collections.max(numbers));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Tần suất</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List&lt;Integer&gt; withDuplicates = <span
+                                class="keyword">new</span> ArrayList&lt;&gt;(Arrays.asList(1, 2, 3, 2, 4, 2, 5));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Số
+                                lần xuất hiện của 2: "</span> + Collections.frequency(withDuplicates, 2));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Kiểm tra rời
+                                rạc</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List&lt;Integer&gt; listA = <span
+                                class="keyword">new</span> ArrayList&lt;&gt;(Arrays.asList(1, 2, 3));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List&lt;Integer&gt; listB = <span
+                                class="keyword">new</span> ArrayList&lt;&gt;(Arrays.asList(4, 5, 6));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List&lt;Integer&gt; listC = <span
+                                class="keyword">new</span> ArrayList&lt;&gt;(Arrays.asList(3, 4, 5));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"A
+                                và B không chung? "</span> + Collections.disjoint(listA, listB)); <span
+                                class="comment">// true</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"A
+                                và C không chung? "</span> + Collections.disjoint(listA, listC)); <span
+                                class="comment">// false</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 6: ARRAYS UTILITIES -->
+                <section id="phan6" class="section">
+                    <h2><i class="fas fa-brackets-curly"></i> PHẦN 6: ARRAYS UTILITIES</h2>
+
+                    <div id="phan6-1">
+                        <h3>6.1 ARRAYS LÀ GÌ?</h3>
+                        <p><strong>Định nghĩa:</strong> Arrays là class tiện ích (utility class) trong Java, cung cấp
+                            các phương thức static để thao tác với mảng (arrays).</p>
+
+                        <h4>Đặc điểm:</h4>
+                        <ul>
+                            <li>✅ Chứa các thuật toán hữu ích cho mảng: sắp xếp, tìm kiếm, so sánh</li>
+                            <li>✅ Hỗ trợ chuyển đổi giữa mảng và List</li>
+                            <li>✅ Là class tiện ích, không thể khởi tạo</li>
+                            <li>✅ Tất cả phương thức đều là static</li>
+                        </ul>
+                    </div>
+
+                    <div id="phan6-2">
+                        <h3>6.2 CÁC PHƯƠNG THỨC QUAN TRỌNG CỦA ARRAYS</h3>
+
+                        <h4>6.2.1 Phương thức sort()</h4>
+                        <p><strong>Cú pháp:</strong> <code>Arrays.sort(kiểu[] a)</code>,
+                            <code>Arrays.sort(kiểu[] a, int fromIndex, int toIndex)</code>,
+                            <code>Arrays.sort(T[] a, Comparator&lt;? super T&gt; c)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ sort()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">int</span>[] numbers = {5, 2, 8, 1, 9, 3};<br>
+                            System.out.println(<span class="string">"Trước sort: "</span> +
+                            Arrays.toString(numbers));<br>
+                            <br>
+                            Arrays.sort(numbers);<br>
+                            System.out.println(<span class="string">"Sau sort toàn bộ: "</span> +
+                            Arrays.toString(numbers)); <span class="comment">// [1, 2, 3, 5, 8, 9]</span><br>
+                            <br>
+                            <span class="keyword">int</span>[] numbers2 = {5, 2, 8, 1, 9, 3, 7, 4};<br>
+                            Arrays.sort(numbers2, 2, 6); <span class="comment">// Chỉ sort từ index 2 đến 5</span><br>
+                            System.out.println(<span class="string">"Sort một phần: "</span> +
+                            Arrays.toString(numbers2)); <span class="comment">// [5, 2, 1, 3, 8, 9, 7, 4]</span><br>
+                            <br>
+                            <span class="comment">// Với mảng đối tượng</span><br>
+                            String[] names = {<span class="string">"John"</span>, <span class="string">"Alice"</span>,
+                            <span class="string">"Bob"</span>, <span class="string">"David"</span>};<br>
+                            Arrays.sort(names);<br>
+                            System.out.println(<span class="string">"Tên sau sort: "</span> + Arrays.toString(names));
+                            <span class="comment">// [Alice, Bob, David, John]</span><br>
+                            <br>
+                            <span class="comment">// Sắp xếp giảm dần với Comparator</span><br>
+                            Integer[] nums = {5, 2, 8, 1, 9, 3};<br>
+                            Arrays.sort(nums, Collections.reverseOrder());<br>
+                            System.out.println(<span class="string">"Giảm dần: "</span> + Arrays.toString(nums)); <span
+                                class="comment">// [9, 8, 5, 3, 2, 1]</span>
+                        </div>
+
+                        <h4>6.2.2 Phương thức binarySearch()</h4>
+                        <p><strong>Cú pháp:</strong> <code>int binarySearch(kiểu[] a, kiểu key)</code> và
+                            <code>int binarySearch(kiểu[] a, int fromIndex, int toIndex, kiểu key)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ binarySearch()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">int</span>[] numbers = {10, 20, 30, 40, 50, 60, 70};<br>
+                            Arrays.sort(numbers); <span class="comment">// Đảm bảo đã sort</span><br>
+                            <br>
+                            <span class="keyword">int</span> index = Arrays.binarySearch(numbers, 30);<br>
+                            System.out.println(<span class="string">"Vị trí của 30: "</span> + index); <span
+                                class="comment">// 2</span><br>
+                            <br>
+                            index = Arrays.binarySearch(numbers, 35);<br>
+                            System.out.println(<span class="string">"Vị trí chèn của 35: "</span> + index); <span
+                                class="comment">// -4 (chèn ở vị trí 3)</span><br>
+                            <br>
+                            <span class="comment">// Tìm trong một đoạn</span><br>
+                            index = Arrays.binarySearch(numbers, 2, 5, 50); <span class="comment">// Tìm từ index
+                                2-4</span><br>
+                            System.out.println(<span class="string">"Tìm 50 trong đoạn [2,5): "</span> + index); <span
+                                class="comment">// 4</span>
+                        </div>
+
+                        <h4>6.2.3 Phương thức toString() và deepToString()</h4>
+                        <p><strong>Cú pháp:</strong> <code>String toString(kiểu[] a)</code> và
+                            <code>String deepToString(Object[] a)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ toString() và deepToString()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">int</span>[] numbers = {1, 2, 3, 4, 5};<br>
+                            System.out.println(Arrays.toString(numbers)); <span class="comment">// [1, 2, 3, 4,
+                                5]</span><br>
+                            <br>
+                            String[] names = {<span class="string">"Java"</span>, <span class="string">"Python"</span>,
+                            <span class="string">"C++"</span>};<br>
+                            System.out.println(Arrays.toString(names)); <span class="comment">// [Java, Python,
+                                C++]</span><br>
+                            <br>
+                            <span class="comment">// Mảng đa chiều</span><br>
+                            <span class="keyword">int</span>[][] matrix = {{1, 2}, {3, 4}, {5, 6}};<br>
+                            System.out.println(Arrays.toString(matrix)); <span class="comment">// [[I@..., [I@..., ...]
+                                (không đẹp)</span><br>
+                            System.out.println(Arrays.deepToString(matrix)); <span class="comment">// [[1, 2], [3, 4],
+                                [5, 6]]</span>
+                        </div>
+
+                        <h4>6.2.4 Phương thức equals() và deepEquals()</h4>
+                        <p><strong>Cú pháp:</strong> <code>boolean equals(kiểu[] a, kiểu[] a2)</code> và
+                            <code>boolean deepEquals(Object[] a1, Object[] a2)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ equals() và deepEquals()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">int</span>[] arr1 = {1, 2, 3, 4, 5};<br>
+                            <span class="keyword">int</span>[] arr2 = {1, 2, 3, 4, 5};<br>
+                            <span class="keyword">int</span>[] arr3 = {1, 2, 3, 4, 6};<br>
+                            <br>
+                            System.out.println(<span class="string">"arr1 == arr2? "</span> + Arrays.equals(arr1,
+                            arr2)); <span class="comment">// true</span><br>
+                            System.out.println(<span class="string">"arr1 == arr3? "</span> + Arrays.equals(arr1,
+                            arr3)); <span class="comment">// false</span><br>
+                            <br>
+                            <span class="comment">// Mảng đa chiều</span><br>
+                            <span class="keyword">int</span>[][] matrix1 = {{1, 2}, {3, 4}};<br>
+                            <span class="keyword">int</span>[][] matrix2 = {{1, 2}, {3, 4}};<br>
+                            System.out.println(Arrays.equals(matrix1, matrix2)); <span class="comment">// false (so sánh
+                                tham chiếu)</span><br>
+                            System.out.println(Arrays.deepEquals(matrix1, matrix2)); <span class="comment">// true (so
+                                sánh nội dung)</span>
+                        </div>
+
+                        <h4>6.2.5 Phương thức fill()</h4>
+                        <p><strong>Cú pháp:</strong> <code>void fill(kiểu[] a, kiểu val)</code> và
+                            <code>void fill(kiểu[] a, int fromIndex, int toIndex, kiểu val)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ fill()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">int</span>[] numbers = <span class="keyword">new</span> <span
+                                class="keyword">int</span>[10];<br>
+                            Arrays.fill(numbers, 5);<br>
+                            System.out.println(<span class="string">"Sau fill tất cả: "</span> +
+                            Arrays.toString(numbers));<br>
+                            <span class="comment">// [5, 5, 5, 5, 5, 5, 5, 5, 5, 5]</span><br>
+                            <br>
+                            <span class="keyword">int</span>[] numbers2 = <span class="keyword">new</span> <span
+                                class="keyword">int</span>[10];<br>
+                            Arrays.fill(numbers2, 3, 7, 1); <span class="comment">// Chỉ fill từ index 3 đến
+                                6</span><br>
+                            System.out.println(<span class="string">"Sau fill một phần: "</span> +
+                            Arrays.toString(numbers2));<br>
+                            <span class="comment">// [0, 0, 0, 1, 1, 1, 1, 0, 0, 0]</span>
+                        </div>
+
+                        <h4>6.2.6 Phương thức copyOf() và copyOfRange()</h4>
+                        <p><strong>Cú pháp:</strong> <code>kiểu[] copyOf(kiểu[] original, int newLength)</code> và
+                            <code>kiểu[] copyOfRange(kiểu[] original, int from, int to)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ copyOf() và copyOfRange()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">int</span>[] original = {1, 2, 3, 4, 5};<br>
+                            <br>
+                            <span class="comment">// Sao chép với độ dài mới</span><br>
+                            <span class="keyword">int</span>[] copy1 = Arrays.copyOf(original, 3);<br>
+                            System.out.println(<span class="string">"copyOf length 3: "</span> +
+                            Arrays.toString(copy1)); <span class="comment">// [1, 2, 3]</span><br>
+                            <br>
+                            <span class="keyword">int</span>[] copy2 = Arrays.copyOf(original, 8);<br>
+                            System.out.println(<span class="string">"copyOf length 8: "</span> +
+                            Arrays.toString(copy2)); <span class="comment">// [1, 2, 3, 4, 5, 0, 0, 0]</span><br>
+                            <br>
+                            <span class="comment">// Sao chép một đoạn</span><br>
+                            <span class="keyword">int</span>[] copy3 = Arrays.copyOfRange(original, 1, 4);<br>
+                            System.out.println(<span class="string">"copyOfRange [1,4): "</span> +
+                            Arrays.toString(copy3)); <span class="comment">// [2, 3, 4]</span>
+                        </div>
+
+                        <h4>6.2.7 Phương thức asList()</h4>
+                        <p><strong>Cú pháp:</strong> <code>List&lt;T&gt; asList(T... a)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ asList()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            String[] array = {<span class="string">"Java"</span>, <span class="string">"Python"</span>,
+                            <span class="string">"JavaScript"</span>};<br>
+                            <br>
+                            <span class="comment">// Chuyển mảng thành List</span><br>
+                            List&lt;String&gt; list = Arrays.asList(array);<br>
+                            System.out.println(<span class="string">"List từ mảng: "</span> + list); <span
+                                class="comment">// [Java, Python, JavaScript]</span><br>
+                            <br>
+                            <span class="comment">// Có thể thay đổi phần tử</span><br>
+                            list.set(0, <span class="string">"C++"</span>);<br>
+                            System.out.println(<span class="string">"Mảng sau khi thay đổi list: "</span> +
+                            Arrays.toString(array)); <span class="comment">// [C++, Python, JavaScript]</span><br>
+                            <br>
+                            <span class="comment">// KHÔNG thể thêm/xóa phần tử</span><br>
+                            <span class="comment">// list.add("Ruby"); // Sẽ ném
+                                UnsupportedOperationException</span><br>
+                            <br>
+                            <span class="comment">// Tạo List trực tiếp</span><br>
+                            List&lt;Integer&gt; numbers = Arrays.asList(1, 2, 3, 4, 5);<br>
+                            System.out.println(numbers); <span class="comment">// [1, 2, 3, 4, 5]</span>
+                        </div>
+
+                        <h4>6.2.8 Phương thức hashCode() và deepHashCode()</h4>
+                        <p><strong>Cú pháp:</strong> <code>int hashCode(kiểu[] a)</code> và
+                            <code>int deepHashCode(Object[] a)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ hashCode()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">int</span>[] arr = {1, 2, 3, 4, 5};<br>
+                            System.out.println(<span class="string">"HashCode: "</span> + Arrays.hashCode(arr));<br>
+                            <br>
+                            <span class="keyword">int</span>[][] matrix = {{1, 2}, {3, 4}};<br>
+                            System.out.println(<span class="string">"deepHashCode: "</span> +
+                            Arrays.deepHashCode(matrix));
+                        </div>
+
+                        <h4>6.2.9 Phương thức stream()</h4>
+                        <p><strong>Cú pháp:</strong> <code>IntStream stream(int[] array)</code>,
+                            <code>LongStream stream(long[] array)</code>,
+                            <code>DoubleStream stream(double[] array)</code>,
+                            <code>Stream&lt;T&gt; stream(T[] array)</code></p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ stream()</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">int</span>[] numbers = {5, 2, 8, 1, 9, 3};<br>
+                            <br>
+                            <span class="comment">// Tính tổng</span><br>
+                            <span class="keyword">int</span> sum = Arrays.stream(numbers).sum();<br>
+                            System.out.println(<span class="string">"Tổng: "</span> + sum); <span class="comment">//
+                                28</span><br>
+                            <br>
+                            <span class="comment">// Trung bình</span><br>
+                            <span class="keyword">double</span> average =
+                            Arrays.stream(numbers).average().orElse(0);<br>
+                            System.out.println(<span class="string">"Trung bình: "</span> + average); <span
+                                class="comment">// 4.666...</span><br>
+                            <br>
+                            <span class="comment">// Lọc và in</span><br>
+                            Arrays.stream(numbers)<br>
+                            .filter(n -> n % 2 == 0)<br>
+                            .forEach(n -> System.out.print(n + <span class="string">" "</span>)); <span
+                                class="comment">// 2 8</span>
+                        </div>
+                    </div>
+
+                    <div id="phan6-3">
+                        <h3>6.3 VÍ DỤ TỔNG HỢP ARRAYS</h3>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>ArraysUtilsExample.java</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">public class</span> <span class="class-name">ArraysUtilsExample</span>
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args)
+                            {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 1. Tạo và in
+                                mảng</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span>[] numbers =
+                            {42, 17, 8, 99, 23, 56, 11, 34, 72, 5};<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Mảng gốc: "</span> + Arrays.toString(numbers));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 2. Sắp
+                                xếp</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span>[] sorted =
+                            Arrays.copyOf(numbers, numbers.length);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Arrays.sort(sorted);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Sau
+                                sort: "</span> + Arrays.toString(sorted));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 3. Tìm
+                                kiếm</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> index =
+                            Arrays.binarySearch(sorted, 23);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Vị
+                                trí của 23: "</span> + index);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 4. Sao
+                                chép</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span>[] firstHalf
+                            = Arrays.copyOfRange(numbers, 0, 5);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Nửa
+                                đầu: "</span> + Arrays.toString(firstHalf));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 5. So
+                                sánh</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span>[] other =
+                            {42, 17, 8, 99, 23};<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"firstHalf == other? "</span> + Arrays.equals(firstHalf, other));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 6. Điền giá
+                                trị</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span>[] filled =
+                            <span class="keyword">new</span> <span class="keyword">int</span>[8];<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Arrays.fill(filled, 7);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Mảng fill 7: "</span> + Arrays.toString(filled));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 7. Chuyển sang
+                                List</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String[] languages = {<span
+                                class="string">"Java"</span>, <span class="string">"Python"</span>, <span
+                                class="string">"JavaScript"</span>};<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List&lt;String&gt; list =
+                            Arrays.asList(languages);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"List: "</span> + list);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 8. Stream
+                                operations</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Số
+                                chẵn:"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Arrays.stream(numbers)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.filter(n
+                            -> n % 2 == 0)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.sorted()<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.forEach(n
+                            -> System.out.print(n + <span class="string">" "</span>));<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 9. Thống
+                                kê</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Min: "</span> + Arrays.stream(numbers).min().getAsInt());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Max: "</span> + Arrays.stream(numbers).max().getAsInt());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span
+                                class="string">"Sum: "</span> + Arrays.stream(numbers).sum());<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 7: TỔNG KẾT -->
+                <section id="phan7" class="section">
+                    <h2><i class="fas fa-flag-checkered"></i> PHẦN 7: TỔNG KẾT</h2>
+
+                    <div id="phan7-1">
+                        <h3>7.1 SO SÁNH CÁC LOẠI QUEUE</h3>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Đặc điểm</th>
+                                        <th>PriorityQueue</th>
+                                        <th>ArrayDeque</th>
+                                        <th>LinkedList</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Thứ tự</strong></td>
+                                        <td>Theo độ ưu tiên</td>
+                                        <td>FIFO/LIFO tùy chọn</td>
+                                        <td>FIFO/LIFO tùy chọn</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Null</strong></td>
+                                        <td>Không cho phép</td>
+                                        <td>Không cho phép</td>
+                                        <td>Cho phép</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Hiệu suất</strong></td>
+                                        <td>O(log n)</td>
+                                        <td>O(1)</td>
+                                        <td>O(1) (đầu), O(n) (giữa)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cấu trúc</strong></td>
+                                        <td>Heap</td>
+                                        <td>Mảng động</td>
+                                        <td>Doubly-linked list</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Khi nào dùng</strong></td>
+                                        <td>Cần ưu tiên</td>
+                                        <td>Cần tốc độ cao</td>
+                                        <td>Cần thêm/xóa ở giữa</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="phan7-2">
+                        <h3>7.2 SO SÁNH COLLECTIONS VÀ ARRAYS</h3>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Đặc điểm</th>
+                                        <th>Collections</th>
+                                        <th>Arrays</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Đối tượng thao tác</strong></td>
+                                        <td>Collection (List, Set, Queue)</td>
+                                        <td>Mảng (Array)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Phương thức chính</strong></td>
+                                        <td>sort, binarySearch, reverse, shuffle</td>
+                                        <td>sort, binarySearch, copyOf, fill</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Chuyển đổi</strong></td>
+                                        <td>-</td>
+                                        <td>asList() tạo List từ mảng</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tạo immutable</strong></td>
+                                        <td>unmodifiableXXX(), singletonXXX()</td>
+                                        <td>-</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Khi nào dùng</strong></td>
+                                        <td>Làm việc với Collection</td>
+                                        <td>Làm việc với mảng</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>BUỔI 28: QUEUE & UTILITIES- GV: Nguyễn Đình Mạnh</p>
+        </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    this.classList.add('active');
+
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+        });
+
+        // Hàm copy code
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Đã copy!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+
+</html>

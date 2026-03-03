@@ -1,0 +1,2068 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUỔI 36: SQL FUNDAMENTALS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../main.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-database"></i> BUỔI 36: SQL FUNDAMENTALS</i></h1>
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#part0" class="nav-link active"><i class="fas fa-download"></i>
+                            <span> CÀI ĐẶT</span></a></li>
+                    <li class="nav-item"><a href="#part1" class="nav-link"><i class="fas fa-database"></i> <span>PHẦN 1:
+                                DATABASE CONCEPTS</span></a></li>
+                    <li class="nav-item"><a href="#part2" class="nav-link"><i class="fas fa-code"></i> <span>PHẦN 2: SQL
+                                BASICS</span></a></li>
+                    <li class="nav-item"><a href="#part3" class="nav-link"><i class="fas fa-calculator"></i> <span>PHẦN
+                                3: OPERATORS</span></a></li>
+                    <li class="nav-item"><a href="#part4" class="nav-link"><i class="fas fa-project-diagram"></i>
+                            <span>PHẦN 4: VÍ DỤ TỔNG HỢP</span></a></li>
+                    <li class="nav-item"><a href="#part5" class="nav-link"><i class="fas fa-star"></i> <span>PHẦN 5:
+                                TỔNG KẾT</span></a></li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!--  GIỚI THIỆU CÔNG CỤ VÀ CÀI ĐẶT -->
+                <section id="part0" class="section active">
+                    <h2><i class="fas fa-download"></i>  GIỚI THIỆU CÔNG CỤ VÀ CÀI ĐẶT</h2>
+
+                    <h3>0.1 CÔNG CỤ SỬ DỤNG</h3>
+
+                    <div class="info-box">
+                        <p>Để học và thực hành SQL, chúng ta cần hai thứ:</p>
+                        <ul>
+                            <li><strong>Thứ 1: Hệ quản trị cơ sở dữ liệu (DBMS)</strong> - Đây là phần mềm để tạo và
+                                quản lý database</li>
+                            <li><strong>Thứ 2: Giao diện để viết SQL</strong> - Đây là nơi chúng ta gõ câu lệnh SQL</li>
+                        </ul>
+                    </div>
+
+                    <h4>0.1.1 Các hệ quản trị cơ sở dữ liệu phổ biến</h4>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tên DBMS</th>
+                                    <th>Đặc điểm</th>
+                                    <th>Ưu điểm</th>
+                                    <th>Nhược điểm</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge badge-sql">MySQL</span></td>
+                                    <td>Miễn phí, mã nguồn mở</td>
+                                    <td>Dễ học, phổ biến, nhiều tài liệu</td>
+                                    <td>Tính năng ít hơn Oracle</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-ddl">SQL Server</span></td>
+                                    <td>Của Microsoft</td>
+                                    <td>Tích hợp tốt với .NET, công cụ mạnh</td>
+                                    <td>Chỉ chạy tốt trên Windows</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-dml">PostgreSQL</span></td>
+                                    <td>Mã nguồn mở</td>
+                                    <td>Tính năng mạnh, chuẩn SQL tốt</td>
+                                    <td>Khó hơn MySQL</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-operator">Oracle</span></td>
+                                    <td>Chuyên nghiệp</td>
+                                    <td>Rất mạnh, bảo mật cao</td>
+                                    <td>Nặng, phức tạp, có phí</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-mysql">SQLite</span></td>
+                                    <td>Siêu nhẹ</td>
+                                    <td>Không cần cài đặt, chạy trong file</td>
+                                    <td>Ít tính năng</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="note">
+                        <h4><i class="fas fa-check-circle"></i> Trong khóa học này, chúng ta sẽ sử dụng MySQL vì:</h4>
+                        <ul>
+                            <li>Miễn phí 100%</li>
+                            <li>Dễ cài đặt và sử dụng</li>
+                            <li>Phổ biến nhất trong các dự án thực tế</li>
+                            <li>Nhiều tài liệu và cộng đồng hỗ trợ</li>
+                        </ul>
+                    </div>
+
+                    <h4>0.1.2 Các giao diện để viết SQL</h4>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Công cụ</th>
+                                    <th>Mô tả</th>
+                                    <th>Giao diện</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>MySQL Command Line Client</td>
+                                    <td>Cửa sổ đen, gõ lệnh text</td>
+                                    <td>Dòng lệnh</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-sql">MySQL Workbench</span></td>
+                                    <td>Có nút bấm, cửa sổ đồ họa</td>
+                                    <td>Đồ họa</td>
+                                </tr>
+                                <tr>
+                                    <td>phpMyAdmin</td>
+                                    <td>Chạy trên web</td>
+                                    <td>Web</td>
+                                </tr>
+                                <tr>
+                                    <td>DBeaver</td>
+                                    <td>Quản lý nhiều DB khác nhau</td>
+                                    <td>Đồ họa</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="note">
+                        <h4><i class="fas fa-check-circle"></i> Chúng ta sẽ dùng MySQL Workbench vì:</h4>
+                        <ul>
+                            <li>Có giao diện đồ họa dễ nhìn</li>
+                            <li>Vừa gõ lệnh vừa xem kết quả</li>
+                            <li>Tự động gợi ý câu lệnh</li>
+                            <li>Quản lý database trực quan</li>
+                        </ul>
+                    </div>
+
+                    <h3>0.2 CÀI ĐẶT MYSQL TRÊN WINDOWS</h3>
+
+                    <h4>0.2.1 Tải MySQL Installer</h4>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-globe"></i> Bước 1: Vào trang web</span>
+                        </div>
+                        https://dev.mysql.com/downloads/installer/
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-windows"></i> Bước 2: Chọn phiên bản</span>
+                        </div>
+                        Windows (x86, 32-bit), MSI Installer - khoảng 300MB<br>
+                        Nên chọn bản đầy đủ (full) để có cả Workbench
+                    </div>
+
+                    <h4>0.2.2 Cài đặt MySQL</h4>
+
+                    <ol>
+                        <li><strong>Bước 1:</strong> Chạy file vừa tải</li>
+                        <li><strong>Bước 2:</strong> Chọn kiểu cài đặt
+                            <ul>
+                                <li>Developer Default: Cài đầy đủ cho lập trình viên (khuyên dùng)</li>
+                                <li>Server only: Chỉ cài MySQL Server</li>
+                                <li>Client only: Chỉ cài công cụ kết nối</li>
+                                <li>Full: Cài tất cả</li>
+                                <li>Custom: Tự chọn</li>
+                            </ul>
+                        </li>
+                        <li><strong>Bước 3:</strong> Chọn Next và chờ quá trình cài đặt (có thể mất 5-10 phút)</li>
+                        <li><strong>Bước 4:</strong> Cấu hình MySQL Server
+                            <ul>
+                                <li>Config Type: Chọn Development Computer (máy học tập)</li>
+                                <li>Port: Để mặc định 3306</li>
+                                <li>Authentication Method: Chọn Use Strong Password Encryption</li>
+                            </ul>
+                        </li>
+                        <li><strong>Bước 5:</strong> Đặt mật khẩu cho tài khoản root
+                            <ul>
+                                <li>Nhập password: ví dụ 123456 (nên nhớ để dùng)</li>
+                                <li>Có thể thêm user khác nếu muốn</li>
+                            </ul>
+                        </li>
+                        <li><strong>Bước 6:</strong> Chọn Next đến cuối và Finish</li>
+                    </ol>
+
+                    <h4>0.2.3 Mở MySQL Workbench</h4>
+
+                    <ol>
+                        <li><strong>Bước 1:</strong> Tìm và mở MySQL Workbench từ Start Menu</li>
+                        <li><strong>Bước 2:</strong> Kết nối đến MySQL Server
+                            <ul>
+                                <li>Nhìn thấy ô "Local instance MySQL"</li>
+                                <li>Click vào đó</li>
+                                <li>Nhập password đã đặt lúc cài</li>
+                            </ul>
+                        </li>
+                        <li><strong>Bước 3:</strong> Giao diện Workbench hiện ra, sẵn sàng để viết SQL</li>
+                    </ol>
+
+                    <h3>0.3 KIỂM TRA CÀI ĐẶT</h3>
+
+                    <div class="info-box">
+                        <p>Mở MySQL Workbench và gõ câu lệnh sau để kiểm tra:</p>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Kiểm tra</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> <span class="string">'Hello, SQL!'</span> <span
+                            class="keyword">AS</span> Message;
+                    </div>
+
+                    <div class="success-box">
+                        <p>Nếu thấy kết quả hiện ra dòng chữ "Hello, SQL!" là đã cài đặt thành công.</p>
+                    </div>
+
+                    <h3>0.4 CÁC THAO TÁC CƠ BẢN TRONG WORKBENCH</h3>
+
+                    <ol>
+                        <li>
+                            <strong>Tạo database mới:</strong>
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span><i class="fas fa-code"></i> SQL</span>
+                                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i>
+                                        Copy</button>
+                                </div>
+                                <span class="keyword">CREATE DATABASE</span> testdb;
+                            </div>
+                        </li>
+                        <li>
+                            <strong>Chọn database để làm việc:</strong>
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span><i class="fas fa-code"></i> SQL</span>
+                                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i>
+                                        Copy</button>
+                                </div>
+                                <span class="keyword">USE</span> testdb;
+                            </div>
+                            <p>Hoặc click đúp vào tên database ở bên trái</p>
+                        </li>
+                        <li>
+                            <strong>Chạy câu lệnh SQL:</strong>
+                            <ul>
+                                <li>Gõ lệnh vào ô SQL Editor</li>
+                                <li>Chọn dòng lệnh muốn chạy</li>
+                                <li>Click nút hình tia sét hoặc nhấn Ctrl+Enter</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>Xem kết quả:</strong> Kết quả hiện ở bảng phía dưới
+                        </li>
+                    </ol>
+                </section>
+
+                <!-- PHẦN 1: DATABASE CONCEPTS -->
+                <section id="part1" class="section">
+                    <h2><i class="fas fa-database"></i> PHẦN 1: DATABASE CONCEPTS</h2>
+
+                    <h3>1.1 DATABASE LÀ GÌ?</h3>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-lightbulb"></i> Định nghĩa:</h4>
+                        <p><strong>Database (Cơ sở dữ liệu)</strong> là một tập hợp có tổ chức của dữ liệu được lưu trữ
+                            và truy cập điện tử từ hệ thống máy tính.</p>
+                    </div>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Lưu trữ dữ liệu một cách có hệ thống, không bị trùng lặp</li>
+                        <li>Truy xuất dữ liệu nhanh chóng khi cần</li>
+                        <li>Đảm bảo tính toàn vẹn và nhất quán của dữ liệu</li>
+                        <li>Cho phép nhiều người dùng truy cập đồng thời</li>
+                        <li>Bảo mật dữ liệu, phân quyền người dùng</li>
+                    </ul>
+
+                    <h4>Ví dụ thực tế:</h4>
+                    <ul>
+                        <li>Hệ thống quản lý sinh viên của trường học: lưu thông tin sinh viên, điểm số, môn học</li>
+                        <li>Hệ thống bán hàng của siêu thị: lưu sản phẩm, đơn hàng, khách hàng</li>
+                        <li>Hệ thống ngân hàng: lưu tài khoản, giao dịch, khách hàng</li>
+                        <li>Hệ thống đặt vé máy bay: lưu chuyến bay, hành khách, vé đặt</li>
+                    </ul>
+
+                    <h3>1.2 CÁC THÀNH PHẦN CỦA DATABASE</h3>
+
+                    <h4>1.2.1 Table (Bảng)</h4>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-lightbulb"></i> Định nghĩa:</h4>
+                        <p><strong>Table</strong> là cấu trúc cơ bản nhất để lưu trữ dữ liệu trong cơ sở dữ liệu quan
+                            hệ. Nó giống như một bảng tính Excel, gồm các hàng và cột.</p>
+                    </div>
+
+                    <h5>Cấu trúc của một bảng:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-table"></i> Bảng: SinhVien</span>
+                        </div>
+                        +------------+----------------+-----+------------+<br>
+                        | MaSV (PK) | HoTen | Tuoi| Lop |<br>
+                        +------------+----------------+-----+------------+<br>
+                        | 1 | Nguyễn Văn An | 20 | CNTT1 |<br>
+                        | 2 | Trần Thị Bích | 21 | CNTT2 |<br>
+                        | 3 | Lê Văn Cường | 19 | CNTT1 |<br>
+                        | 4 | Phạm Thị Dung | 22 | CNTT3 |<br>
+                        +------------+----------------+-----+------------+<br>
+                        ↑ ↑ ↑ ↑<br>
+                        Khóa chính Cột Cột Cột
+                    </div>
+
+                    <div class="note">
+                        <h4><i class="fas fa-comment-dots"></i> Giải thích:</h4>
+                        <ul>
+                            <li><strong>Hàng (Row/Record)</strong>: Mỗi hàng là một bản ghi, đại diện cho một đối tượng
+                                cụ thể</li>
+                            <li><strong>Cột (Column/Field)</strong>: Mỗi cột là một thuộc tính của đối tượng</li>
+                            <li><strong>Ô (Cell)</strong>: Giao điểm của hàng và cột, chứa giá trị cụ thể</li>
+                        </ul>
+                    </div>
+
+                    <h4>1.2.2 Primary Key (Khóa chính)</h4>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-lightbulb"></i> Định nghĩa:</h4>
+                        <p><strong>Khóa chính</strong> là một cột hoặc tổ hợp các cột dùng để xác định duy nhất mỗi hàng
+                            trong bảng.</p>
+                    </div>
+
+                    <h5>Đặc điểm:</h5>
+                    <ul class="feature-list">
+                        <li><span class="feature-check"> Giá trị duy nhất</strong>, không trùng lặp giữa các hàng</li>
+                        <li><span class="feature-check"> Không được NULL</strong> (bắt buộc phải có giá trị)</li>
+                        <li><span class="feature-check"> Mỗi bảng chỉ có một Primary Key</strong></li>
+                        <li><span class="feature-check"> Dữ liệu tự động được đánh chỉ mục</strong> (index) để tìm nhanh
+                        </li>
+                    </ul>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Cách 1: Khai báo khi tạo cột</span><br>
+                        <span class="keyword">CREATE TABLE</span> SinhVien (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSV <span class="type">INT</span> <span class="constraint">PRIMARY
+                            KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;HoTen <span class="type">VARCHAR</span>(<span
+                            class="number">100</span>),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Tuoi <span class="type">INT</span><br>
+                        );<br>
+                        <br>
+                        <span class="comment">-- Cách 2: Khai báo riêng ở cuối</span><br>
+                        <span class="keyword">CREATE TABLE</span> SinhVien (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSV <span class="type">INT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;HoTen <span class="type">VARCHAR</span>(<span
+                            class="number">100</span>),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Tuoi <span class="type">INT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="constraint">PRIMARY KEY</span> (MaSV)<br>
+                        );<br>
+                        <br>
+                        <span class="comment">-- Cách 3: Khóa chính gồm nhiều cột</span><br>
+                        <span class="keyword">CREATE TABLE</span> Diem (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSV <span class="type">INT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaMon <span class="type">INT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Diem <span class="type">FLOAT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="constraint">PRIMARY KEY</span> (MaSV, MaMon) <span
+                            class="comment">-- Cả hai cột hợp thành khóa chính</span><br>
+                        );
+                    </div>
+
+                    <div class="note">
+                        <h4><i class="fas fa-comment-dots"></i> Giải thích:</h4>
+                        <ul>
+                            <li><strong>MaSV INT PRIMARY KEY</strong>: cột MaSV là khóa chính, kiểu số nguyên</li>
+                            <li><strong>PRIMARY KEY (MaSV, MaMon)</strong>: tổ hợp (MaSV + MaMon) là khóa chính</li>
+                        </ul>
+                    </div>
+
+                    <h4>1.2.3 Foreign Key (Khóa ngoại)</h4>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-lightbulb"></i> Định nghĩa:</h4>
+                        <p><strong>Khóa ngoại</strong> là một cột tạo liên kết giữa hai bảng, tham chiếu đến khóa chính
+                            của bảng khác.</p>
+                    </div>
+
+                    <h5>Mục đích:</h5>
+                    <ul>
+                        <li>Tạo mối quan hệ giữa các bảng</li>
+                        <li>Đảm bảo toàn vẹn dữ liệu (không thể tham chiếu đến dữ liệu không tồn tại)</li>
+                    </ul>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Bảng 1: SinhVien</span><br>
+                        <span class="keyword">CREATE TABLE</span> SinhVien (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSV <span class="type">INT</span> <span class="constraint">PRIMARY
+                            KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;HoTen <span class="type">VARCHAR</span>(<span
+                            class="number">100</span>)<br>
+                        );<br>
+                        <br>
+                        <span class="comment">-- Bảng 2: KetQua (có khóa ngoại tham chiếu đến SinhVien)</span><br>
+                        <span class="keyword">CREATE TABLE</span> KetQua (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaKetQua <span class="type">INT</span> <span class="constraint">PRIMARY
+                            KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSV <span class="type">INT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MonHoc <span class="type">VARCHAR</span>(<span
+                            class="number">50</span>),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Diem <span class="type">FLOAT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="constraint">FOREIGN KEY</span> (MaSV) <span
+                            class="constraint">REFERENCES</span> SinhVien(MaSV)<br>
+                        );
+                    </div>
+
+                    <div class="note">
+                        <h4><i class="fas fa-comment-dots"></i> Giải thích:</h4>
+                        <ul>
+                            <li><strong>FOREIGN KEY (MaSV)</strong>: cột MaSV trong bảng KetQua là khóa ngoại</li>
+                            <li><strong>REFERENCES SinhVien(MaSV)</strong>: tham chiếu đến cột MaSV của bảng SinhVien
+                            </li>
+                            <li>Điều này đảm bảo mọi MaSV trong bảng KetQua phải tồn tại trong bảng SinhVien</li>
+                        </ul>
+                    </div>
+
+                    <h4>1.2.4 Index (Chỉ mục)</h4>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-lightbulb"></i> Định nghĩa:</h4>
+                        <p><strong>Index</strong> là cấu trúc dữ liệu đặc biệt giúp tăng tốc độ truy vấn dữ liệu, giống
+                            như mục lục của cuốn sách.</p>
+                    </div>
+
+                    <h5>Cách hoạt động:</h5>
+                    <ul>
+                        <li>Không có index: phải duyệt toàn bộ bảng để tìm (chậm)</li>
+                        <li>Có index: tìm trực tiếp qua chỉ mục (nhanh)</li>
+                    </ul>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tạo index trên cột HoTen</span><br>
+                        <span class="keyword">CREATE INDEX</span> idx_hoten <span class="keyword">ON</span>
+                        SinhVien(HoTen);<br>
+                        <br>
+                        <span class="comment">-- Tạo index trên nhiều cột</span><br>
+                        <span class="keyword">CREATE INDEX</span> idx_tuoi_lop <span class="keyword">ON</span>
+                        SinhVien(Tuoi, Lop);<br>
+                        <br>
+                        <span class="comment">-- Xóa index</span><br>
+                        <span class="keyword">DROP INDEX</span> idx_hoten <span class="keyword">ON</span> SinhVien;
+                    </div>
+
+                    <h3>1.3 CÁC MỐI QUAN HỆ TRONG DATABASE</h3>
+
+                    <h4>1.3.1 One-to-One (1-1)</h4>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-lightbulb"></i> Định nghĩa:</h4>
+                        <p>Mỗi hàng trong bảng A liên kết với một và chỉ một hàng trong bảng B.</p>
+                    </div>
+
+                    <h5>Ví dụ thực tế:</h5>
+                    <ul>
+                        <li>Một người có một căn cước công dân</li>
+                        <li>Một tài khoản có một thông tin bảo mật</li>
+                        <li>Một nhân viên có một hợp đồng lao động</li>
+                    </ul>
+
+                    <h5>Cách tạo:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">CREATE TABLE</span> Nguoi (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;NguoiID <span class="type">INT</span> <span class="constraint">PRIMARY
+                            KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;HoTen <span class="type">VARCHAR</span>(<span
+                            class="number">100</span>)<br>
+                        );<br>
+                        <br>
+                        <span class="keyword">CREATE TABLE</span> CCCD (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;CCCDID <span class="type">INT</span> <span class="constraint">PRIMARY
+                            KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;SoCCCD <span class="type">VARCHAR</span>(<span
+                            class="number">20</span>),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;NguoiID <span class="type">INT</span> <span
+                            class="constraint">UNIQUE</span>, <span class="comment">-- UNIQUE đảm bảo 1-1</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="constraint">FOREIGN KEY</span> (NguoiID) <span
+                            class="constraint">REFERENCES</span> Nguoi(NguoiID)<br>
+                        );
+                    </div>
+
+                    <h4>1.3.2 One-to-Many (1-N)</h4>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-lightbulb"></i> Định nghĩa:</h4>
+                        <p>Một hàng trong bảng A liên kết với nhiều hàng trong bảng B.</p>
+                    </div>
+
+                    <h5>Ví dụ thực tế:</h5>
+                    <ul>
+                        <li>Một lớp học có nhiều sinh viên</li>
+                        <li>Một khách hàng có nhiều đơn hàng</li>
+                        <li>Một tác giả có nhiều sách</li>
+                    </ul>
+
+                    <h5>Cách tạo:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Bảng 1: Lop (1)</span><br>
+                        <span class="keyword">CREATE TABLE</span> Lop (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaLop <span class="type">INT</span> <span class="constraint">PRIMARY
+                            KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;TenLop <span class="type">VARCHAR</span>(<span
+                            class="number">50</span>)<br>
+                        );<br>
+                        <br>
+                        <span class="comment">-- Bảng 2: SinhVien (N) - chứa khóa ngoại</span><br>
+                        <span class="keyword">CREATE TABLE</span> SinhVien (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSV <span class="type">INT</span> <span class="constraint">PRIMARY
+                            KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;HoTen <span class="type">VARCHAR</span>(<span
+                            class="number">100</span>),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaLop <span class="type">INT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="constraint">FOREIGN KEY</span> (MaLop) <span
+                            class="constraint">REFERENCES</span> Lop(MaLop)<br>
+                        );
+                    </div>
+
+                    <h4>1.3.3 Many-to-Many (N-N)</h4>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-lightbulb"></i> Định nghĩa:</h4>
+                        <p>Nhiều hàng trong bảng A liên kết với nhiều hàng trong bảng B.</p>
+                    </div>
+
+                    <h5>Ví dụ thực tế:</h5>
+                    <ul>
+                        <li>Một sinh viên học nhiều môn, một môn có nhiều sinh viên</li>
+                        <li>Một sản phẩm thuộc nhiều danh mục, một danh mục có nhiều sản phẩm</li>
+                        <li>Một diễn viên đóng nhiều phim, một phim có nhiều diễn viên</li>
+                    </ul>
+
+                    <h5>Cách tạo:</h5>
+                    <p>Cần bảng trung gian (junction table) để kết nối.</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Bảng 1: SinhVien</span><br>
+                        <span class="keyword">CREATE TABLE</span> SinhVien (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSV <span class="type">INT</span> <span class="constraint">PRIMARY
+                            KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;HoTen <span class="type">VARCHAR</span>(<span
+                            class="number">100</span>)<br>
+                        );<br>
+                        <br>
+                        <span class="comment">-- Bảng 2: MonHoc</span><br>
+                        <span class="keyword">CREATE TABLE</span> MonHoc (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaMon <span class="type">INT</span> <span class="constraint">PRIMARY
+                            KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;TenMon <span class="type">VARCHAR</span>(<span
+                            class="number">100</span>)<br>
+                        );<br>
+                        <br>
+                        <span class="comment">-- Bảng trung gian: DangKy</span><br>
+                        <span class="keyword">CREATE TABLE</span> DangKy (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSV <span class="type">INT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaMon <span class="type">INT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;NgayDangKy <span class="type">DATE</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="constraint">PRIMARY KEY</span> (MaSV, MaMon), <span
+                            class="comment">-- Khóa chính là tổ hợp</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="constraint">FOREIGN KEY</span> (MaSV) <span
+                            class="constraint">REFERENCES</span> SinhVien(MaSV),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="constraint">FOREIGN KEY</span> (MaMon) <span
+                            class="constraint">REFERENCES</span> MonHoc(MaMon)<br>
+                        );
+                    </div>
+                </section>
+
+                <!-- PHẦN 2: SQL BASICS -->
+                <section id="part2" class="section">
+                    <h2><i class="fas fa-code"></i> PHẦN 2: SQL BASICS</h2>
+
+                    <h3>2.1 SQL LÀ GÌ?</h3>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-lightbulb"></i> Định nghĩa:</h4>
+                        <p><strong>SQL (Structured Query Language)</strong> là ngôn ngữ chuẩn để giao tiếp với cơ sở dữ
+                            liệu quan hệ.</p>
+                    </div>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Truy vấn dữ liệu (lấy dữ liệu ra xem)</li>
+                        <li>Thêm dữ liệu mới vào database</li>
+                        <li>Cập nhật dữ liệu đã có</li>
+                        <li>Xóa dữ liệu không cần thiết</li>
+                        <li>Tạo và thay đổi cấu trúc database</li>
+                    </ul>
+
+                    <h4>Phân loại câu lệnh SQL:</h4>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nhóm</th>
+                                    <th>Tên đầy đủ</th>
+                                    <th>Chức năng</th>
+                                    <th>Các lệnh</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge badge-ddl">DDL</span></td>
+                                    <td>Data Definition Language</td>
+                                    <td>Định nghĩa cấu trúc</td>
+                                    <td>CREATE, ALTER, DROP, TRUNCATE</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-dml">DML</span></td>
+                                    <td>Data Manipulation Language</td>
+                                    <td>Thao tác dữ liệu</td>
+                                    <td>SELECT, INSERT, UPDATE, DELETE</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-operator">DCL</span></td>
+                                    <td>Data Control Language</td>
+                                    <td>Kiểm soát quyền</td>
+                                    <td>GRANT, REVOKE</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-sql">TCL</span></td>
+                                    <td>Transaction Control Language</td>
+                                    <td>Quản lý giao dịch</td>
+                                    <td>COMMIT, ROLLBACK, SAVEPOINT</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>2.2 CÁC KIỂU DỮ LIỆU TRONG SQL</h3>
+
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Xác định loại dữ liệu có thể lưu trong mỗi cột.</p>
+                    </div>
+
+                    <h4>Các kiểu dữ liệu thường dùng:</h4>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Kiểu dữ liệu</th>
+                                    <th>Mô tả</th>
+                                    <th>Kích thước</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge badge-sql">INT</span></td>
+                                    <td>Số nguyên</td>
+                                    <td>4 bytes</td>
+                                    <td>1, 100, -25</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-dml">VARCHAR(n)</span></td>
+                                    <td>Chuỗi có độ dài thay đổi</td>
+                                    <td>n ký tự</td>
+                                    <td>'Nguyễn Văn A'</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-ddl">CHAR(n)</span></td>
+                                    <td>Chuỗi có độ dài cố định</td>
+                                    <td>n ký tự</td>
+                                    <td>'M', 'F'</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-mysql">DATE</span></td>
+                                    <td>Ngày tháng</td>
+                                    <td>3 bytes</td>
+                                    <td>'2024-12-25'</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-operator">DATETIME</span></td>
+                                    <td>Ngày giờ</td>
+                                    <td>8 bytes</td>
+                                    <td>'2024-12-25 14:30:00'</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-dml">DECIMAL(p,s)</span></td>
+                                    <td>Số thập phân</td>
+                                    <td>p số, s lẻ</td>
+                                    <td>99.99</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-sql">BOOLEAN</span></td>
+                                    <td>Đúng/sai</td>
+                                    <td>1 byte</td>
+                                    <td>TRUE, FALSE</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-ddl">TEXT</span></td>
+                                    <td>Văn bản dài</td>
+                                    <td>65KB-4GB</td>
+                                    <td>Mô tả sản phẩm</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">CREATE TABLE</span> SanPham (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSP <span class="type">INT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;TenSP <span class="type">VARCHAR</span>(<span
+                            class="number">100</span>),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Gia <span class="type">DECIMAL</span>(<span
+                            class="number">10</span>,<span class="number">2</span>),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;NgayTao <span class="type">DATE</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;ConHang <span class="type">BOOLEAN</span><br>
+                        );
+                    </div>
+
+                    <h3>2.3 CÁC RÀNG BUỘC (CONSTRAINTS)</h3>
+
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Ràng buộc dùng để giới hạn loại dữ liệu có thể được đưa vào bảng, đảm bảo tính chính xác và
+                            toàn vẹn của dữ liệu.</p>
+                    </div>
+
+                    <h4>Các ràng buộc thường dùng:</h4>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Ràng buộc</th>
+                                    <th>Mô tả</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge badge-ddl">NOT NULL</span></td>
+                                    <td>Không được để trống</td>
+                                    <td>HoTen VARCHAR(100) NOT NULL</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-sql">UNIQUE</span></td>
+                                    <td>Giá trị không được trùng lặp</td>
+                                    <td>Email VARCHAR(255) UNIQUE</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-dml">PRIMARY KEY</span></td>
+                                    <td>Khóa chính (NOT NULL + UNIQUE)</td>
+                                    <td>MaSV INT PRIMARY KEY</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-operator">FOREIGN KEY</span></td>
+                                    <td>Khóa ngoại</td>
+                                    <td>FOREIGN KEY (MaSV) REFERENCES SinhVien(MaSV)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-mysql">CHECK</span></td>
+                                    <td>Kiểm tra điều kiện</td>
+                                    <td>Tuoi INT CHECK (Tuoi >= 18)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-dml">DEFAULT</span></td>
+                                    <td>Giá trị mặc định</td>
+                                    <td>TrangThai VARCHAR(20) DEFAULT 'active'</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h5>Ví dụ tổng hợp:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">CREATE TABLE</span> SinhVien (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSV <span class="type">INT</span> <span class="constraint">PRIMARY
+                            KEY</span>, <span class="comment">-- Khóa chính</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;HoTen <span class="type">VARCHAR</span>(<span class="number">100</span>)
+                        <span class="constraint">NOT NULL</span>, <span class="comment">-- Không được NULL</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Email <span class="type">VARCHAR</span>(<span class="number">255</span>)
+                        <span class="constraint">UNIQUE</span>, <span class="comment">-- Không trùng</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Tuoi <span class="type">INT</span> <span class="constraint">CHECK</span>
+                        (Tuoi >= <span class="number">18</span>), <span class="comment">-- Phải >= 18</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;NgayNhapHoc <span class="type">DATE</span> <span
+                            class="constraint">DEFAULT</span> <span class="function">CURRENT_DATE</span>, <span
+                            class="comment">-- Mặc định là ngày hiện tại</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;GioiTinh <span class="type">CHAR</span>(<span class="number">1</span>)
+                        <span class="constraint">DEFAULT</span> <span class="string">'M'</span> <span class="comment">--
+                            Mặc định là 'M'</span><br>
+                        );
+                    </div>
+
+                    <h3>2.4 CÁC LỆNH SQL CƠ BẢN</h3>
+
+                    <h4>2.4.1 CREATE DATABASE - Tạo cơ sở dữ liệu</h4>
+
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Tạo một database mới để chứa các bảng.</p>
+                    </div>
+
+                    <h5>Cú pháp:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">CREATE DATABASE</span> ten_database;
+                    </div>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tạo database QuanLySinhVien</span><br>
+                        <span class="keyword">CREATE DATABASE</span> QuanLySinhVien;<br>
+                        <br>
+                        <span class="comment">-- Hiển thị danh sách database</span><br>
+                        <span class="keyword">SHOW DATABASES</span>;<br>
+                        <br>
+                        <span class="comment">-- Chọn database để làm việc</span><br>
+                        <span class="keyword">USE</span> QuanLySinhVien;
+                    </div>
+
+                    <h4>2.4.2 CREATE TABLE - Tạo bảng</h4>
+
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Tạo một bảng mới trong database để lưu trữ dữ liệu.</p>
+                    </div>
+
+                    <h5>Cú pháp:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">CREATE TABLE</span> ten_bang (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;ten_cot1 kieu_du_lieu rang_buoc,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;ten_cot2 kieu_du_lieu rang_buoc,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;ten_cot3 kieu_du_lieu rang_buoc,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;...<br>
+                        );
+                    </div>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tạo bảng Khoa</span><br>
+                        <span class="keyword">CREATE TABLE</span> Khoa (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaKhoa <span class="type">INT</span> <span class="constraint">PRIMARY
+                            KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;TenKhoa <span class="type">VARCHAR</span>(<span
+                            class="number">100</span>) <span class="constraint">NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;SoDienThoai <span class="type">VARCHAR</span>(<span
+                            class="number">15</span>)<br>
+                        );<br>
+                        <br>
+                        <span class="comment">-- Tạo bảng SinhVien</span><br>
+                        <span class="keyword">CREATE TABLE</span> SinhVien (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSV <span class="type">INT</span> <span class="constraint">PRIMARY
+                            KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;HoTen <span class="type">VARCHAR</span>(<span class="number">100</span>)
+                        <span class="constraint">NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;NgaySinh <span class="type">DATE</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;GioiTinh <span class="type">CHAR</span>(<span class="number">1</span>)
+                        <span class="constraint">CHECK</span> (GioiTinh <span class="operator">IN</span> (<span
+                            class="string">'M'</span>, <span class="string">'F'</span>)),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaKhoa <span class="type">INT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Email <span class="type">VARCHAR</span>(<span class="number">255</span>)
+                        <span class="constraint">UNIQUE</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="constraint">FOREIGN KEY</span> (MaKhoa) <span
+                            class="constraint">REFERENCES</span> Khoa(MaKhoa)<br>
+                        );
+                    </div>
+
+                    <h4>2.4.3 INSERT - Thêm dữ liệu</h4>
+
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Thêm một hoặc nhiều hàng mới vào bảng.</p>
+                    </div>
+
+                    <h5>Cú pháp:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Thêm một hàng</span><br>
+                        <span class="keyword">INSERT INTO</span> ten_bang (cot1, cot2, cot3, ...)<br>
+                        <span class="keyword">VALUES</span> (gia_tri1, gia_tri2, gia_tri3, ...);<br>
+                        <br>
+                        <span class="comment">-- Thêm nhiều hàng</span><br>
+                        <span class="keyword">INSERT INTO</span> ten_bang (cot1, cot2, cot3, ...)<br>
+                        <span class="keyword">VALUES</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;(gia_tri1, gia_tri2, gia_tri3, ...),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;(gia_tri1, gia_tri2, gia_tri3, ...),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;(gia_tri1, gia_tri2, gia_tri3, ...);
+                    </div>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Thêm một khoa</span><br>
+                        <span class="keyword">INSERT INTO</span> Khoa (MaKhoa, TenKhoa, SoDienThoai)<br>
+                        <span class="keyword">VALUES</span> (<span class="number">1</span>, <span class="string">'Công
+                            nghệ thông tin'</span>, <span class="string">'0123456789'</span>);<br>
+                        <br>
+                        <span class="comment">-- Thêm nhiều sinh viên</span><br>
+                        <span class="keyword">INSERT INTO</span> SinhVien (MaSV, HoTen, NgaySinh, GioiTinh, MaKhoa,
+                        Email) <span class="keyword">VALUES</span><br>
+                        (<span class="number">1</span>, <span class="string">'Nguyễn Văn An'</span>, <span
+                            class="string">'2000-05-15'</span>, <span class="string">'M'</span>, <span
+                            class="number">1</span>, <span class="string">'an@gmail.com'</span>),<br>
+                        (<span class="number">2</span>, <span class="string">'Trần Thị Bích'</span>, <span
+                            class="string">'2001-08-20'</span>, <span class="string">'F'</span>, <span
+                            class="number">1</span>, <span class="string">'bich@gmail.com'</span>),<br>
+                        (<span class="number">3</span>, <span class="string">'Lê Văn Cường'</span>, <span
+                            class="string">'1999-12-10'</span>, <span class="string">'M'</span>, <span
+                            class="number">2</span>, <span class="string">'cuong@gmail.com'</span>),<br>
+                        (<span class="number">4</span>, <span class="string">'Phạm Thị Dung'</span>, <span
+                            class="string">'2000-03-25'</span>, <span class="string">'F'</span>, <span
+                            class="number">2</span>, <span class="string">'dung@gmail.com'</span>),<br>
+                        (<span class="number">5</span>, <span class="string">'Hoàng Văn Em'</span>, <span
+                            class="string">'2001-07-30'</span>, <span class="string">'M'</span>, <span
+                            class="number">3</span>, <span class="string">'em@gmail.com'</span>);
+                    </div>
+
+                    <h4>2.4.4 SELECT - Truy vấn dữ liệu</h4>
+
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Lấy dữ liệu từ database để xem hoặc xử lý.</p>
+                    </div>
+
+                    <h5>Cú pháp cơ bản:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> cot1, cot2, ...<br>
+                        <span class="keyword">FROM</span> ten_bang<br>
+                        <span class="keyword">WHERE</span> dieu_kien<br>
+                        <span class="keyword">ORDER BY</span> cot <span class="keyword">ASC</span>|<span
+                            class="keyword">DESC</span><br>
+                        <span class="keyword">LIMIT</span> so_luong;
+                    </div>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy tất cả sinh viên</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien;<br>
+                        <br>
+                        <span class="comment">-- Lấy tên và email sinh viên</span><br>
+                        <span class="keyword">SELECT</span> HoTen, Email <span class="keyword">FROM</span> SinhVien;<br>
+                        <br>
+                        <span class="comment">-- Lấy sinh viên khoa CNTT</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien <br>
+                        <span class="keyword">WHERE</span> MaKhoa = <span class="number">1</span>;<br>
+                        <br>
+                        <span class="comment">-- Lấy sinh viên trên 20 tuổi, sắp xếp theo tên</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien<br>
+                        <span class="keyword">WHERE</span> Tuoi > <span class="number">20</span><br>
+                        <span class="keyword">ORDER BY</span> HoTen <span class="keyword">ASC</span>;<br>
+                        <br>
+                        <span class="comment">-- Lấy 5 sinh viên đầu tiên</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien<br>
+                        <span class="keyword">LIMIT</span> <span class="number">5</span>;
+                    </div>
+
+                    <h4>2.4.5 UPDATE - Cập nhật dữ liệu</h4>
+
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Sửa đổi giá trị của các hàng đã có trong bảng.</p>
+                    </div>
+
+                    <h5>Cú pháp:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">UPDATE</span> ten_bang<br>
+                        <span class="keyword">SET</span> cot1 = gia_tri_moi1, cot2 = gia_tri_moi2, ...<br>
+                        <span class="keyword">WHERE</span> dieu_kien;
+                    </div>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Sửa tuổi sinh viên có MaSV = 1</span><br>
+                        <span class="keyword">UPDATE</span> SinhVien<br>
+                        <span class="keyword">SET</span> Tuoi = <span class="number">21</span><br>
+                        <span class="keyword">WHERE</span> MaSV = <span class="number">1</span>;<br>
+                        <br>
+                        <span class="comment">-- Sửa nhiều cột</span><br>
+                        <span class="keyword">UPDATE</span> SinhVien<br>
+                        <span class="keyword">SET</span> Tuoi = <span class="number">22</span>, Email = <span
+                            class="string">'an_moi@gmail.com'</span><br>
+                        <span class="keyword">WHERE</span> MaSV = <span class="number">1</span>;<br>
+                        <br>
+                        <span class="comment">-- Tăng tuổi tất cả sinh viên lên 1 (cẩn thận!)</span><br>
+                        <span class="keyword">UPDATE</span> SinhVien<br>
+                        <span class="keyword">SET</span> Tuoi = Tuoi + <span class="number">1</span>;
+                    </div>
+
+                    <h4>2.4.6 DELETE - Xóa dữ liệu</h4>
+
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Xóa một hoặc nhiều hàng khỏi bảng.</p>
+                    </div>
+
+                    <h5>Cú pháp:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">DELETE FROM</span> ten_bang<br>
+                        <span class="keyword">WHERE</span> dieu_kien;
+                    </div>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Xóa sinh viên có MaSV = 1</span><br>
+                        <span class="keyword">DELETE FROM</span> SinhVien<br>
+                        <span class="keyword">WHERE</span> MaSV = <span class="number">1</span>;<br>
+                        <br>
+                        <span class="comment">-- Xóa sinh viên dưới 18 tuổi</span><br>
+                        <span class="keyword">DELETE FROM</span> SinhVien<br>
+                        <span class="keyword">WHERE</span> Tuoi < <span class="number">18</span>;<br>
+                            <br>
+                            <span class="comment">-- Xóa tất cả sinh viên (cẩn thận!)</span><br>
+                            <span class="keyword">DELETE FROM</span> SinhVien;
+                    </div>
+
+                    <h4>2.4.7 ALTER TABLE - Thay đổi cấu trúc bảng</h4>
+
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Thêm, sửa, xóa cột trong bảng đã có.</p>
+                    </div>
+
+                    <h5>Cú pháp:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Thêm cột</span><br>
+                        <span class="keyword">ALTER TABLE</span> ten_bang<br>
+                        <span class="keyword">ADD</span> ten_cot kieu_du_lieu rang_buoc;<br>
+                        <br>
+                        <span class="comment">-- Xóa cột</span><br>
+                        <span class="keyword">ALTER TABLE</span> ten_bang<br>
+                        <span class="keyword">DROP COLUMN</span> ten_cot;<br>
+                        <br>
+                        <span class="comment">-- Sửa cột</span><br>
+                        <span class="keyword">ALTER TABLE</span> ten_bang<br>
+                        <span class="keyword">MODIFY COLUMN</span> ten_cot kieu_du_lieu_moi;<br>
+                        <br>
+                        <span class="comment">-- Đổi tên cột (MySQL)</span><br>
+                        <span class="keyword">ALTER TABLE</span> ten_bang<br>
+                        <span class="keyword">CHANGE COLUMN</span> ten_cu ten_moi kieu_du_lieu;
+                    </div>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Thêm cột DiaChi</span><br>
+                        <span class="keyword">ALTER TABLE</span> SinhVien<br>
+                        <span class="keyword">ADD</span> DiaChi <span class="type">VARCHAR</span>(<span
+                            class="number">200</span>);<br>
+                        <br>
+                        <span class="comment">-- Xóa cột DiaChi</span><br>
+                        <span class="keyword">ALTER TABLE</span> SinhVien<br>
+                        <span class="keyword">DROP COLUMN</span> DiaChi;<br>
+                        <br>
+                        <span class="comment">-- Sửa kiểu dữ liệu cột Tuoi</span><br>
+                        <span class="keyword">ALTER TABLE</span> SinhVien<br>
+                        <span class="keyword">MODIFY COLUMN</span> Tuoi <span class="type">INT</span>;
+                    </div>
+
+                    <h4>2.4.8 DROP TABLE - Xóa bảng</h4>
+
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Xóa hoàn toàn bảng (cả cấu trúc và dữ liệu).</p>
+                    </div>
+
+                    <h5>Cú pháp:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">DROP TABLE</span> ten_bang;<br>
+                        <span class="keyword">DROP TABLE IF EXISTS</span> ten_bang; <span class="comment">-- Chỉ xóa nếu
+                            tồn tại</span>
+                    </div>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Xóa bảng SinhVien</span><br>
+                        <span class="keyword">DROP TABLE</span> SinhVien;<br>
+                        <br>
+                        <span class="comment">-- Xóa nếu tồn tại</span><br>
+                        <span class="keyword">DROP TABLE IF EXISTS</span> SinhVien;
+                    </div>
+
+                    <h4>2.4.9 TRUNCATE TABLE - Xóa dữ liệu giữ cấu trúc</h4>
+
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Xóa tất cả dữ liệu trong bảng nhưng giữ nguyên cấu trúc.</p>
+                    </div>
+
+                    <h5>Cú pháp:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">TRUNCATE TABLE</span> ten_bang;
+                    </div>
+
+                    <h5>So sánh DELETE và TRUNCATE:</h5>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>DELETE</th>
+                                    <th>TRUNCATE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Xóa từng hàng, chậm</td>
+                                    <td>Xóa tất cả cùng lúc, nhanh</td>
+                                </tr>
+                                <tr>
+                                    <td>Có thể dùng WHERE</td>
+                                    <td>Không thể dùng WHERE</td>
+                                </tr>
+                                <tr>
+                                    <td>Reset được (ROLLBACK)</td>
+                                    <td>Không reset được</td>
+                                </tr>
+                                <tr>
+                                    <td>Giữ nguyên cấu trúc</td>
+                                    <td>Giữ nguyên cấu trúc</td>
+                                </tr>
+                                <tr>
+                                    <td>Không reset auto-increment</td>
+                                    <td>Reset auto-increment</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Xóa tất cả dữ liệu trong bảng SinhVien</span><br>
+                        <span class="keyword">TRUNCATE TABLE</span> SinhVien;
+                    </div>
+                </section>
+
+                <!-- PHẦN 3: OPERATORS -->
+                <section id="part3" class="section">
+                    <h2><i class="fas fa-calculator"></i> PHẦN 3: OPERATORS</h2>
+
+                    <h3>3.1 TOÁN TỬ SỐ HỌC</h3>
+
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Thực hiện các phép tính toán học trên dữ liệu số.</p>
+                    </div>
+
+                    <h4>Các toán tử:</h4>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Toán tử</th>
+                                    <th>Mô tả</th>
+                                    <th>Ví dụ</th>
+                                    <th>Kết quả</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge badge-operator">+</span></td>
+                                    <td>Cộng</td>
+                                    <td>SELECT 10 + 3;</td>
+                                    <td>13</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-operator">-</span></td>
+                                    <td>Trừ</td>
+                                    <td>SELECT 10 - 3;</td>
+                                    <td>7</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-operator">*</span></td>
+                                    <td>Nhân</td>
+                                    <td>SELECT 10 * 3;</td>
+                                    <td>30</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-operator">/</span></td>
+                                    <td>Chia</td>
+                                    <td>SELECT 10 / 3;</td>
+                                    <td>3.3333</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-operator">%</span></td>
+                                    <td>Chia lấy dư</td>
+                                    <td>SELECT 10 % 3;</td>
+                                    <td>1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h5>Ví dụ trong bảng:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tính tổng điểm</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSV,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;DiemToan,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;DiemLy,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;DiemHoa,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;(DiemToan + DiemLy + DiemHoa) <span class="keyword">AS</span>
+                        TongDiem<br>
+                        <span class="keyword">FROM</span> BangDiem;<br>
+                        <br>
+                        <span class="comment">-- Tính điểm trung bình</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSV,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;(DiemToan + DiemLy + DiemHoa) / <span class="number">3</span> <span
+                            class="keyword">AS</span> DiemTB<br>
+                        <span class="keyword">FROM</span> BangDiem;<br>
+                        <br>
+                        <span class="comment">-- Tính thuế 10% trên giá sản phẩm</span><br>
+                        <span class="keyword">SELECT</span> <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;TenSP,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Gia,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Gia * <span class="number">0.1</span> <span class="keyword">AS</span>
+                        Thue,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Gia * <span class="number">1.1</span> <span class="keyword">AS</span>
+                        GiaSauThue<br>
+                        <span class="keyword">FROM</span> SanPham;
+                    </div>
+
+                    <h3>3.2 TOÁN TỬ SO SÁNH</h3>
+
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>So sánh các giá trị để lọc dữ liệu.</p>
+                    </div>
+
+                    <h4>Các toán tử:</h4>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Toán tử</th>
+                                    <th>Mô tả</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge badge-operator">=</span></td>
+                                    <td>Bằng</td>
+                                    <td>WHERE Tuoi = 20</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-operator">!= hoặc <></span></td>
+                                    <td>Không bằng</td>
+                                    <td>WHERE Tuoi != 20</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-operator">></span></td>
+                                    <td>Lớn hơn</td>
+                                    <td>WHERE Tuoi > 20</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-operator">
+                                            << /span>
+                                    </td>
+                                    <td>Nhỏ hơn</td>
+                                    <td>WHERE Tuoi < 20</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-operator">>=</span></td>
+                                    <td>Lớn hơn hoặc bằng</td>
+                                    <td>WHERE Tuoi >= 20</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-operator">
+                                            <=< /span>
+                                    </td>
+                                    <td>Nhỏ hơn hoặc bằng</td>
+                                    <td>WHERE Tuoi <= 20</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Sinh viên bằng đúng 20 tuổi</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien <span
+                            class="keyword">WHERE</span> Tuoi = <span class="number">20</span>;<br>
+                        <br>
+                        <span class="comment">-- Sinh viên không phải 20 tuổi</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien <span
+                            class="keyword">WHERE</span> Tuoi != <span class="number">20</span>;<br>
+                        <br>
+                        <span class="comment">-- Sinh viên trên 20 tuổi</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien <span
+                            class="keyword">WHERE</span> Tuoi > <span class="number">20</span>;<br>
+                        <br>
+                        <span class="comment">-- Sinh viên từ 20 tuổi trở lên</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien <span
+                            class="keyword">WHERE</span> Tuoi >= <span class="number">20</span>;
+                    </div>
+
+                    <h3>3.3 TOÁN TỬ LOGIC</h3>
+
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Kết hợp nhiều điều kiện với nhau.</p>
+                    </div>
+
+                    <h4>3.3.1 AND</h4>
+
+                    <h5>Cú pháp:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">WHERE</span> dieu_kien1 <span class="keyword">AND</span> dieu_kien2
+                    </div>
+
+                    <div class="note">
+                        <h4><i class="fas fa-comment-dots"></i> Giải thích:</h4>
+                        <p>Cả hai điều kiện phải đúng thì hàng mới được chọn.</p>
+                    </div>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Sinh viên trên 20 tuổi VÀ học lớp CNTT1</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien<br>
+                        <span class="keyword">WHERE</span> Tuoi > <span class="number">20</span> <span
+                            class="keyword">AND</span> Lop = <span class="string">'CNTT1'</span>;<br>
+                        <br>
+                        <span class="comment">-- Sinh viên từ 18-25 tuổi</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien<br>
+                        <span class="keyword">WHERE</span> Tuoi >= <span class="number">18</span> <span
+                            class="keyword">AND</span> Tuoi <= <span class="number">25</span>;
+                    </div>
+
+                    <h4>3.3.2 OR</h4>
+
+                    <h5>Cú pháp:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">WHERE</span> dieu_kien1 <span class="keyword">OR</span> dieu_kien2
+                    </div>
+
+                    <div class="note">
+                        <h4><i class="fas fa-comment-dots"></i> Giải thích:</h4>
+                        <p>Một trong hai điều kiện đúng là hàng được chọn.</p>
+                    </div>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Sinh viên học lớp CNTT1 HOẶC CNTT2</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien<br>
+                        <span class="keyword">WHERE</span> Lop = <span class="string">'CNTT1'</span> <span
+                            class="keyword">OR</span> Lop = <span class="string">'CNTT2'</span>;
+                    </div>
+
+                    <h4>3.3.3 NOT</h4>
+
+                    <h5>Cú pháp:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">WHERE NOT</span> dieu_kien
+                    </div>
+
+                    <div class="note">
+                        <h4><i class="fas fa-comment-dots"></i> Giải thích:</h4>
+                        <p>Lấy các hàng không thỏa mãn điều kiện.</p>
+                    </div>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Sinh viên không học lớp CNTT1</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien<br>
+                        <span class="keyword">WHERE NOT</span> Lop = <span class="string">'CNTT1'</span>;
+                    </div>
+
+                    <h3>3.4 TOÁN TỬ ĐẶC BIỆT</h3>
+
+                    <h4>3.4.1 BETWEEN ... AND ...</h4>
+
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Lấy giá trị trong một khoảng (bao gồm cả hai đầu).</p>
+                    </div>
+
+                    <h5>Cú pháp:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">WHERE</span> cot <span class="keyword">BETWEEN</span> gia_tri1 <span
+                            class="keyword">AND</span> gia_tri2
+                    </div>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Sinh viên từ 20 đến 25 tuổi</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien<br>
+                        <span class="keyword">WHERE</span> Tuoi <span class="keyword">BETWEEN</span> <span
+                            class="number">20</span> <span class="keyword">AND</span> <span
+                            class="number">25</span>;<br>
+                        <br>
+                        <span class="comment">-- Tương đương với:</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien<br>
+                        <span class="keyword">WHERE</span> Tuoi >= <span class="number">20</span> <span
+                            class="keyword">AND</span> Tuoi <= <span class="number">25</span>;
+                    </div>
+
+                    <h4>3.4.2 IN</h4>
+
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Lấy giá trị nằm trong một tập hợp.</p>
+                    </div>
+
+                    <h5>Cú pháp:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">WHERE</span> cot <span class="keyword">IN</span> (gia_tri1, gia_tri2,
+                        gia_tri3, ...)
+                    </div>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Sinh viên học lớp CNTT1, CNTT2, hoặc CNTT3</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien<br>
+                        <span class="keyword">WHERE</span> Lop <span class="keyword">IN</span> (<span
+                            class="string">'CNTT1'</span>, <span class="string">'CNTT2'</span>, <span
+                            class="string">'CNTT3'</span>);<br>
+                        <br>
+                        <span class="comment">-- Sinh viên có mã 1, 3, 5</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien<br>
+                        <span class="keyword">WHERE</span> MaSV <span class="keyword">IN</span> (<span
+                            class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>);
+                    </div>
+
+                    <h4>3.4.3 LIKE</h4>
+
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Tìm kiếm theo mẫu, thường dùng cho chuỗi.</p>
+                    </div>
+
+                    <h5>Ký tự đại diện:</h5>
+                    <ul>
+                        <li><strong>%</strong>: đại diện cho 0 hoặc nhiều ký tự</li>
+                        <li><strong>_</strong>: đại diện cho 1 ký tự bất kỳ</li>
+                    </ul>
+
+                    <h5>Cú pháp:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">WHERE</span> cot <span class="keyword">LIKE</span> <span
+                            class="string">'mau'</span>
+                    </div>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Tên bắt đầu bằng 'Nguyen'</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien<br>
+                        <span class="keyword">WHERE</span> HoTen <span class="keyword">LIKE</span> <span
+                            class="string">'Nguyen%'</span>;<br>
+                        <br>
+                        <span class="comment">-- Tên kết thúc bằng 'Anh'</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien<br>
+                        <span class="keyword">WHERE</span> HoTen <span class="keyword">LIKE</span> <span
+                            class="string">'%Anh'</span>;<br>
+                        <br>
+                        <span class="comment">-- Tên có chứa 'Van'</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien<br>
+                        <span class="keyword">WHERE</span> HoTen <span class="keyword">LIKE</span> <span
+                            class="string">'%Van%'</span>;<br>
+                        <br>
+                        <span class="comment">-- Email có đuôi @gmail.com</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien<br>
+                        <span class="keyword">WHERE</span> Email <span class="keyword">LIKE</span> <span
+                            class="string">'%@gmail.com'</span>;
+                    </div>
+
+                    <h4>3.4.4 IS NULL và IS NOT NULL</h4>
+
+                    <div class="note">
+                        <h4><i class="fas fa-bullseye"></i> Mục đích:</h4>
+                        <p>Kiểm tra giá trị NULL (không xác định).</p>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Lưu ý:</h4>
+                        <ul>
+                            <li>Không thể dùng = NULL vì NULL không phải giá trị</li>
+                            <li>Phải dùng IS NULL hoặc IS NOT NULL</li>
+                        </ul>
+                    </div>
+
+                    <h5>Cú pháp:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">WHERE</span> cot <span class="keyword">IS NULL</span><br>
+                        <span class="keyword">WHERE</span> cot <span class="keyword">IS NOT NULL</span>
+                    </div>
+
+                    <h5>Ví dụ:</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- Sinh viên chưa có email</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien<br>
+                        <span class="keyword">WHERE</span> Email <span class="keyword">IS NULL</span>;<br>
+                        <br>
+                        <span class="comment">-- Sinh viên đã có email</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien<br>
+                        <span class="keyword">WHERE</span> Email <span class="keyword">IS NOT NULL</span>;
+                    </div>
+                </section>
+
+                <!-- PHẦN 4: VÍ DỤ TỔNG HỢP -->
+                <section id="part4" class="section">
+                    <h2><i class="fas fa-project-diagram"></i> PHẦN 4: VÍ DỤ TỔNG HỢP</h2>
+
+                    <h3>4.1 Tạo cơ sở dữ liệu quản lý sinh viên</h3>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> SQL</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="comment">-- 1. Tạo database</span><br>
+                        <span class="keyword">CREATE DATABASE</span> QuanLySinhVien;<br>
+                        <span class="keyword">USE</span> QuanLySinhVien;<br>
+                        <br>
+                        <span class="comment">-- 2. Tạo bảng Khoa</span><br>
+                        <span class="keyword">CREATE TABLE</span> Khoa (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaKhoa <span class="type">INT</span> <span class="constraint">PRIMARY
+                            KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;TenKhoa <span class="type">VARCHAR</span>(<span
+                            class="number">100</span>) <span class="constraint">NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;SoDienThoai <span class="type">VARCHAR</span>(<span
+                            class="number">15</span>)<br>
+                        );<br>
+                        <br>
+                        <span class="comment">-- 3. Tạo bảng SinhVien</span><br>
+                        <span class="keyword">CREATE TABLE</span> SinhVien (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSV <span class="type">INT</span> <span class="constraint">PRIMARY
+                            KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;HoTen <span class="type">VARCHAR</span>(<span class="number">100</span>)
+                        <span class="constraint">NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;NgaySinh <span class="type">DATE</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;GioiTinh <span class="type">CHAR</span>(<span class="number">1</span>)
+                        <span class="constraint">CHECK</span> (GioiTinh <span class="operator">IN</span> (<span
+                            class="string">'M'</span>, <span class="string">'F'</span>)),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaKhoa <span class="type">INT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Email <span class="type">VARCHAR</span>(<span class="number">255</span>)
+                        <span class="constraint">UNIQUE</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="constraint">FOREIGN KEY</span> (MaKhoa) <span
+                            class="constraint">REFERENCES</span> Khoa(MaKhoa)<br>
+                        );<br>
+                        <br>
+                        <span class="comment">-- 4. Tạo bảng MonHoc</span><br>
+                        <span class="keyword">CREATE TABLE</span> MonHoc (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaMon <span class="type">INT</span> <span class="constraint">PRIMARY
+                            KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;TenMon <span class="type">VARCHAR</span>(<span
+                            class="number">100</span>) <span class="constraint">NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;SoTinChi <span class="type">INT</span> <span
+                            class="constraint">DEFAULT</span> <span class="number">3</span><br>
+                        );<br>
+                        <br>
+                        <span class="comment">-- 5. Tạo bảng KetQua (bảng điểm)</span><br>
+                        <span class="keyword">CREATE TABLE</span> KetQua (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaSV <span class="type">INT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;MaMon <span class="type">INT</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Diem <span class="type">DECIMAL</span>(<span
+                            class="number">4</span>,<span class="number">2</span>) <span class="constraint">CHECK</span>
+                        (Diem >= <span class="number">0</span> <span class="keyword">AND</span> Diem <= <span
+                            class="number">10</span>),<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;NgayThi <span class="type">DATE</span>,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="constraint">PRIMARY KEY</span> (MaSV, MaMon),<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="constraint">FOREIGN KEY</span> (MaSV) <span
+                                class="constraint">REFERENCES</span> SinhVien(MaSV),<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="constraint">FOREIGN KEY</span> (MaMon) <span
+                                class="constraint">REFERENCES</span> MonHoc(MaMon)<br>
+                            );<br>
+                            <br>
+                            <span class="comment">-- 6. Thêm dữ liệu mẫu</span><br>
+                            <span class="keyword">INSERT INTO</span> Khoa (MaKhoa, TenKhoa, SoDienThoai) <span
+                                class="keyword">VALUES</span><br>
+                            (<span class="number">1</span>, <span class="string">'Công nghệ thông tin'</span>, <span
+                                class="string">'0123456789'</span>),<br>
+                            (<span class="number">2</span>, <span class="string">'Kinh tế'</span>, <span
+                                class="string">'0987654321'</span>),<br>
+                            (<span class="number">3</span>, <span class="string">'Ngoại ngữ'</span>, <span
+                                class="string">'0112233445'</span>);<br>
+                            <br>
+                            <span class="keyword">INSERT INTO</span> SinhVien (MaSV, HoTen, NgaySinh, GioiTinh, MaKhoa,
+                            Email) <span class="keyword">VALUES</span><br>
+                            (<span class="number">1</span>, <span class="string">'Nguyễn Văn An'</span>, <span
+                                class="string">'2000-05-15'</span>, <span class="string">'M'</span>, <span
+                                class="number">1</span>, <span class="string">'an@gmail.com'</span>),<br>
+                            (<span class="number">2</span>, <span class="string">'Trần Thị Bích'</span>, <span
+                                class="string">'2001-08-20'</span>, <span class="string">'F'</span>, <span
+                                class="number">1</span>, <span class="string">'bich@gmail.com'</span>),<br>
+                            (<span class="number">3</span>, <span class="string">'Lê Văn Cường'</span>, <span
+                                class="string">'1999-12-10'</span>, <span class="string">'M'</span>, <span
+                                class="number">2</span>, <span class="string">'cuong@gmail.com'</span>),<br>
+                            (<span class="number">4</span>, <span class="string">'Phạm Thị Dung'</span>, <span
+                                class="string">'2000-03-25'</span>, <span class="string">'F'</span>, <span
+                                class="number">2</span>, <span class="string">'dung@gmail.com'</span>),<br>
+                            (<span class="number">5</span>, <span class="string">'Hoàng Văn Em'</span>, <span
+                                class="string">'2001-07-30'</span>, <span class="string">'M'</span>, <span
+                                class="number">3</span>, <span class="string">'em@gmail.com'</span>);<br>
+                            <br>
+                            <span class="keyword">INSERT INTO</span> MonHoc (MaMon, TenMon, SoTinChi) <span
+                                class="keyword">VALUES</span><br>
+                            (<span class="number">1</span>, <span class="string">'Lập trình Java'</span>, <span
+                                class="number">4</span>),<br>
+                            (<span class="number">2</span>, <span class="string">'Cơ sở dữ liệu'</span>, <span
+                                class="number">3</span>),<br>
+                            (<span class="number">3</span>, <span class="string">'Toán rời rạc'</span>, <span
+                                class="number">3</span>),<br>
+                            (<span class="number">4</span>, <span class="string">'Kinh tế vi mô'</span>, <span
+                                class="number">3</span>),<br>
+                            (<span class="number">5</span>, <span class="string">'Tiếng Anh'</span>, <span
+                                class="number">2</span>);<br>
+                            <br>
+                            <span class="keyword">INSERT INTO</span> KetQua (MaSV, MaMon, Diem, NgayThi) <span
+                                class="keyword">VALUES</span><br>
+                            (<span class="number">1</span>, <span class="number">1</span>, <span
+                                class="number">8.5</span>, <span class="string">'2024-01-15'</span>),<br>
+                            (<span class="number">1</span>, <span class="number">2</span>, <span
+                                class="number">7.0</span>, <span class="string">'2024-01-20'</span>),<br>
+                            (<span class="number">2</span>, <span class="number">1</span>, <span
+                                class="number">9.0</span>, <span class="string">'2024-01-15'</span>),<br>
+                            (<span class="number">2</span>, <span class="number">3</span>, <span
+                                class="number">8.0</span>, <span class="string">'2024-01-25'</span>),<br>
+                            (<span class="number">3</span>, <span class="number">4</span>, <span
+                                class="number">7.5</span>, <span class="string">'2024-01-18'</span>),<br>
+                            (<span class="number">4</span>, <span class="number">4</span>, <span
+                                class="number">8.0</span>, <span class="string">'2024-01-18'</span>),<br>
+                            (<span class="number">5</span>, <span class="number">5</span>, <span
+                                class="number">9.5</span>, <span class="string">'2024-01-22'</span>);<br>
+                            <br>
+                            <span class="comment">-- 7. Các câu truy vấn mẫu</span><br>
+                            <br>
+                            <span class="comment">-- 7.1. Lấy tất cả sinh viên</span><br>
+                            <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien;<br>
+                            <br>
+                            <span class="comment">-- 7.2. Lấy sinh viên khoa CNTT</span><br>
+                            <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien <br>
+                            <span class="keyword">WHERE</span> MaKhoa = <span class="number">1</span>;<br>
+                            <br>
+                            <span class="comment">-- 7.3. Lấy sinh viên sinh năm 2000</span><br>
+                            <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> SinhVien <br>
+                            <span class="keyword">WHERE</span> <span class="function">YEAR</span>(NgaySinh) = <span
+                                class="number">2000</span>;<br>
+                            <br>
+                            <span class="comment">-- 7.4. Lấy điểm của sinh viên, kèm tên môn học</span><br>
+                            <span class="keyword">SELECT</span> <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;sv.HoTen,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;mh.TenMon,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;kq.Diem<br>
+                            <span class="keyword">FROM</span> SinhVien sv<br>
+                            <span class="keyword">JOIN</span> KetQua kq <span class="keyword">ON</span> sv.MaSV =
+                            kq.MaSV<br>
+                            <span class="keyword">JOIN</span> MonHoc mh <span class="keyword">ON</span> kq.MaMon =
+                            mh.MaMon;<br>
+                            <br>
+                            <span class="comment">-- 7.5. Tính điểm trung bình của từng sinh viên</span><br>
+                            <span class="keyword">SELECT</span> <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;sv.MaSV,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;sv.HoTen,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">AVG</span>(kq.Diem) <span
+                                class="keyword">AS</span> DiemTrungBinh<br>
+                            <span class="keyword">FROM</span> SinhVien sv<br>
+                            <span class="keyword">LEFT JOIN</span> KetQua kq <span class="keyword">ON</span> sv.MaSV =
+                            kq.MaSV<br>
+                            <span class="keyword">GROUP BY</span> sv.MaSV, sv.HoTen;<br>
+                            <br>
+                            <span class="comment">-- 7.6. Lấy sinh viên có điểm cao nhất môn Java</span><br>
+                            <span class="keyword">SELECT</span> <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;sv.HoTen,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;kq.Diem<br>
+                            <span class="keyword">FROM</span> SinhVien sv<br>
+                            <span class="keyword">JOIN</span> KetQua kq <span class="keyword">ON</span> sv.MaSV =
+                            kq.MaSV<br>
+                            <span class="keyword">WHERE</span> kq.MaMon = <span class="number">1</span><br>
+                            <span class="keyword">ORDER BY</span> kq.Diem <span class="keyword">DESC</span><br>
+                            <span class="keyword">LIMIT</span> <span class="number">1</span>;
+                    </div>
+                </section>
+
+                <!-- PHẦN 5: TỔNG KẾT -->
+                <section id="part5" class="section">
+                    <h2><i class="fas fa-star"></i> PHẦN 5: TỔNG KẾT</h2>
+
+                    <h3>5.1 BẢNG TÓM TẮT CÚ PHÁP</h3>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Lệnh</th>
+                                    <th>Cú pháp cơ bản</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge badge-ddl">CREATE DATABASE</span></td>
+                                    <td>CREATE DATABASE ten_db;</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-ddl">CREATE TABLE</span></td>
+                                    <td>CREATE TABLE ten_bang (cot1 kieu, cot2 kieu);</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-dml">INSERT</span></td>
+                                    <td>INSERT INTO ten_bang VALUES (gia_tri1, gia_tri2);</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-dml">SELECT</span></td>
+                                    <td>SELECT cot FROM ten_bang WHERE dieu_kien;</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-dml">UPDATE</span></td>
+                                    <td>UPDATE ten_bang SET cot = gia_tri WHERE dieu_kien;</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-dml">DELETE</span></td>
+                                    <td>DELETE FROM ten_bang WHERE dieu_kien;</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-ddl">ALTER TABLE</span></td>
+                                    <td>ALTER TABLE ten_bang ADD cot kieu;</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-ddl">DROP TABLE</span></td>
+                                    <td>DROP TABLE ten_bang;</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-ddl">TRUNCATE</span></td>
+                                    <td>TRUNCATE TABLE ten_bang;</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>5.2 BẢNG TÓM TẮT TOÁN TỬ</h3>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><span>Loại</span></th>
+                                    <th><span>Toán tử</span></th>
+                                    <th><span>Mô tả</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong><span>Số học</span></strong></td>
+                                    <td><code>+ - * / %</code></td>
+                                    <td><span>Tính toán</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><span>So sánh</span></strong></td>
+                                    <td><code>= != &lt; &gt; &lt;= &gt;=</code></td>
+                                    <td><span>So sánh giá trị</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><span>Logic</span></strong></td>
+                                    <td><code>AND OR NOT</code></td>
+                                    <td><span>Kết hợp điều kiện</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><span>Khoảng</span></strong></td>
+                                    <td><code>BETWEEN ... AND ...</code></td>
+                                    <td><span>Trong khoảng</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><span>Tập hợp</span></strong></td>
+                                    <td><code>IN (...)</code></td>
+                                    <td><span>Trong tập hợp</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><span>Mẫu</span></strong></td>
+                                    <td><code>LIKE</code></td>
+                                    <td><span>Tìm theo mẫu</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><span>NULL</span></strong></td>
+                                    <td><code>IS NULL</code><span>, </span><code>IS NOT NULL</code></td>
+                                    <td><span>Kiểm tra NULL</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>5.3 CÁC BƯỚC THỰC HÀNH</h3>
+
+                    <ol>
+                        <li><strong>Bước 1:</strong> Mở MySQL Workbench</li>
+                        <li><strong>Bước 2:</strong> Tạo database mới: <code>CREATE DATABASE TenDB;</code></li>
+                        <li><strong>Bước 3:</strong> Chọn database: <code>USE TenDB;</code></li>
+                        <li><strong>Bước 4:</strong> Tạo bảng: <code>CREATE TABLE ...</code></li>
+                        <li><strong>Bước 5:</strong> Thêm dữ liệu: <code>INSERT INTO ...</code></li>
+                        <li><strong>Bước 6:</strong> Truy vấn: <code>SELECT ...</code></li>
+                    </ol>
+
+                    <div class="comparison-box">
+                        <h4><i class="fas fa-lightbulb"></i> Tóm tắt nhanh:</h4>
+                        <ul>
+                            <li><span class="badge badge-ddl">DDL</span> - Định nghĩa cấu trúc: CREATE, ALTER, DROP</li>
+                            <li><span class="badge badge-dml">DML</span> - Thao tác dữ liệu: SELECT, INSERT, UPDATE,
+                                DELETE</li>
+                            <li><span class="badge badge-operator">Toán tử</span> - Lọc và tính toán dữ liệu</li>
+                        </ul>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-star"></i> Tổng kết SQL Fundamentals</h4>
+                        <div class="demo-box">
+                            <p style="font-size: 1.3rem;"><i class="fas fa-database"></i> Database <i
+                                    class="fas fa-arrow-right"></i> Table <i class="fas fa-arrow-right"></i> SQL <i
+                                    class="fas fa-arrow-right"></i> Data</p>
+                            <div
+                                style="display: flex; gap: 15px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+                                <span class="badge badge-sql">DDL</span>
+                                <span class="badge badge-mysql">DML</span>
+                                <span class="badge badge-ddl">DQL</span>
+                                <span class="badge badge-dml">DCL</span>
+                                <span class="badge badge-operator">TCL</span>
+                            </div>
+                            <p style="margin-top: 20px;"><i class="fas fa-quote-right"></i> "SQL là ngôn ngữ của dữ liệu
+                                - học SQL để làm chủ dữ liệu!"</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p><i class="fas fa-database"></i> BUỔI 36: SQL FUNDAMENTALS - GV: Nguyễn Đình Mạnh</p>
+        </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng với hiệu ứng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // Xóa class active từ tất cả các link và section
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    // Thêm class active cho link được click với hiệu ứng
+                    this.classList.add('active');
+
+                    // Thêm hiệu ứng rung nhẹ khi click
+                    this.style.animation = 'none';
+                    this.offsetHeight; // Trigger reflow
+                    this.style.animation = 'slideInLeft 0.3s ease';
+
+                    // Hiển thị section tương ứng
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+
+                    // Cuộn lên đầu section
+                    document.querySelector('.main-content').scrollTop = 0;
+                });
+            });
+        });
+
+        // Hàm copy code với hiệu ứng
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+
+            // Hiệu ứng copy
+            button.innerHTML = '<i class="fas fa-check"></i> Đã copy!';
+            button.style.background = '#27ae60';
+
+            navigator.clipboard.writeText(text).then(() => {
+                setTimeout(() => {
+                    button.innerHTML = '<i class="far fa-copy"></i> Copy';
+                    button.style.background = '#555';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+
+</html>
