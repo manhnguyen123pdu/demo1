@@ -451,7 +451,7 @@
                     <li class="nav-item"><a href="#part1" class="nav-link active"><i class="fas fa-home"></i> <span> TỔNG QUAN</span></a></li>
                     <li class="nav-item"><a href="#part2" class="nav-link"><i class="fas fa-sitemap"></i> <span> EXCEPTION HIERARCHY</span></a></li>
                     <li class="nav-item"><a href="#part3" class="nav-link"><i class="fas fa-hand-paper"></i> <span> TRY-CATCH-FINALLY</span></a></li>
-                    <li class="nav-item"><a href="#part4" class="nav-link"><i class="fas fa-leaf"></i> <span> TRY-WITH-RESOURCES</span></a></li>
+                    <!-- <li class="nav-item"><a href="#part4" class="nav-link"><i class="fas fa-leaf"></i> <span> TRY-WITH-RESOURCES</span></a></li> -->
                     <li class="nav-item"><a href="#part5" class="nav-link"><i class="fas fa-arrow-up"></i> <span>THROWING EXCEPTIONS</span></a></li>
                     <li class="nav-item"><a href="#part6" class="nav-link"><i class="fas fa-cogs"></i> <span> CUSTOM EXCEPTIONS</span></a></li>
                     <li class="nav-item"><a href="#part7" class="nav-link"><i class="fas fa-check-double"></i> <span> BEST PRACTICES</span></a></li>
@@ -1441,7 +1441,7 @@
                         <span class="keyword">throw new</span> ExceptionType(<span class="string">"Error message"</span>);
                     </div>
 
-                    <h4>Ví dụ 1: Throw checked exception</h4>
+                    <h4>Ví dụ : Throw checked exception</h4>
                     <div class="code-block">
                         <div class="code-header">
                             <span><i class="fas fa-code"></i> ThrowCheckedExample.java</span>
@@ -1465,7 +1465,7 @@
                         }
                     </div>
 
-                    <h4>Ví dụ 2: Throw unchecked exception</h4>
+                    <h4>Ví dụ: Throw unchecked exception</h4>
                     <div class="code-block">
                         <div class="code-header">
                             <span><i class="fas fa-code"></i> ThrowUncheckedExample.java</span>
@@ -1503,67 +1503,30 @@
                         }
                     </div>
 
-                    <h4>Ví dụ 1: Một method có thể throw nhiều exception</h4>
-                    <div class="code-block">
-                        <div class="code-header">
-                            <span><i class="fas fa-code"></i> ThrowsExample.java</span>
-                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
-                        </div>
-                        <span class="keyword">import</span> java.io.*;<br>
-                        <br>
-                        <span class="keyword">public class</span> ThrowsExample {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;readFileAndParse(<span class="string">"test.txt"</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (FileNotFoundException e) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"File không tồn tại!"</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (IOException e) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Lỗi đọc file!"</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (NumberFormatException e) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Dữ liệu trong file không phải số!"</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> readFileAndParse(String filename) <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throws</span> FileNotFoundException, IOException, NumberFormatException {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BufferedReader reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(filename));<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String line = reader.readLine();<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> number = Integer.parseInt(line); <span class="comment">// Có thể throw NumberFormatException</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Số đọc được: "</span> + number);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reader.close();<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        }
-                    </div>
-
-                    <h4>Ví dụ 2: Throw exception lên caller</h4>
-                    <div class="code-block">
-                        <div class="code-header">
-                            <span><i class="fas fa-code"></i> ThrowToCaller.java</span>
-                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
-                        </div>
-                        <span class="keyword">public class</span> ThrowToCaller {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;methodA();<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (Exception e) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Xử lý ở main: "</span> + e.getMessage());<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> methodA() <span class="keyword">throws</span> Exception {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;methodB();<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> methodB() <span class="keyword">throws</span> Exception {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;methodC();<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> methodC() <span class="keyword">throws</span> Exception {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span> Exception(<span class="string">"Lỗi từ methodC"</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        }
-                    </div>
+                 <div class="code-block">
+    <div class="code-header">
+        <span><i class="fas fa-code"></i> Ví dụ throws Exception</span>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+    </div>
+    <span class="keyword">package</span> BT1;<br>
+<br>
+<span class="keyword">public class</span> Main {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> validateAge(<span class="keyword">int</span> age) <span class="keyword">throws</span> Exception {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (age < 0) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span> Exception(<span class="string">"Tuổi không thể là số âm!"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Tuổi hợp lệ: "</span> + age);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;validateAge(-5);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (Exception e) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Lỗi: "</span> + e.getMessage());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+</div>
 
                     <h3>5.3 PHÂN BIỆT THROW VS THROWS</h3>
                     <div class="table-container">
@@ -1669,209 +1632,45 @@
                             <li>Thêm các fields nếu cần</li>
                         </ol>
                     </div>
-
-                    <h4>Ví dụ 1: Checked Custom Exception</h4>
                     <div class="code-block">
-                        <div class="code-header">
-                            <span><i class="fas fa-code"></i> BankingException.java</span>
-                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
-                        </div>
-                        <span class="comment">// Lớp cha cho tất cả exceptions của banking</span><br>
-                        <span class="keyword">public class</span> BankingException <span class="keyword">extends</span> Exception {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> BankingException(String message) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">super</span>(message);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> BankingException(String message, Throwable cause) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">super</span>(message, cause);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        }<br>
-                        <br>
-                        <span class="comment">// Specific exception</span><br>
-                        <span class="keyword">public class</span> InsufficientBalanceException <span class="keyword">extends</span> BankingException {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private double</span> balance;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private double</span> required;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> InsufficientBalanceException(<span class="keyword">double</span> balance, <span class="keyword">double</span> required) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">super</span>(String.format(<span class="string">"Số dư không đủ! Cần: %.2f, Hiện có: %.2f"</span>, required, balance));<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.balance = balance;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.required = required;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public double</span> getBalance() { <span class="keyword">return</span> balance; }<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public double</span> getRequired() { <span class="keyword">return</span> required; }<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public double</span> getDeficit() { <span class="keyword">return</span> required - balance; }<br>
-                        }<br>
-                        <br>
-                        <span class="comment">// Specific exception khác</span><br>
-                        <span class="keyword">public class</span> InvalidAmountException <span class="keyword">extends</span> BankingException {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> InvalidAmountException(String message) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">super</span>(message);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        }
-                    </div>
-
-                    <h4>Ví dụ 2: Unchecked Custom Exception</h4>
-                    <div class="code-block">
-                        <div class="code-header">
-                            <span><i class="fas fa-code"></i> ValidationException.java</span>
-                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
-                        </div>
-                        <span class="comment">// Unchecked exception - kế thừa RuntimeException</span><br>
-                        <span class="keyword">public class</span> ValidationException <span class="keyword">extends</span> RuntimeException {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> List<String> errors;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> ValidationException(String message) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">super</span>(message);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> ValidationException(List<String> errors) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">super</span>(<span class="string">"Validation failed: "</span> + String.join(<span class="string">", "</span>, errors));<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.errors = errors;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> List<String> getErrors() {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> errors;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        }<br>
-                        <br>
-                        <span class="comment">// Sử dụng</span><br>
-                        <span class="keyword">public class</span> UserValidator {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> validateUser(String name, String email, <span class="keyword">int</span> age) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List<String> errors = <span class="keyword">new</span> ArrayList<>();<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (name == <span class="keyword">null</span> || name.trim().isEmpty()) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errors.add(<span class="string">"Tên không được để trống"</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (email == <span class="keyword">null</span> || !email.contains(<span class="string">"@"</span>)) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errors.add(<span class="string">"Email không hợp lệ"</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (age < <span class="number">18</span> || age > <span class="number">150</span>) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errors.add(<span class="string">"Tuổi không hợp lệ"</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (!errors.isEmpty()) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span> ValidationException(errors);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        }
-                    </div>
-
-                    <h3>6.3 VÍ DỤ THỰC TẾ: BANKING APPLICATION</h3>
-                    
-                    <h4>Account.java</h4>
-                    <div class="code-block">
-                        <div class="code-header">
-                            <span><i class="fas fa-code"></i> Account.java</span>
-                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
-                        </div>
-                        <span class="keyword">public class</span> Account {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span> String accountNumber;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private double</span> balance;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private boolean</span> active;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> Account(String accountNumber, <span class="keyword">double</span> initialBalance) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.accountNumber = accountNumber;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.balance = initialBalance;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.active = <span class="keyword">true</span>;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> deposit(<span class="keyword">double</span> amount) <span class="keyword">throws</span> InvalidAmountException {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (amount <= <span class="number">0</span>) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span> InvalidAmountException(<span class="string">"Số tiền nạp phải lớn hơn 0"</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (amount > <span class="number">10000000</span>) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span> InvalidAmountException(<span class="string">"Số tiền nạp không được vượt quá 10 triệu"</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;balance += amount;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Nạp thành công: "</span> + amount + <span class="string">". Số dư: "</span> + balance);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> withdraw(<span class="keyword">double</span> amount) <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throws</span> InvalidAmountException, InsufficientBalanceException, AccountInactiveException {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (!active) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span> AccountInactiveException(<span class="string">"Tài khoản đã bị khóa"</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (amount <= <span class="number">0</span>) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span> InvalidAmountException(<span class="string">"Số tiền rút phải lớn hơn 0"</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (amount > balance) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span> InsufficientBalanceException(balance, amount);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;balance -= amount;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Rút thành công: "</span> + amount + <span class="string">". Số dư: "</span> + balance);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> transfer(Account to, <span class="keyword">double</span> amount) <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throws</span> InvalidAmountException, InsufficientBalanceException, <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AccountInactiveException, TransferLimitExceededException {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (amount > <span class="number">5000000</span>) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span> TransferLimitExceededException(<span class="string">"Hạn mức chuyển tối đa 5 triệu"</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.withdraw(amount);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to.deposit(amount);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Chuyển thành công: "</span> + amount);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// getters, setters</span><br>
-                        }<br>
-                        <br>
-                        <span class="comment">// Custom Exceptions</span><br>
-                        <span class="keyword">class</span> AccountInactiveException <span class="keyword">extends</span> BankingException {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> AccountInactiveException(String message) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">super</span>(message);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        }<br>
-                        <br>
-                        <span class="keyword">class</span> TransferLimitExceededException <span class="keyword">extends</span> BankingException {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> TransferLimitExceededException(String message) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">super</span>(message);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        }
-                    </div>
-
-                    <h4>BankingApp.java</h4>
-                    <div class="code-block">
-                        <div class="code-header">
-                            <span><i class="fas fa-code"></i> BankingApp.java</span>
-                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
-                        </div>
-                        <span class="keyword">public class</span> BankingApp {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Account acc1 = <span class="keyword">new</span> Account(<span class="string">"123456"</span>, <span class="number">1000000</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Account acc2 = <span class="keyword">new</span> Account(<span class="string">"789012"</span>, <span class="number">500000</span>);<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;acc1.withdraw(<span class="number">2000000</span>); <span class="comment">// Số dư không đủ</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (InsufficientBalanceException e) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Lỗi: "</span> + e.getMessage());<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Thiếu: "</span> + e.getDeficit());<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (InvalidAmountException e) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Lỗi: "</span> + e.getMessage());<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (AccountInactiveException e) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Lỗi: "</span> + e.getMessage());<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;acc1.transfer(acc2, <span class="number">6000000</span>); <span class="comment">// Vượt hạn mức</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (TransferLimitExceededException e) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Lỗi chuyển tiền: "</span> + e.getMessage());<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (Exception e) {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Lỗi khác: "</span> + e.getMessage());<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                        }
-                    </div>
+    <div class="code-header">
+        <span><i class="fas fa-code"></i> Tạo Custom Exception</span>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+    </div>
+    <span class="keyword">package</span> BT1;<br>
+<br>
+<span class="comment">// BƯỚC 1: Tạo Custom Exception</span><br>
+<span class="keyword">class</span> <span class="class-name">TuoiKhongHopLeException</span> <span class="keyword">extends</span> <span class="class-name">Exception</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="class-name">TuoiKhongHopLeException</span>(<span class="keyword">String</span> thongBao) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">super</span>(thongBao); <span class="comment">// Gọi constructor của lớp cha (Exception)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+</div>
+<div class="code-block">
+    <div class="code-header">
+        <span><i class="fas fa-code"></i> Ví dụ Custom Exception</span>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+    </div>
+    <span class="keyword">package</span> BT1;<br>
+    <br>
+    <span class="keyword">public class</span> Main {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> kiemTra(<span class="keyword">int</span> tuoi) <span class="keyword">throws</span> TuoiKhongHopLeException {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (tuoi < 18) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span> TuoiKhongHopLeException(<span class="string">"Tuổi phải từ 18 trở lên! Bạn mới "</span> + tuoi + <span class="string">" tuổi."</span>);}<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"✓ Chào mừng bạn! Tuổi: "</span> + tuoi);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> main(String[] args) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kiemTra(20);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kiemTra(15);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (TuoiKhongHopLeException e) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"LỖI: "</span> + e.getMessage());<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+    }
+</div>
+      
                 </section>
 
                 <!-- PHẦN 7: BEST PRACTICES -->
