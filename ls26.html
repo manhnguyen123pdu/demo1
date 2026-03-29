@@ -474,6 +474,7 @@
 
                     <li class="nav-item"><a href="#phan7" class="nav-link"><i class="fas fa-flag-checkered"></i> PHẦN 7:
                             TỔNG KẾT</a></li>
+                    <li class="nav-item"><a href="#phan8" class="nav-link"><i class="fas fa-flag-checkered"></i>                             BÀI TẬP</a></li>
 
                 </ul>
             </nav>
@@ -2544,6 +2545,357 @@
                         </div>
                     </div>
                 </section>
+                 <section id="phan8" class="section">
+ <!-- BÀI 1 -->
+    <div id="bai1" class="div">
+        <h2><i class="fas fa-users"></i> Bài 1: Quản lý hàng đợi khách hàng</h2>
+        <h3>Yêu cầu:</h3>
+        <p>Xây dựng chương trình quản lý hàng đợi khách hàng tại quầy giao dịch.</p>
+        <h3>Chức năng:</h3>
+        <ul>
+            <li>Thêm khách hàng vào hàng đợi</li>
+            <li>Phục vụ khách hàng (lấy ra khỏi hàng đợi theo FIFO)</li>
+            <li>Hiển thị danh sách khách hàng đang chờ</li>
+            <li>Kiểm tra hàng đợi rỗng</li>
+            <li>Thoát chương trình</li>
+        </ul>
+        <h3>Input:</h3>
+        <p>Nhập tên khách hàng (String)</p>
+        <h3>Output:</h3>
+        <p>Hiển thị danh sách theo thứ tự vào trước → ra trước</p>
+        <h3>Ràng buộc:</h3>
+        <ul>
+            <li>Sử dụng <code>Queue&lt;String&gt;</code></li>
+            <li>Áp dụng: <code>offer()</code>, <code>poll()</code>, <code>peek()</code>, <code>isEmpty()</code></li>
+        </ul>
+    </div>
+
+    <!-- BÀI 2 -->
+    <div id="bai2" class="div">
+        <h2><i class="fas fa-sort-numeric-up-alt"></i> Bài 2: Sắp xếp số bằng PriorityQueue</h2>
+        <h3>Yêu cầu:</h3>
+        <p>Nhập vào n số nguyên, in ra theo thứ tự tăng dần.</p>
+        <h3>Input:</h3>
+        <p>n (số lượng phần tử)<br>n số nguyên</p>
+        <h3>Output:</h3>
+        <p>Danh sách đã sắp xếp tăng dần</p>
+        <h3>Ràng buộc:</h3>
+        <ul>
+            <li>Sử dụng <code>PriorityQueue&lt;Integer&gt;</code></li>
+            <li>Không dùng <code>Collections.sort()</code></li>
+        </ul>
+    </div>
+
+    <!-- BÀI 3 -->
+    <div id="bai3" class="div">
+        <h2><i class="fas fa-user-graduate"></i> Bài 3: Quản lý sinh viên bằng PriorityQueue</h2>
+        <h3>Yêu cầu:</h3>
+        <p>Xây dựng hệ thống quản lý sinh viên.</p>
+        <h3>Thông tin sinh viên:</h3>
+        <ul>
+            <li>id (String)</li>
+            <li>name (String)</li>
+        </ul>
+        <h3>Chức năng:</h3>
+        <ul>
+            <li>Thêm sinh viên</li>
+            <li>Hiển thị danh sách (tự động sắp xếp theo id tăng dần)</li>
+        </ul>
+        <h3>Ràng buộc:</h3>
+        <ul>
+            <li>Sử dụng <code>PriorityQueue&lt;Student&gt;</code></li>
+            <li>Dùng <code>Comparator</code></li>
+        </ul>
+    </div>
+
+    <!-- BÀI 4 -->
+    <div id="bai4" class="div">
+        <h2><i class="fas fa-arrows-alt-h"></i> Bài 4: Sử dụng Deque (Queue 2 đầu)</h2>
+        <h3>Yêu cầu:</h3>
+        <p>Thực hiện các thao tác với hàng đợi 2 đầu.</p>
+        <h3>Chức năng:</h3>
+        <ul>
+            <li>Thêm phần tử vào đầu</li>
+            <li>Thêm phần tử vào cuối</li>
+            <li>Xóa phần tử đầu</li>
+            <li>Xóa phần tử cuối</li>
+            <li>Hiển thị danh sách</li>
+        </ul>
+        <h3>Ràng buộc:</h3>
+        <ul>
+            <li>Sử dụng <code>Deque&lt;Integer&gt;</code></li>
+            <li>Áp dụng: <code>addFirst()</code>, <code>addLast()</code>, <code>removeFirst()</code>, <code>removeLast()</code></li>
+        </ul>
+    </div>
+
+    <!-- BÀI 5 -->
+    <div id="bai5" class="div">
+        <h2><i class="fas fa-box"></i> Bài 5: QUẢN LÝ SẢN PHẨM (UTILITIES + OOP)</h2>
+        <h3>1. Mô tả bài toán</h3>
+        <p>Xây dựng chương trình quản lý sản phẩm sử dụng: Lập trình hướng đối tượng (OOP) và Collections Utilities.</p>
+        
+        <h3>2. Thiết kế lớp</h3>
+        <p><strong>Lớp Product</strong></p>
+        <ul>
+            <li>id : String</li>
+            <li>name : String</li>
+            <li>price : double</li>
+            <li>quantity : int</li>
+            <li>Constructor đầy đủ, Getter/Setter, toString()</li>
+        </ul>
+        <p><strong>Lớp ProductManager</strong></p>
+        <ul>
+            <li>List&lt;Product&gt; list</li>
+        </ul>
+
+        <h3>3. Chức năng cần xây dựng</h3>
+        <ol>
+            <li>Thêm sản phẩm</li>
+            <li>Hiển thị danh sách</li>
+            <li>Sắp xếp theo giá tăng dần: <code>Collections.sort(list, Comparator.comparing(Product::getPrice));</code></li>
+            <li>Sắp xếp theo tên (A → Z): <code>Collections.sort(list, Comparator.comparing(Product::getName));</code></li>
+            <li>Tìm sản phẩm có giá cao nhất: <code>Collections.max(list, Comparator.comparing(Product::getPrice));</code></li>
+            <li>Tìm sản phẩm theo id</li>
+            <li>Đảo ngược danh sách: <code>Collections.reverse(list);</code></li>
+            <li>Xóa sản phẩm theo id</li>
+            <li>Trộn danh sách ngẫu nhiên: <code>Collections.shuffle(list);</code></li>
+        </ol>
+
+        <h3>4. Menu chương trình</h3>
+        <div class="menu-box">
+            ===== PRODUCT MANAGEMENT =====<br>
+            1. Thêm sản phẩm<br>
+            2. Hiển thị danh sách<br>
+            3. Sắp xếp theo giá<br>
+            4. Sắp xếp theo tên<br>
+            5. Tìm sản phẩm giá cao nhất<br>
+            6. Tìm theo id<br>
+            7. Đảo danh sách<br>
+            8. Xóa theo id<br>
+            9. Trộn danh sách<br>
+            0. Thoát
+        </div>
+
+        <h3>5. Input/Output</h3>
+        <p><strong>Input:</strong> Nhập từ bàn phím (Scanner)</p>
+        <p><strong>Output:</strong> ID: P01 | Name: Laptop | Price: 1500 | Quantity: 5</p>
+
+        <h3>6. Ràng buộc kỹ thuật</h3>
+        <ul>
+            <li>Sử dụng ArrayList</li>
+            <li>Sử dụng Collections</li>
+            <li>Sử dụng Comparator</li>
+            <li>Áp dụng OOP (tách class rõ ràng)</li>
+            <li>Có menu do-while</li>
+        </ul>
+
+        <h3>7. Nâng cao</h3>
+        <ul>
+            <li>Lọc sản phẩm có giá > 1000</li>
+            <li>Tính tổng giá trị kho (price * quantity)</li>
+            <li>Sắp xếp theo quantity</li>
+        </ul>
+    </div>
+
+    <!-- BÀI 6 -->
+    <div id="bai6" class="div">
+        <h2><i class="fas fa-user-edit"></i> Bài 6: QUẢN LÝ SINH VIÊN (UTILITIES + OOP)</h2>
+        <h3>1. Mô tả bài toán</h3>
+        <p>Quản lý danh sách sinh viên trong lớp học sử dụng OOP và Collections Utilities.</p>
+
+        <h3>2. Thiết kế lớp</h3>
+        <p><strong>Lớp Student</strong></p>
+        <ul>
+            <li>id : String</li>
+            <li>name : String</li>
+            <li>gpa : double</li>
+            <li>Constructor, Getter/Setter, toString()</li>
+        </ul>
+        <p><strong>Lớp StudentManager</strong></p>
+        <ul>
+            <li>List&lt;Student&gt; list</li>
+        </ul>
+
+        <h3>3. Chức năng</h3>
+        <ol>
+            <li>Thêm sinh viên</li>
+            <li>Hiển thị danh sách</li>
+            <li>Sắp xếp theo GPA tăng dần</li>
+            <li>Sắp xếp theo tên</li>
+            <li>Tìm sinh viên có điểm cao nhất</li>
+            <li>Tìm theo id</li>
+            <li>Xóa theo id</li>
+            <li>Đảo ngược danh sách</li>
+            <li>Trộn danh sách</li>
+        </ol>
+
+        <h3>4. Menu</h3>
+        <div class="menu-box">
+            ===== STUDENT MANAGEMENT =====<br>
+            1. Thêm sinh viên<br>
+            2. Hiển thị danh sách<br>
+            3. Sắp xếp theo GPA<br>
+            4. Sắp xếp theo tên<br>
+            5. Sinh viên GPA cao nhất<br>
+            6. Tìm theo id<br>
+            7. Xóa theo id<br>
+            8. Đảo danh sách<br>
+            9. Trộn danh sách<br>
+            0. Thoát
+        </div>
+
+        <h3>5. Output</h3>
+        <p>ID: SV01 | Name: Nguyen Van A | GPA: 3.5</p>
+
+        <h3>6. Ràng buộc</h3>
+        <ul>
+            <li>ArrayList, Collections, Comparator</li>
+            <li>OOP, menu do-while</li>
+        </ul>
+    </div>
+
+    <!-- BÀI 7 -->
+    <div id="bai7" class="div">
+        <h2><i class="fas fa-briefcase"></i> Bài 7: QUẢN LÝ NHÂN VIÊN</h2>
+        <h3>1. Mô tả</h3>
+        <p>Quản lý nhân viên công ty với nhiều loại nhân viên, sử dụng kế thừa, đa hình, Collections.</p>
+
+        <h3>2. Thiết kế lớp</h3>
+        <p><strong>Lớp trừu tượng Employee</strong></p>
+        <ul>
+            <li>id, name, salary</li>
+            <li>abstract double calculateSalary()</li>
+        </ul>
+        <p><strong>FullTimeEmployee</strong> (kế thừa Employee)</p>
+        <ul>
+            <li>bonus : double</li>
+            <li>calculateSalary() = salary + bonus</li>
+        </ul>
+        <p><strong>PartTimeEmployee</strong> (kế thừa Employee)</p>
+        <ul>
+            <li>hoursWorked : int</li>
+            <li>hourlyRate : double</li>
+            <li>calculateSalary() = hoursWorked * hourlyRate</li>
+        </ul>
+        <p><strong>EmployeeManager</strong>: List&lt;Employee&gt; list</p>
+
+        <h3>3. Chức năng</h3>
+        <ol>
+            <li>Thêm nhân viên (FullTime/PartTime)</li>
+            <li>Hiển thị danh sách (kèm loại, lương thực nhận)</li>
+            <li>Tổng lương công ty</li>
+            <li>Nhân viên lương cao nhất</li>
+            <li>Sắp xếp theo lương giảm dần</li>
+            <li>Tìm theo id</li>
+            <li>Xóa theo id</li>
+            <li>Phân loại nhân viên (FullTime/PartTime)</li>
+        </ol>
+
+        <h3>4. Menu</h3>
+        <div class="menu-box">
+            ===== EMPLOYEE MANAGEMENT =====<br>
+            1. Thêm nhân viên<br>
+            2. Hiển thị danh sách<br>
+            3. Tổng lương công ty<br>
+            4. Nhân viên lương cao nhất<br>
+            5. Sắp xếp theo lương giảm dần<br>
+            6. Tìm theo id<br>
+            7. Xóa theo id<br>
+            8. Phân loại nhân viên<br>
+            0. Thoát
+        </div>
+
+        <h3>5. Output</h3>
+        <p>ID: NV01 | Name: A | Type: FullTime | Salary: 2000</p>
+        <p>ID: NV02 | Name: B | Type: PartTime | Salary: 800</p>
+
+        <h3>6. Ràng buộc</h3>
+        <ul>
+            <li>ArrayList&lt;Employee&gt;</li>
+            <li>Collections, Comparator</li>
+            <li>Kế thừa, đa hình, Override</li>
+        </ul>
+    </div>
+
+    <!-- BÀI 8: Quản lý bãi xe -->
+    <div id="bai8" class="div">
+        <h2><i class="fas fa-parking"></i> QUẢN LÝ BÃI XE (CÓ THỜI GIAN VÀO/RA)</h2>
+        
+        <h3>1. Mô tả bài toán</h3>
+        <p>Hệ thống quản lý bãi xe, mỗi phương tiện có thời gian vào/ra để tính phí. Sử dụng kế thừa, đa hình, interface, Collections, LocalDateTime.</p>
+
+        <h3>2. Thiết kế lớp</h3>
+        <p><strong>Interface FeeCalculator</strong></p>
+        <ul>
+            <li>double calculateFee(long hours);</li>
+        </ul>
+        <p><strong>Lớp trừu tượng Vehicle</strong></p>
+        <ul>
+            <li>id, name, brand</li>
+            <li>timeIn : LocalDateTime</li>
+            <li>timeOut : LocalDateTime</li>
+            <li>abstract void display()</li>
+        </ul>
+        <p><strong>Car</strong> (kế thừa Vehicle, implements FeeCalculator): phí 10.000đ/giờ</p>
+        <p><strong>Motorbike</strong>: phí 5.000đ/giờ</p>
+        <p><strong>Truck</strong>: phí 20.000đ/giờ</p>
+
+        <h3>3. Chức năng</h3>
+        <ol>
+            <li>Xe vào bãi (thêm phương tiện, timeIn = now hoặc nhập)</li>
+            <li>Xe rời bãi (cập nhật timeOut = now)</li>
+            <li>Hiển thị danh sách xe</li>
+            <li>Tính phí gửi xe (dùng Duration)</li>
+            <li>Tìm xe đang gửi (timeOut == null)</li>
+            <li>Tìm xe theo khoảng thời gian</li>
+            <li>Sắp xếp theo thời gian vào</li>
+            <li>Tính tổng doanh thu</li>
+        </ol>
+
+        <h3>4. Menu</h3>
+        <div class="menu-box">
+            ===== PARKING MANAGEMENT =====<br>
+            1. Xe vào bãi<br>
+            2. Xe ra bãi<br>
+            3. Hiển thị danh sách<br>
+            4. Tính phí từng xe<br>
+            5. Xe đang gửi<br>
+            6. Tìm theo thời gian<br>
+            7. Sắp xếp theo timeIn<br>
+            8. Tổng doanh thu<br>
+            0. Thoát
+        </div>
+
+        <h3>5. Input/Output</h3>
+        <p><strong>Input:</strong> Nhập từ bàn phím, thời gian có thể dùng LocalDateTime.now() hoặc nhập dạng yyyy-MM-dd HH:mm</p>
+        <p><strong>Output:</strong></p>
+        <code>
+            ID: V01 | Name: Toyota | Type: Car<br>
+            Time In: 2026-03-18 08:00<br>
+            Time Out: 2026-03-18 12:00<br>
+            Fee: 40000
+        </code>
+
+        <h3>6. Ràng buộc kỹ thuật</h3>
+        <ul>
+            <li>Abstract class, Interface, Polymorphism</li>
+            <li>LocalDateTime, ArrayList, Collections, Comparator</li>
+        </ul>
+
+        <h3>7. Nâng cao (hay ra thi)</h3>
+        <ul>
+            <li>Làm tròn giờ (1h20 → 2h)</li>
+            <li>Phí ban đêm khác ban ngày</li>
+            <li>Giới hạn sức chứa</li>
+            <li>Lưu file</li>
+        </ul>
+
+        <div class="note">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Điểm khó:</strong> Xử lý thời gian (Duration), kiểm tra null (timeOut), tính phí chính xác, kết hợp nhiều OOP.
+        </div>
+    </div>
+                 </section>
             </main>
         </div>
 

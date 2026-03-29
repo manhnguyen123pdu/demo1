@@ -7,6 +7,9 @@
     <title>BUỔI 34: FILE I/O & STREAMS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
  <link rel="stylesheet" href="./main.css">
+<style>
+    
+</style>
 </head>
 
 <body>
@@ -23,6 +26,7 @@
                     <li class="nav-item"><a href="#part3" class="nav-link"><i class="fas fa-font"></i> <span>PHẦN 3: CHARACTER STREAMS</span></a></li>
                     <li class="nav-item"><a href="#part4" class="nav-link"><i class="fas fa-broom"></i> <span>PHẦN 4: TRY-WITH-RESOURCES</span></a></li>
                     <li class="nav-item"><a href="#part5" class="nav-link"><i class="fas fa-star"></i> <span>PHẦN 5: TỔNG KẾT</span></a></li>
+                    <li class="nav-item"><a href="#part6" class="nav-link"><i class="fas fa-star"></i> <span>BÀI TẬP</span></a></li>
                 </ul>
             </nav>
 
@@ -1852,6 +1856,117 @@
                             <p style="margin-top: 20px;"><i class="fas fa-quote-right"></i> "Xử lý file hiệu quả với Java I/O Streams!"</p>
                         </div>
                     </div>
+                </section>
+                <section id="part6" class="section">
+    <!-- BÀI 1: FILE CLASS -->
+    <div id="bai1">
+        <h2>Bài 1: FILE CLASS <span class="badge">Java.io.File</span></h2>
+        <ol>
+            <li><strong></strong> Tạo đối tượng File trỏ đến file <code>data.txt</code>.</li>
+            <li><strong></strong> Kiểm tra file <code>data.txt</code> có tồn tại không. In ra <code>"Ton tai"</code> hoặc <code>"Khong ton tai"</code>.</li>
+            <li><strong></strong> Tạo file rỗng <code>myfile.txt</code> bằng phương thức của File.</li>
+            <li><strong></strong> In ra đường dẫn tuyệt đối của file <code>myfile.txt</code>.</li>
+            <li><strong></strong> In ra tên file của <code>myfile.txt</code>.</li>
+            <li><strong></strong> In ra kích thước (bytes) của <code>myfile.txt</code>.</li>
+            <li><strong></strong> Tạo thư mục <code>mydir</code> bằng File.</li>
+            <li><strong></strong> Kiểm tra <code>mydir</code> có phải là thư mục không. In ra <code>"La thu muc"</code> hoặc <code>"Khong phai thu muc"</code>.</li>
+            <li><strong></strong> Liệt kê tất cả file và thư mục con trong thư mục hiện tại (dùng <code>list()</code>).</li>
+            <li><strong></strong> Xóa file <code>myfile.txt</code> bằng phương thức của File.</li>
+        </ol>
+    </div>
+
+
+    <!-- BÀI 2: BYTE STREAMS (Ghi file) -->
+    <div id="bai2">
+        <h2>Bài 2: BYTE STREAMS (Ghi file) <span class="badge">FileOutputStream</span></h2>
+        <ol>
+            <li><strong></strong> Dùng <code>FileOutputStream</code> ghi chuỗi <code>"Hello Byte"</code> vào file <code>byte.txt</code>.</li>
+            <li><strong></strong> Ghi mảng byte <code>{65,66,67,68,69}</code> vào file <code>letters.dat</code>.</li>
+            <li><strong></strong> Ghi số nguyên <code>100</code> vào file <code>number.dat</code> (chuyển thành byte hoặc dùng write).</li>
+            <li><strong></strong> Ghi tiếp dòng <code>"Dong thu hai"</code> vào cuối file <code>byte.txt</code> (dùng append).</li>
+            <li><strong></strong> Ghi mảng byte <code>{10,20,30,40,50}</code> vào file <code>scores.dat</code>.</li>
+            <li><strong></strong> Ghi 5 ký tự <code>'A','B','C','D','E'</code> vào file <code>chars.dat</code> (dùng write từng byte).</li>
+            <li><strong></strong> Ghi chuỗi <code>"Java I/O"</code> vào file <code>io.txt</code> sau đó ghi thêm <code>" Rat hay"</code> vào cuối.</li>
+            <li><strong></strong> Tạo file <code>empty.dat</code> với nội dung rỗng.</li>
+            <li><strong></strong> Ghi giá trị <code>255</code> vào file <code>max.dat</code> (dạng byte).</li>
+            <li><strong></strong> Ghi mảng byte từ 0 đến 9 vào file <code>digits.dat</code>.</li>
+        </ol>
+    </div>
+
+
+    <!-- BÀI 3: BYTE STREAMS (Đọc file) -->
+    <div id="bai3">
+        <h2>Bài 3: BYTE STREAMS (Đọc file) <span class="badge">FileInputStream</span></h2>
+        <ol>
+            <li><strong></strong> Đọc file <code>byte.txt</code> (từ Bài 2) và in từng byte ra màn hình.</li>
+            <li><strong></strong> Đọc file <code>letters.dat</code> và in ra từng ký tự tương ứng.</li>
+            <li><strong></strong> Đọc file <code>scores.dat</code> và tính tổng các số, in ra.</li>
+            <li><strong></strong> Đọc file <code>scores.dat</code> và tìm số lớn nhất, in ra.</li>
+            <li><strong></strong> Đọc file <code>digits.dat</code> và in ra các số chẵn.</li>
+            <li><strong></strong> Đọc file <code>chars.dat</code> và in ra các ký tự dạng chữ.</li>
+            <li><strong></strong> Đọc file <code>number.dat</code> và in ra số đó (chỉ đọc 1 byte).</li>
+            <li><strong></strong> Đọc file <code>max.dat</code> và in ra giá trị (dạng int).</li>
+            <li><strong></strong> Sao chép nội dung file <code>byte.txt</code> sang file <code>copy_byte.txt</code> (đọc từng byte, ghi từng byte).</li>
+            <li><strong></strong> Đọc file <code>letters.dat</code> và đếm xem có bao nhiêu byte có giá trị lớn hơn 70.</li>
+        </ol>
+    </div>
+
+   
+
+    <!-- BÀI 4: CHARACTER STREAMS -->
+    <div id="bai4">
+        <h2>Bài 4: CHARACTER STREAMS <span class="badge">FileReader / FileWriter</span></h2>
+        <ol>
+            <li><strong></strong> Dùng <code>FileWriter</code> ghi dòng <code>"Dong mot"</code> vào file <code>char.txt</code>.</li>
+            <li><strong></strong> Dùng <code>FileWriter</code> ghi tiếp dòng <code>"Dong hai"</code> vào cuối file <code>char.txt</code>.</li>
+            <li><strong></strong> Dùng <code>FileWriter</code> ghi chuỗi <code>"Java Character Stream"</code> vào file <code>stream.txt</code>.</li>
+            <li><strong></strong> Dùng <code>FileReader</code> đọc file <code>char.txt</code> và in từng ký tự.</li>
+            <li><strong></strong> Dùng <code>FileReader</code> đọc file <code>stream.txt</code> và đếm số ký tự.</li>
+            <li><strong></strong> Dùng <code>FileReader</code> đọc file <code>char.txt</code> và in ra 5 ký tự đầu tiên.</li>
+            <li><strong></strong> Ghi mảng ký tự <code>{'X','Y','Z'}</code> vào file <code>xyz.txt</code> dùng <code>FileWriter</code>.</li>
+            <li><strong></strong> Đọc file <code>xyz.txt</code> và in ra các ký tự đó.</li>
+            <li><strong></strong> Sao chép file <code>char.txt</code> sang <code>copy_char.txt</code> dùng <code>FileReader</code> và <code>FileWriter</code>.</li>
+            <li><strong></strong> Đọc file <code>char.txt</code> và in ra các ký tự là chữ in hoa (nếu có).</li>
+        </ol>
+    </div>
+
+ 
+
+    <!-- BÀI 7: TỔNG HỢP CƠ BẢN -->
+    <div id="bai7">
+        <h2>Bài 5: TỔNG HỢP CƠ BẢN <span class="badge">Tổng hợp</span></h2>
+        <ol>
+            <li><strong></strong> Tạo thư mục <code>mydata</code>.</li>
+            <li><strong></strong> Trong thư mục <code>mydata</code>, tạo file <code>info.txt</code>.</li>
+            <li><strong></strong> Ghi dòng <code>"Hoc Java I/O"</code> vào file <code>mydata/info.txt</code>.</li>
+            <li><strong></strong> Đọc file <code>mydata/info.txt</code> và in nội dung.</li>
+            <li><strong></strong> Dùng byte stream ghi mảng <code>{5,10,15,20}</code> vào <code>numbers.dat</code>.</li>
+            <li><strong></strong> Đọc file <code>numbers.dat</code> và in ra các số chia hết cho 5.</li>
+            <li><strong></strong> Dùng character stream ghi tên của bạn vào <code>name.txt</code>.</li>
+            <li><strong></strong> Đọc file <code>name.txt</code> và in ra số lượng ký tự.</li>
+            <li><strong></strong> Dùng <code>BufferedReader</code> đọc file <code>name.txt</code> và kiểm tra có chứa chữ <code>"a"</code> không.</li>
+            <li><strong></strong> Xóa file <code>name.txt</code> và thư mục <code>mydata</code>.</li>
+        </ol>
+    </div>
+
+   
+
+    <!-- BÀI 8: TỔNG HỢP NÂNG CAO -->
+    <div id="bai8">
+        <h2>Bài 6: TỔNG HỢP NÂNG CAO <span class="badge">Nâng cao</span></h2>
+        <ol>
+            <li><strong></strong> Kiểm tra file <code>data.txt</code> nếu chưa có thì tạo mới.</li>
+            <li><strong></strong> Ghi dòng <code>"Dong 1"</code> và <code>"Dong 2"</code> vào <code>data.txt</code> (mỗi dòng trên 1 lần ghi).</li>
+            <li><strong></strong> Đọc file <code>data.txt</code> và in ra từng dòng.</li>
+            <li><strong></strong> Đọc file <code>data.txt</code> và đếm tổng số ký tự (không tính xuống dòng).</li>
+            <li><strong></strong> Ghi mảng <code>{100,200,300}</code> vào <code>values.dat</code> dạng byte.</li>
+            <li><strong></strong> Đọc file <code>values.dat</code> và in ra số thứ 2.</li>
+            <li><strong></strong> Sao chép file <code>data.txt</code> sang <code>backup.txt</code> (dùng character stream).</li>
+            <li><strong></strong> Đọc file <code>backup.txt</code> và in ra dòng có độ dài lớn nhất.</li>
+            <li><strong></strong> Dùng <code>try-with-resources</code> để ghi và đọc file <code>test.txt</code>.</li>
+            <li><strong></strong> Xóa tất cả file đã tạo trong bài (nếu còn).</li>
+        </ol>
+    </div>
                 </section>
             </main>
         </div>
