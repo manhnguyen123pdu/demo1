@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUỔI 1: GIỚI THIỆU MYSQL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../main.css">
+</head>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-database"></i> BUỔI 1: GIỚI THIỆU MYSQL</h1>
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#phan1" class="nav-link active"><i class="fas fa-info-circle"></i> PHẦN 1: GIỚI THIỆU MYSQL</a></li>
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan1-1" class="nav-link">1.1 MySQL là gì?</a></li> -->
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan1-2" class="nav-link">1.2 Đặc điểm chính</a></li> -->
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan1-3" class="nav-link">1.3 Kiến trúc MySQL</a></li> -->
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan1-4" class="nav-link">1.4 Cú pháp SQL cơ bản</a></li> -->
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan1-5" class="nav-link">1.5 Phân loại lệnh SQL</a></li> -->
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan1-6" class="nav-link">1.6 Ví dụ minh họa</a></li> -->
+                    
+                    <li class="nav-item"><a href="#phan2" class="nav-link"><i class="fas fa-download"></i> PHẦN 2: CÀI ĐẶT & KẾT NỐI MYSQL</a></li>
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan2-1" class="nav-link">1.1 Cài MySQL trực tiếp</a></li> -->
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan2-2" class="nav-link">1.2 Cài MySQL bằng Docker</a></li> -->
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan2-3" class="nav-link">1.3 Cài MySQL Workbench</a></li> -->
+                    
+                    <li class="nav-item"><a href="#phan3" class="nav-link"><i class="fas fa-database"></i> PHẦN 3: QUẢN LÝ DATABASE</a></li>
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan3-1" class="nav-link">3.1 Tạo Database</a></li> -->
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan3-2" class="nav-link">3.2 Xem danh sách Database</a></li> -->
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan3-3" class="nav-link">3.3 Chọn Database</a></li> -->
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan3-4" class="nav-link">3.4 Xóa Database</a></li> -->
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan3-5" class="nav-link">3.5 Lệnh minh họa</a></li> -->
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan3-6" class="nav-link">3.6 Ghi chú quan trọng</a></li> -->
+                    
+                    <li class="nav-item"><a href="#phan4" class="nav-link"><i class="fas fa-table"></i> PHẦN 4: QUẢN LÝ TABLE</a></li>
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan4-1" class="nav-link">4.1 Tạo Table</a></li> -->
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan4-2" class="nav-link">4.2 Xem danh sách Table</a></li> -->
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan4-3" class="nav-link">4.3 Xem cấu trúc Table</a></li> -->
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan4-4" class="nav-link">4.4 Xóa Table</a></li> -->
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan4-5" class="nav-link">4.5 Ví dụ tổng hợp</a></li> -->
+                    <!-- <li class="nav-item nav-sub-item"><a href="#phan4-6" class="nav-link">4.6 Ghi chú quan trọng</a></li> -->
+                    
+                    <li class="nav-item"><a href="#phan5" class="nav-link"><i class="fas fa-plus-circle"></i> PHẦN 5: INSERT</a></li>
+                    <!-- <li class="nav-item"><a href="#phan6" class="nav-link"><i class="fas fa-search"></i> PHẦN 6: SELECT</a></li> -->
+                    <!-- <li class="nav-item"><a href="#phan7" class="nav-link"><i class="fas fa-edit"></i> PHẦN 7: UPDATE</a></li> -->
+                    <!-- <li class="nav-item"><a href="#phan8" class="nav-link"><i class="fas fa-trash-alt"></i> PHẦN 8: DELETE</a></li> -->
+                    <!-- <li class="nav-item"><a href="#phan9" class="nav-link"><i class="fas fa-filter"></i> PHẦN 9: LIKE</a></li> -->
+                    <!-- <li class="nav-item"><a href="#phan10" class="nav-link"><i class="fas fa-list"></i> PHẦN 10: IN</a></li> -->
+                    <!-- <li class="nav-item"><a href="#phan11" class="nav-link"><i class="fas fa-arrows-alt-h"></i> PHẦN 11: BETWEEN</a></li> -->
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- PHẦN 1: GIỚI THIỆU MYSQL -->
+                <section id="phan1" class="section active">
+                    <h2><i class="fas fa-info-circle"></i> PHẦN 1: GIỚI THIỆU MYSQL</h2>
+                    
+                    <div id="phan1-1">
+                        <h3>1.1. MySQL là gì?</h3>
+                        <p>MySQL là một hệ quản trị cơ sở dữ liệu quan hệ (Relational Database Management System – RDBMS).</p>
+                        <ul>
+                            <li>Dữ liệu được lưu trữ trong các bảng (tables), mỗi bảng gồm cột (columns) và hàng (rows).</li>
+                            <li>MySQL sử dụng ngôn ngữ SQL (Structured Query Language) để thao tác dữ liệu.</li>
+                            <li>Đây là phần mềm mã nguồn mở (open-source), miễn phí, nhưng cũng có phiên bản thương mại do Oracle phát triển.</li>
+                            <li>Được dùng phổ biến trong:
+                                <ul>
+                                    <li>Website (WordPress, Laravel, PHP…)</li>
+                                    <li>Ứng dụng doanh nghiệp</li>
+                                    <li>Game server</li>
+                                    <li>Hệ thống phân tích dữ liệu</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div id="phan1-2">
+                        <h3>1.2. Đặc điểm chính</h3>
+                        
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Đặc điểm</th>
+                                        <th>Mô tả</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Mã nguồn mở</strong></td>
+                                        <td>Có thể sử dụng miễn phí, tùy chỉnh mã nguồn nếu cần.</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Hiệu năng cao</strong></th>
+                                        <td>Xử lý nhanh, ổn định với dữ liệu lớn.</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tính tương thích</strong></th>
+                                        <td>Hoạt động trên nhiều hệ điều hành: Windows, Linux, macOS.</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Hỗ trợ đa ngôn ngữ lập trình</strong></th>
+                                        <td>PHP, Java, Python, C#, Node.js…</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Bảo mật</strong></th>
+                                        <td>Hỗ trợ xác thực người dùng, phân quyền, mã hóa.</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="phan1-3">
+                        <h3>1.3. Kiến trúc MySQL</h3>
+                        <p>MySQL hoạt động theo mô hình Client - Server:</p>
+                        <ul>
+                            <li><strong>MySQL Server:</strong>
+                                <ul>
+                                    <li>Chạy nền (background) trên máy chủ.</li>
+                                    <li>Quản lý dữ liệu, xử lý câu lệnh SQL.</li>
+                                </ul>
+                            </li>
+                            <li><strong>MySQL Client:</strong>
+                                <ul>
+                                    <li>Có thể là MySQL CLI (dòng lệnh) hoặc ứng dụng như MySQL Workbench, PHPMyAdmin.</li>
+                                    <li>Gửi câu lệnh SQL đến server để thực thi.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div id="phan1-4">
+                        <h3>1.4. Cú pháp SQL cơ bản</h3>
+                        <ul>
+                            <li>SQL (Structured Query Language) là ngôn ngữ để giao tiếp với MySQL.</li>
+                            <li>Một câu lệnh SQL có dạng: <code>LỆNH SQL từ khóa [tùy chọn] ...;</code></li>
+                        </ul>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> customers;
+                        </div>
+                        <p><strong>Giải thích:</strong></p>
+                        <ul>
+                            <li>SELECT: Lệnh lấy dữ liệu.</li>
+                            <li>*: Lấy tất cả các cột.</li>
+                            <li>FROM customers: Lấy từ bảng customers.</li>
+                            <li>;: Kết thúc câu lệnh.</li>
+                        </ul>
+                    </div>
+
+                    <div id="phan1-5">
+                        <h3>1.5. Phân loại lệnh SQL</h3>
+                        
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nhóm lệnh</th>
+                                        <th>Mục đích</th>
+                                        <th>Ví dụ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>DDL (Data Definition Language)</strong></th>
+                                        <td>Định nghĩa cấu trúc dữ liệu</th>
+                                        <td>CREATE, ALTER, DROP</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>DML (Data Manipulation Language)</strong></th>
+                                        <td>Thao tác dữ liệu</th>
+                                        <td>INSERT, UPDATE, DELETE</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>DQL (Data Query Language)</strong></th>
+                                        <td>Truy vấn dữ liệu</th>
+                                        <td>SELECT</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>DCL (Data Control Language)</strong></th>
+                                        <td>Phân quyền</th>
+                                        <td>GRANT, REVOKE</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>TCL (Transaction Control Language)</strong></th>
+                                        <td>Quản lý giao dịch</th>
+                                        <td>COMMIT, ROLLBACK</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="phan1-6">
+                        <h3>1.6. Ví dụ minh họa</h3>
+                        <p>Giả sử có bảng users:</p>
+                        
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>name</th>
+                                        <th>age</th>
+                                        <th>city</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</th>
+                                        <td>An</th>
+                                        <td>22</th>
+                                        <td>Hà Nội</th>
+                                    </tr>
+                                    <tr>
+                                        <td>2</th>
+                                        <td>Bình</th>
+                                        <td>30</th>
+                                        <td>Đà Nẵng</th>
+                                    </tr>
+                                    <tr>
+                                        <td>3</th>
+                                        <td>Chi</th>
+                                        <td>25</th>
+                                        <td>TP.HCM</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p><strong>Truy vấn tất cả dữ liệu:</strong> <code>SELECT * FROM users;</code></p>
+                        
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>name</th>
+                                        <th>age</th>
+                                        <th>city</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</th>
+                                        <td>An</th>
+                                        <td>22</th>
+                                        <td>Hà Nội</th>
+                                    </tr>
+                                    <tr>
+                                        <td>2</th>
+                                        <td>Bình</th>
+                                        <td>30</th>
+                                        <td>Đà Nẵng</th>
+                                    </tr>
+                                    <tr>
+                                        <td>3</th>
+                                        <td>Chi</th>
+                                        <td>25</th>
+                                        <td>TP.HCM</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 2: CÀI ĐẶT & KẾT NỐI MYSQL -->
+                <section id="phan2" class="section">
+                    <h2><i class="fas fa-download"></i> PHẦN 2: CÀI ĐẶT & KẾT NỐI MYSQL</h2>
+
+                    <div id="phan2-1">
+                        <h3>1.1. Cài MySQL trực tiếp vào máy</h3>
+                        
+                        <h4>Windows</h4>
+                        <ul>
+                            <li>Vào trang tải MySQL: https://dev.mysql.com/downloads/.</li>
+                            <li>Tải MySQL Installer bản .msi.</li>
+                            <li>Mở file cài → Chọn Developer Default (bao gồm MySQL Server + MySQL Workbench).</li>
+                            <li>Chọn Next → Cài đặt.</li>
+                            <li>Đặt mật khẩu cho user root.</li>
+                            <li>Hoàn tất cài đặt.</li>
+                            <li>Sau khi cài: Mở Command Prompt: mysql -u root -p → Nhập mật khẩu đã đặt.</li>
+                        </ul>
+                    </div>
+
+                    <div id="phan2-2">
+                        <h3>1.2. Cài MySQL bằng Docker</h3>
+                        <p><strong>Nhanh, không ảnh hưởng hệ thống</strong></p>
+                        
+                        <h4>Bước 1 – Kéo image MySQL trên cmd</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Docker pull</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            docker pull mysql:latest
+                        </div>
+
+                        <h4>Bước 2 – Tạo container MySQL</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Docker run</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            docker run --name mysql-server \
+                              -e MYSQL_ROOT_PASSWORD=1234 \
+                              -p 3306:3306 \
+                              -d mysql:latest
+                        </div>
+
+                        <p><strong>Giải thích:</strong></p>
+                        <ul>
+                            <li>--name mysql-server → Tên container.</li>
+                            <li>-e MYSQL_ROOT_PASSWORD=1234 → Mật khẩu root là 1234.</li>
+                            <li>-p 3306:3306 → Mở cổng MySQL ra ngoài.</li>
+                            <li>-d → Chạy nền.</li>
+                            <li>mysql:latest → Image MySQL mới nhất.</li>
+                        </ul>
+
+                        <p><strong>Nếu muốn bản Oracle Linux 9:</strong></p>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Docker run with Oracle Linux 9</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            docker run --name mysql-server \
+                              -e MYSQL_ROOT_PASSWORD=1234 \
+                              -p 3306:3306 \
+                              -d mysql:oraclelinux9
+                        </div>
+                    </div>
+
+                    <div id="phan2-3">
+                        <h3>1.3. Cài MySQL Workbench</h3>
+                        <p>MySQL Workbench là phần mềm giao diện để quản lý database trực quan.</p>
+                        <ul>
+                            <li>Windows / macOS: Khi cài MySQL Installer, chọn luôn MySQL Workbench.</li>
+                            <li>Hoặc tải riêng tại: https://dev.mysql.com/downloads/workbench/</li>
+                        </ul>
+
+                        <h4>Mở Workbench và kết nối</h4>
+                        <ul>
+                            <li>Mở MySQL Workbench.</li>
+                            <li>Nhấn + để tạo kết nối mới.</li>
+                            <li>Nhập thông tin:
+                                <ul>
+                                    <li>Connection Name: MySQL Local</li>
+                                    <li>Hostname: 127.0.0.1</li>
+                                    <li>Port: 3306</li>
+                                    <li>Username: root</li>
+                                    <li>Password: nhập mật khẩu root</li>
+                                </ul>
+                            </li>
+                            <li>Nhấn Test Connection → Nếu OK thì Save.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- PHẦN 3: QUẢN LÝ DATABASE -->
+                <section id="phan3" class="section">
+                    <h2><i class="fas fa-database"></i> PHẦN 3: QUẢN LÝ DATABASE</h2>
+                    
+                    <p>Trong MySQL, Database (Cơ sở dữ liệu) là nơi chứa các bảng (tables), và mỗi bảng sẽ chứa dữ liệu theo cấu trúc hàng (rows) và cột (columns).</p>
+                    <p>Việc quản lý database bao gồm: Tạo mới (CREATE DATABASE), Xem danh sách (SHOW DATABASES), Chọn database để làm việc (USE), Xóa database (DROP DATABASE).</p>
+
+                    <div id="phan3-1">
+                        <h3>3.1. Tạo Database</h3>
+                        <p><strong>Cú pháp:</strong> <code>CREATE DATABASE database_name;</code></p>
+                        <p><strong>Giải thích:</strong> CREATE DATABASE → Lệnh tạo mới cơ sở dữ liệu. database_name → Tên cơ sở dữ liệu (không dấu cách, thường dùng chữ thường hoặc gạch dưới _).</p>
+                        <p><strong>Quy tắc đặt tên:</strong> Chỉ gồm chữ, số, dấu gạch dưới _. Không trùng với tên database đã có. Không dùng ký tự đặc biệt.</p>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">CREATE DATABASE</span> cre;
+                        </div>
+                        <p>→ Tạo database tên cre.</p>
+                    </div>
+
+                    <div id="phan3-2">
+                        <h3>3.2. Xem danh sách Database</h3>
+                        <p><strong>Cú pháp:</strong> <code>SHOW DATABASES;</code></p>
+                        <p><strong>Giải thích:</strong> SHOW DATABASES → Liệt kê tất cả database hiện có trên server MySQL.</p>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">SHOW DATABASES</span>;
+                        </div>
+                        
+                        <p><strong>Kết quả mẫu:</strong></p>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Database</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>information_schema</th>
+                                    </tr>
+                                    <tr>
+                                        <td>mysql</th>
+                                    </tr>
+                                    <tr>
+                                        <td>performance_schema</th>
+                                    </tr>
+                                    <tr>
+                                        <td>sys</th>
+                                    </tr>
+                                    <tr>
+                                        <td>cre</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="phan3-3">
+                        <h3>3.3. Chọn Database để làm việc</h3>
+                        <p><strong>Cú pháp:</strong> <code>USE database_name;</code></p>
+                        <p><strong>Giải thích:</strong> USE → Lệnh chọn database. Sau khi chọn, tất cả các thao tác (tạo bảng, thêm dữ liệu…) sẽ áp dụng trên database đó.</p>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">USE</span> cre;
+                        </div>
+                        <p>→ Chọn cre làm database hiện tại.</p>
+                    </div>
+
+                    <div id="phan3-4">
+                        <h3>3.4. Xóa Database</h3>
+                        <p><strong>Cú pháp:</strong> <code>DROP DATABASE database_name;</code></p>
+                        <p><strong>Giải thích:</strong> DROP DATABASE → Xóa toàn bộ database và dữ liệu bên trong. Cẩn thận: Lệnh này không thể hoàn tác.</p>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">DROP DATABASE</span> cre;
+                        </div>
+                        <p>→ Xóa database cre.</p>
+                    </div>
+
+                    <div id="phan3-5">
+                        <h3>3.5. Các lệnh đầy đủ minh họa</h3>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>SQL Commands</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="comment">-- 1. Tạo database</span><br>
+                            <span class="keyword">CREATE DATABASE</span> cre;<br>
+                            <br>
+                            <span class="comment">-- 2. Xem danh sách database</span><br>
+                            <span class="keyword">SHOW DATABASES</span>;<br>
+                            <br>
+                            <span class="comment">-- 3. Chọn database để làm việc</span><br>
+                            <span class="keyword">USE</span> cre;<br>
+                            <br>
+                            <span class="comment">-- 4. Xóa database</span><br>
+                            <span class="keyword">DROP DATABASE</span> cre;
+                        </div>
+                    </div>
+
+                    <div id="phan3-6">
+                        <h3>3.6. Ghi chú quan trọng</h3>
+                        
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Lệnh</th>
+                                        <th>Mô tả</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>CREATE DATABASE</strong></th>
+                                        <td>Tạo cơ sở dữ liệu mới</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>SHOW DATABASES</strong></th>
+                                        <td>Liệt kê tất cả cơ sở dữ liệu</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>USE</strong></th>
+                                        <td>Chọn cơ sở dữ liệu hiện tại</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>DROP DATABASE</strong></th>
+                                        <td>Xóa cơ sở dữ liệu</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 4: QUẢN LÝ TABLE -->
+                <section id="phan4" class="section">
+                    <h2><i class="fas fa-table"></i> PHẦN 4: QUẢN LÝ TABLE</h2>
+
+                    <div id="phan4-1">
+                        <h3>4.1. Mục đích</h3>
+                        <p>Bảng (Table) trong MySQL là nơi lưu trữ dữ liệu của một ứng dụng, hệ thống hoặc website.</p>
+                        <p>Mỗi bảng sẽ chứa nhiều cột (columns) để mô tả các thuộc tính của dữ liệu và nhiều hàng (rows) chứa dữ liệu thực tế.</p>
+                        <p>Tạo bảng (CREATE TABLE) thường được thực hiện khi:</p>
+                        <ul>
+                            <li>Bắt đầu một dự án mới (tạo bảng users để lưu thông tin người dùng).</li>
+                            <li>Thêm chức năng mới cần bảng dữ liệu riêng.</li>
+                            <li>Chuẩn bị cơ sở dữ liệu cho hệ thống quản lý, bán hàng, học sinh, nhân viên…</li>
+                        </ul>
+
+                        <h4>4.1. Tạo Table</h4>
+                        <p><strong>Cú pháp:</strong></p>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>CREATE TABLE Syntax</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">CREATE TABLE</span> table_name (<br>
+                            &nbsp;&nbsp;&nbsp;column1 datatype constraints,<br>
+                            &nbsp;&nbsp;&nbsp;column2 datatype constraints,<br>
+                            &nbsp;&nbsp;&nbsp;...<br>
+                            );
+                        </div>
+
+                        <p><strong>Giải thích:</strong></p>
+                        <ul>
+                            <li>CREATE TABLE → Lệnh tạo bảng mới.</li>
+                            <li>table_name → Tên bảng (nên viết thường, không dấu, dùng _ để phân cách).</li>
+                            <li>column1, column2 → Tên các cột trong bảng.</li>
+                            <li>datatype → Kiểu dữ liệu (INT, VARCHAR, DATE…).</li>
+                            <li>constraints → Ràng buộc dữ liệu (PRIMARY KEY, NOT NULL, DEFAULT…).</li>
+                        </ul>
+
+                        <h4>Các kiểu dữ liệu MySQL thường dùng</h4>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nhóm kiểu dữ liệu</th>
+                                        <th>Tên kiểu</th>
+                                        <th>Mô tả</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td rowspan="4">Số nguyên</td>
+                                        <td>TINYINT</td>
+                                        <td>Số nguyên rất nhỏ (-128 → 127)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>SMALLINT</td>
+                                        <td>Số nguyên nhỏ (-32,768 → 32,767)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>INT / INTEGER</td>
+                                        <td>Số nguyên thường dùng</td>
+                                    </tr>
+                                    <tr>
+                                        <td>BIGINT</td>
+                                        <td>Số nguyên rất lớn</td>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="3">Số thực</td>
+                                        <td>FLOAT</td>
+                                        <td>Số thực chính xác thấp (4 byte)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>DOUBLE / REAL</td>
+                                        <td>Số thực chính xác cao (8 byte)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>DECIMAL(m, d)</td>
+                                        <td>Số thập phân chính xác tuyệt đối (dùng cho tiền tệ)</td>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="3">Chuỗi ký tự</td>
+                                        <td>CHAR(n)</td>
+                                        <td>Chuỗi cố định độ dài n (tối đa 255 ký tự)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>VARCHAR(n)</td>
+                                        <td>Chuỗi biến độ dài, tối đa n (tối đa 65535 ký tự)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>TEXT</td>
+                                        <td>Chuỗi văn bản dài (~65,535 ký tự)</td>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="4">Ngày & Thời gian</td>
+                                        <td>DATE</td>
+                                        <td>Ngày (YYYY-MM-DD)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>TIME</td>
+                                        <td>Giờ, phút, giây (HH:MM:SS)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>DATETIME</td>
+                                        <td>Ngày & giờ</td>
+                                    </tr>
+                                    <tr>
+                                        <td>TIMESTAMP</td>
+                                        <td>Ngày & giờ (Unix timestamp)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Boolean</td>
+                                        <td>BOOLEAN / BOOL</td>
+                                        <td>Giá trị TRUE/FALSE (lưu như TINYINT(1))</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h4>Constraints – Ràng buộc dữ liệu trong MySQL</h4>
+                        <p><strong>Định nghĩa:</strong> Constraints là các quy tắc áp dụng trên cột hoặc bảng để đảm bảo tính toàn vẹn và hợp lệ của dữ liệu.</p>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Constraint</th>
+                                        <th>Mục đích</th>
+                                        <th>Ví dụ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>PRIMARY KEY</strong></th>
+                                        <td>Định danh duy nhất mỗi bản ghi, không trùng và không NULL. Tự động tạo chỉ mục giúp truy vấn nhanh hơn.</th>
+                                        <td>id INT AUTO_INCREMENT PRIMARY KEY</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>FOREIGN KEY</strong></th>
+                                        <td>Liên kết dữ liệu giữa các bảng, đảm bảo giá trị cột phải tồn tại ở bảng khác.</th>
+                                        <td>FOREIGN KEY (user_id) REFERENCES users(id)</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>NOT NULL</strong></th>
+                                        <td>Bắt buộc cột phải có giá trị, không được để trống.</th>
+                                        <td>name VARCHAR(50) NOT NULL</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>UNIQUE</strong></th>
+                                        <td>Đảm bảo giá trị trong cột là duy nhất.</th>
+                                        <td>email VARCHAR(100) UNIQUE</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>DEFAULT</strong></th>
+                                        <td>Gán giá trị mặc định nếu không nhập giá trị.</th>
+                                        <td>status VARCHAR(10) DEFAULT 'active'</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>CHECK</strong></th>
+                                        <td>Giới hạn giá trị cột theo điều kiện.</th>
+                                        <td>age INT CHECK (age >= 18)</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ CREATE TABLE users</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">CREATE TABLE</span> users (<br>
+                            &nbsp;&nbsp;&nbsp;id <span class="keyword">INT AUTO_INCREMENT PRIMARY KEY</span>,         <span class="comment">-- Khóa chính, tự tăng</span><br>
+                            &nbsp;&nbsp;&nbsp;name <span class="keyword">VARCHAR(50) NOT NULL</span>,                             <span class="comment">-- Không được để trống</span><br>
+                            &nbsp;&nbsp;&nbsp;email <span class="keyword">VARCHAR(100) UNIQUE</span>,                                <span class="comment">-- Giá trị duy nhất</span><br>
+                            &nbsp;&nbsp;&nbsp;age <span class="keyword">INT CHECK (age >= 18)</span>,                                       <span class="comment">-- Tuổi phải >= 18</span><br>
+                            &nbsp;&nbsp;&nbsp;status <span class="keyword">VARCHAR(10) DEFAULT 'active'</span>,                   <span class="comment">-- Giá trị mặc định</span><br>
+                            &nbsp;&nbsp;&nbsp;created_date <span class="keyword">TIMESTAMP DEFAULT NOW()</span>           <span class="comment">-- Thời gian mặc định</span><br>
+                            );
+                        </div>
+
+                        <p><strong>Giải thích chi tiết từng phần:</strong></p>
+                        <ul>
+                            <li>CREATE TABLE users → Lệnh tạo bảng tên users.</li>
+                            <li>id INT AUTO_INCREMENT PRIMARY KEY → id: Tên cột. INT: Kiểu số nguyên. AUTO_INCREMENT: Tự động tăng giá trị mỗi bản ghi mới. PRIMARY KEY: Khóa chính, duy nhất, không được NULL.</li>
+                            <li>name VARCHAR(50) NOT NULL → VARCHAR(50): Chuỗi tối đa 50 ký tự. NOT NULL: Không được để trống.</li>
+                            <li>email VARCHAR(100) UNIQUE → VARCHAR(100): Chuỗi tối đa 100 ký tự. UNIQUE: Giá trị không được trùng lặp giữa các bản ghi.</li>
+                            <li>age INT CHECK (age >= 18) → INT: Kiểu số nguyên. CHECK (age >= 18): Ràng buộc, chỉ chấp nhận tuổi từ 18 trở lên.</li>
+                            <li>status VARCHAR(10) DEFAULT 'active' → VARCHAR(10): Chuỗi tối đa 10 ký tự. DEFAULT 'active': Nếu không nhập, mặc định là "active".</li>
+                            <li>created_date TIMESTAMP DEFAULT NOW() → TIMESTAMP: Lưu thời gian. DEFAULT NOW(): Mặc định là thời điểm hiện tại khi thêm dữ liệu.</li>
+                        </ul>
+                    </div>
+
+                    <div id="phan4-2">
+                        <h3>4.2. Xem danh sách các Table</h3>
+                        <p><strong>Cú pháp:</strong> <code>SHOW TABLES;</code></p>
+                        <p><strong>Giải thích:</strong> SHOW TABLES → Liệt kê toàn bộ bảng có trong database hiện tại. Phải chọn database trước bằng USE database_name;.</p>
+                    </div>
+
+                    <div id="phan4-3">
+                        <h3>4.3. Xem cấu trúc Table</h3>
+                        <p><strong>Cú pháp:</strong> <code>DESCRIBE table_name;</code> hoặc <code>SHOW COLUMNS FROM table_name;</code></p>
+                        <p><strong>Giải thích:</strong> DESCRIBE → Hiển thị thông tin chi tiết từng cột trong bảng (tên, kiểu dữ liệu, khóa, mặc định…).</p>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">DESCRIBE</span> users;
+                        </div>
+                        
+                        <p><strong>Kết quả mẫu:</strong></p>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Type</th>
+                                        <th>Null</th>
+                                        <th>Key</th>
+                                        <th>Default</th>
+                                        <th>Extra</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>id</td>
+                                        <td>int</td>
+                                        <td>NO</td>
+                                        <td>PRI</td>
+                                        <td>-</td>
+                                        <td>auto_increment</td>
+                                    </tr>
+                                    <tr>
+                                        <td>name</td>
+                                        <td>varchar(50)</td>
+                                        <td>NO</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>email</td>
+                                        <td>varchar(100)</td>
+                                        <td>YES</td>
+                                        <td>UNI</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>age</td>
+                                        <td>int</td>
+                                        <td>YES</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>status</td>
+                                        <td>varchar(10)</td>
+                                        <td>YES</td>
+                                        <td>-</td>
+                                        <td>active</td>
+                                        <td>-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>created_date</td>
+                                        <td>timestamp</td>
+                                        <td>YES</td>
+                                        <td>-</td>
+                                        <td>CURRENT_TIMESTAMP</td>
+                                        <td>DEFAULT_GENERATED</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="phan4-4">
+                        <h3>4.4. Xóa Table</h3>
+                        <p><strong>Cú pháp:</strong> <code>DROP TABLE table_name;</code></p>
+                        <p><strong>Giải thích:</strong> DROP TABLE → Xóa hoàn toàn bảng và dữ liệu bên trong. Không thể hoàn tác, nên cần cẩn thận.</p>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Ví dụ</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">DROP TABLE</span> users;
+                        </div>
+                        <p>→ Xóa bảng users khỏi database.</p>
+                    </div>
+
+                    <div id="phan4-5">
+                        <h3>4.5. Ví dụ tổng hợp</h3>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>SQL Commands</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="comment">-- 1. Tạo bảng users</span><br>
+                            <span class="keyword">CREATE TABLE</span> users (<br>
+                            &nbsp;&nbsp;&nbsp;id <span class="keyword">INT AUTO_INCREMENT PRIMARY KEY</span>,<br>
+                            &nbsp;&nbsp;&nbsp;name <span class="keyword">VARCHAR(50) NOT NULL</span>,<br>
+                            &nbsp;&nbsp;&nbsp;email <span class="keyword">VARCHAR(100) UNIQUE</span>,<br>
+                            &nbsp;&nbsp;&nbsp;age <span class="keyword">INT CHECK (age >= 18)</span>,<br>
+                            &nbsp;&nbsp;&nbsp;status <span class="keyword">VARCHAR(10) DEFAULT 'active'</span>,<br>
+                            &nbsp;&nbsp;&nbsp;created_date <span class="keyword">TIMESTAMP DEFAULT NOW()</span><br>
+                            );<br>
+                            <br>
+                            <span class="comment">-- 2. Xem danh sách bảng</span><br>
+                            <span class="keyword">SHOW TABLES</span>;<br>
+                            <br>
+                            <span class="comment">-- 3. Xem cấu trúc bảng users</span><br>
+                            <span class="keyword">DESCRIBE</span> users;<br>
+                            <br>
+                            <span class="comment">-- 4. Xóa bảng users</span><br>
+                            <span class="keyword">DROP TABLE</span> users;
+                        </div>
+                    </div>
+
+                    <div id="phan4-6">
+                        <h3>4.6. Ghi chú quan trọng</h3>
+                        
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Lệnh SQL</th>
+                                        <th>Mô tả</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>CREATE TABLE</strong></th>
+                                        <td>Tạo bảng mới</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>SHOW TABLES</strong></th>
+                                        <td>Liệt kê bảng trong database</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>DESCRIBE / SHOW COLUMNS</strong></th>
+                                        <td>Xem cấu trúc bảng</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>DROP TABLE</strong></th>
+                                        <td>Xóa bảng</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 5: INSERT -->
+                <section id="phan5" class="section">
+                    <h2><i class="fas fa-plus-circle"></i> PHẦN 5. INSERT – Thêm dữ liệu vào bảng</h2>
+                    
+                    <p><strong>Mục đích:</strong> Dùng để chèn (thêm) một hoặc nhiều bản ghi (record) vào bảng. Đây là bước để đưa dữ liệu thực tế vào cơ sở dữ liệu sau khi đã tạo cấu trúc bảng.</p>
+
+                    <h4>5.1. Cú pháp đầy đủ</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>INSERT Syntax</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">INSERT INTO</span> table_name (column1, column2, column3, ...)<br>
+                        <span class="keyword">VALUES</span> (value1, value2, value3, ...);
+                    </div>
+                    <p><strong>Giải thích:</strong> INSERT INTO table_name → Chọn bảng để thêm dữ liệu. (column1, column2, ...) → Danh sách các cột muốn chèn dữ liệu. VALUES (value1, value2, ...) → Giá trị tương ứng với các cột. Các giá trị chuỗi (text) phải đặt trong dấu ' ' (hoặc " "), giá trị số thì không cần.</p>
+
+                    <h4>5.2. Chèn dữ liệu vào tất cả các cột</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>INSERT INTO all columns</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">INSERT INTO</span> table_name<br>
+                        <span class="keyword">VALUES</span> (value1, value2, value3, ...);
+                    </div>
+                    <p><strong>Cẩn thận:</strong> Phải nhập đúng số lượng và thứ tự cột.</p>
+
+                    <h4>5.3. Ví dụ với bảng users</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>INSERT Examples</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">-- 1. Tạo database tên 'users'</span><br>
+                        <span class="keyword">CREATE DATABASE</span> users;<br>
+                        <br>
+                        <span class="comment">-- 2. Chọn database để làm việc</span><br>
+                        <span class="keyword">USE</span> users;<br>
+                        <br>
+                        <span class="comment">-- 3. Tạo bảng 'users'</span><br>
+                        <span class="keyword">CREATE TABLE</span> users (<br>
+                        &nbsp;&nbsp;&nbsp;id <span class="keyword">INT AUTO_INCREMENT PRIMARY KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;name <span class="keyword">VARCHAR(50) NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;email <span class="keyword">VARCHAR(100) UNIQUE</span>,<br>
+                        &nbsp;&nbsp;&nbsp;age <span class="keyword">INT CHECK (age >= 18)</span>,<br>
+                        &nbsp;&nbsp;&nbsp;status <span class="keyword">VARCHAR(10) DEFAULT 'active'</span>,<br>
+                        &nbsp;&nbsp;&nbsp;created_date <span class="keyword">TIMESTAMP DEFAULT NOW()</span><br>
+                        );<br>
+                        <br>
+                        <span class="comment">-- 4. Chèn dữ liệu (cách 1: vào một số cột)</span><br>
+                        <span class="keyword">INSERT INTO</span> users (name, email, age)<br>
+                        <span class="keyword">VALUES</span> ('Nguyen Van A', 'a@example.com', 25);<br>
+                        <br>
+                        <span class="comment">-- 5. Chèn dữ liệu đầy đủ các cột (trừ id)</span><br>
+                        <span class="keyword">INSERT INTO</span> users (name, email, age, status, created_date)<br>
+                        <span class="keyword">VALUES</span> ('Tran Thi B', 'b@example.com', 30, 'inactive', '2025-08-10 14:30:00');<br>
+                        <br>
+                        <span class="comment">-- 6. Chèn nhiều bản ghi một lúc</span><br>
+                        <span class="keyword">INSERT INTO</span> users (name, email, age)<br>
+                        <span class="keyword">VALUES</span> <br>
+                        ('Le Van C', 'c@example.com', 28),<br>
+                        ('Pham Thi D', 'd@example.com', 22),<br>
+                        ('Hoang Van E', 'e@example.com', 35);<br>
+                        <br>
+                        <span class="comment">-- 7. Xem dữ liệu đã chèn</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users;
+                    </div>
+
+                    <h4>5.4. Kiểm tra dữ liệu sau khi chèn</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>SELECT * FROM users</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users;
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>Name</th>
+                                    <th>email</th>
+                                    <th>age</th>
+                                    <th>status</th>
+                                    <th>created_date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Nguyen Van A</td>
+                                    <td>a@example.com</td>
+                                    <td>25</td>
+                                    <td>active</td>
+                                    <td>2025-08-10 18:22:07</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Tran Thi B</td>
+                                    <td>b@example.com</td>
+                                    <td>30</td>
+                                    <td>inactive</td>
+                                    <td>2025-08-10 14:30:00</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Le Van C</td>
+                                    <td>c@example.com</td>
+                                    <td>28</td>
+                                    <td>active</td>
+                                    <td>2025-08-10 18:22:07</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Pham Thi D</td>
+                                    <td>d@example.com</td>
+                                    <td>22</td>
+                                    <td>active</td>
+                                    <td>2025-08-10 18:22:07</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>Hoang Van E</td>
+                                    <td>e@example.com</td>
+                                    <td>35</td>
+                                    <td>active</td>
+                                    <td>2025-08-10 18:22:07</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- PHẦN 6: SELECT -->
+                <section id="phan6" class="section">
+                    <h2><i class="fas fa-search"></i> PHẦN 6. SELECT – Lấy dữ liệu</h2>
+                    
+                    <p><strong>Mục đích:</strong> Dùng để truy vấn và lấy dữ liệu từ bảng. Có thể lấy toàn bộ dữ liệu hoặc chỉ lấy một số cột, kèm điều kiện lọc. Hỗ trợ sắp xếp, giới hạn số bản ghi.</p>
+
+                    <h4>6.1. Lấy toàn bộ dữ liệu</h4>
+                    <p><strong>Cú pháp:</strong> <code>SELECT * FROM table_name;</code></p>
+                    <p><strong>Giải thích:</strong> SELECT * → Lấy tất cả các cột. FROM table_name → Lấy dữ liệu từ bảng chỉ định.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users;
+                    </div>
+
+                    <h4>6.2. Lấy một số cột nhất định</h4>
+                    <p><strong>Cú pháp:</strong> <code>SELECT column1, column2 FROM table_name;</code></p>
+                    <p><strong>Giải thích:</strong> Chỉ lấy các cột được liệt kê. Giúp giảm dữ liệu trả về và tăng tốc truy vấn.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> name, email <span class="keyword">FROM</span> users;
+                    </div>
+
+                    <h4>6.3. Lọc dữ liệu với WHERE</h4>
+                    <p><strong>Cú pháp:</strong> <code>SELECT * FROM table_name WHERE condition;</code></p>
+                    <p><strong>Giải thích:</strong> WHERE → Lọc dữ liệu theo điều kiện. Điều kiện có thể dùng toán tử so sánh (=, >, <, >=, <=, <>) hoặc logic (AND, OR).</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> age >= 30;
+                    </div>
+
+                    <h4>6.4. Sắp xếp dữ liệu (ORDER BY)</h4>
+                    <p><strong>Cú pháp:</strong> <code>SELECT * FROM table_name ORDER BY column ASC|DESC;</code></p>
+                    <p><strong>Giải thích:</strong> ORDER BY → Sắp xếp theo một hoặc nhiều cột. ASC → Tăng dần (mặc định). DESC → Giảm dần.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users <span class="keyword">ORDER BY</span> age <span class="keyword">DESC</span>;
+                    </div>
+
+                    <h4>6.5. Giới hạn số bản ghi (LIMIT)</h4>
+                    <p><strong>Cú pháp:</strong> <code>SELECT * FROM table_name LIMIT number;</code></p>
+                    <p><strong>Giải thích:</strong> LIMIT → Giới hạn số bản ghi trả về. Thường dùng khi chỉ cần xem trước dữ liệu.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users <span class="keyword">LIMIT</span> 3;
+                    </div>
+
+                    <h4>6.6. Code ví dụ tổng hợp</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>SELECT Examples</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">-- 1. Lấy toàn bộ dữ liệu</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users;<br>
+                        <br>
+                        <span class="comment">-- 2. Lấy một số cột</span><br>
+                        <span class="keyword">SELECT</span> name, email <span class="keyword">FROM</span> users;<br>
+                        <br>
+                        <span class="comment">-- 3. Lọc theo điều kiện</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> age >= 30;<br>
+                        <br>
+                        <span class="comment">-- 4. Sắp xếp giảm dần theo tuổi</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users <span class="keyword">ORDER BY</span> age <span class="keyword">DESC</span>;<br>
+                        <br>
+                        <span class="comment">-- 5. Lấy 3 bản ghi đầu tiên</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users <span class="keyword">LIMIT</span> 3;
+                    </div>
+                </section>
+
+                <!-- PHẦN 7: UPDATE -->
+                <section id="phan7" class="section">
+                    <h2><i class="fas fa-edit"></i> PHẦN 7: UPDATE – Cập nhật dữ liệu</h2>
+                    
+                    <p><strong>Mục đích:</strong> Dùng để thay đổi giá trị của các cột trong bảng cho một hoặc nhiều bản ghi. Có thể cập nhật toàn bộ bảng hoặc chỉ những bản ghi thỏa điều kiện (dùng WHERE). Giúp chỉnh sửa dữ liệu bị sai, thêm thông tin mới, hoặc cập nhật trạng thái.</p>
+
+                    <h4>7.1. Cú pháp</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>UPDATE Syntax</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">UPDATE</span> table_name<br>
+                        <span class="keyword">SET</span> column1 = value1, column2 = value2, ...<br>
+                        [<span class="keyword">WHERE</span> condition];
+                    </div>
+                    <p><strong>Giải thích:</strong> UPDATE table_name → Chỉ định bảng cần cập nhật. SET column1 = value1 → Gán giá trị mới cho cột. Có thể cập nhật nhiều cột cùng lúc (ngăn cách bằng dấu phẩy). WHERE condition → Điều kiện lọc bản ghi cần cập nhật. Cẩn thận: Nếu không có WHERE, tất cả các bản ghi sẽ bị cập nhật.</p>
+
+                    <h4>7.2. Các tùy chọn thường dùng</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Cú pháp</th>
+                                    <th>Mô tả</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Cập nhật 1 cột</td>
+                                    <td>Thay đổi giá trị một cột</td>
+                                    <td>UPDATE users SET status='inactive' WHERE id=1;</td>
+                                </tr>
+                                <tr>
+                                    <td>Cập nhật nhiều cột</td>
+                                    <td>Thay đổi nhiều cột cùng lúc</td>
+                                    <td>UPDATE users SET name='Nguyen Van B', age=29 WHERE id=2;</td>
+                                </tr>
+                                <tr>
+                                    <td>Cập nhật toàn bộ bảng</td>
+                                    <td>Không dùng WHERE</td>
+                                    <td>UPDATE users SET status='active';</td>
+                                </tr>
+                                <tr>
+                                    <td>Sử dụng toán tử</td>
+                                    <td>Tăng/giảm giá trị số</td>
+                                    <td>UPDATE users SET age = age + 1 WHERE status='active';</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>7.3. Ví dụ thực hành</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>UPDATE Examples</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">-- 1. Cập nhật trạng thái của người dùng có id = 1</span><br>
+                        <span class="keyword">UPDATE</span> users<br>
+                        <span class="keyword">SET</span> status = 'inactive'<br>
+                        <span class="keyword">WHERE</span> id = 1;<br>
+                        <br>
+                        <span class="comment">-- 2. Cập nhật tên và tuổi của người dùng có email 'b@example.com'</span><br>
+                        <span class="keyword">UPDATE</span> users<br>
+                        <span class="keyword">SET</span> name = 'Tran Thi B Updated', age = 31<br>
+                        <span class="keyword">WHERE</span> email = 'b@example.com';<br>
+                        <br>
+                        <span class="comment">-- 3. Tăng tuổi của tất cả người dùng có trạng thái active thêm 1</span><br>
+                        <span class="keyword">UPDATE</span> users<br>
+                        <span class="keyword">SET</span> age = age + 1<br>
+                        <span class="keyword">WHERE</span> status = 'active';<br>
+                        <br>
+                        <span class="comment">-- 4. Cập nhật trạng thái toàn bộ bảng thành 'pending'</span><br>
+                        <span class="keyword">UPDATE</span> users<br>
+                        <span class="keyword">SET</span> status = 'pending';
+                    </div>
+
+                    <div class="note">
+                        <p><strong>Ghi chú quan trọng:</strong> Luôn dùng WHERE khi chỉ muốn cập nhật một phần dữ liệu. Có thể kết hợp với ORDER BY và LIMIT để chỉ cập nhật một số bản ghi đầu tiên.</p>
+                    </div>
+                </section>
+
+                <!-- PHẦN 8: DELETE -->
+                <section id="phan8" class="section">
+                    <h2><i class="fas fa-trash-alt"></i> PHẦN 8. DELETE – Xóa dữ liệu</h2>
+                    
+                    <p><strong>Mục đích:</strong> Lệnh DELETE được dùng để xóa một hoặc nhiều bản ghi (hàng) trong bảng MySQL. Khác với DROP: DELETE chỉ xóa dữ liệu, không xóa cấu trúc bảng. DROP sẽ xóa toàn bộ bảng và cấu trúc của nó.</p>
+
+                    <h4>Cú pháp</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>DELETE Syntax</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">DELETE FROM</span> table_name<br>
+                        <span class="keyword">WHERE</span> điều_kiện;
+                    </div>
+
+                    <p><strong>Giải thích:</strong> DELETE FROM table_name → Chỉ định bảng muốn xóa dữ liệu. WHERE điều_kiện → Xác định bản ghi cần xóa. Nếu bỏ WHERE → Xóa toàn bộ dữ liệu trong bảng (rất nguy hiểm). Có thể dùng nhiều điều kiện AND, OR để lọc chính xác bản ghi.</p>
+
+                    <h4>Ví dụ</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>DELETE Examples</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">-- 1. Xóa một bản ghi cụ thể</span><br>
+                        <span class="keyword">DELETE FROM</span> users<br>
+                        <span class="keyword">WHERE</span> id = 3;<br>
+                        <br>
+                        <span class="comment">-- 2. Xóa nhiều bản ghi theo điều kiện</span><br>
+                        <span class="keyword">DELETE FROM</span> users<br>
+                        <span class="keyword">WHERE</span> status = 'inactive';<br>
+                        <br>
+                        <span class="comment">-- 3. Xóa toàn bộ dữ liệu (Cẩn thận!)</span><br>
+                        <span class="keyword">DELETE FROM</span> users;
+                    </div>
+
+                    <h4>Xử lý lỗi khi gặp Safe Update Mode (Error 1175)</h4>
+                    <p>MySQL Workbench có Safe Update Mode để tránh xóa nhầm dữ liệu.</p>
+                    <p><strong>Có 2 cách xử lý:</strong></p>
+                    <ul>
+                        <li>Thêm điều kiện với cột khóa chính: <code>DELETE FROM users WHERE id = 3;</code></li>
+                        <li>Tắt Safe Mode: Vào Edit → Preferences → SQL Editor → bỏ chọn "Safe Updates". Reconnect lại MySQL Workbench.</li>
+                    </ul>
+
+                    <h4>Ghi chú quan trọng</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Lệnh</th>
+                                    <th>Mô tả</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>DELETE</strong></td>
+                                    <td>Xóa dữ liệu theo điều kiện, giữ nguyên cấu trúc bảng</th>
+                                </tr>
+                                <tr>
+                                    <td><strong>TRUNCATE</strong></th>
+                                    <td>Xóa toàn bộ dữ liệu, reset AUTO_INCREMENT</th>
+                                </tr>
+                                <tr>
+                                    <td><strong>DROP TABLE</strong></th>
+                                    <td>Xóa cả bảng và dữ liệu bên trong</th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Ví dụ tổng hợp</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>DELETE Examples</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">-- 1. Xem dữ liệu hiện tại</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users;<br>
+                        <br>
+                        <span class="comment">-- 2. Xóa người có ID = 5</span><br>
+                        <span class="keyword">DELETE FROM</span> users<br>
+                        <span class="keyword">WHERE</span> id = 5;<br>
+                        <br>
+                        <span class="comment">-- 3. Xóa tất cả user "inactive"</span><br>
+                        <span class="keyword">DELETE FROM</span> users<br>
+                        <span class="keyword">WHERE</span> status = 'inactive';<br>
+                        <br>
+                        <span class="comment">-- 4. Xóa toàn bộ dữ liệu (không khuyến khích)</span><br>
+                        <span class="keyword">DELETE FROM</span> users;
+                    </div>
+                </section>
+
+                <!-- PHẦN 9: LIKE -->
+                <section id="phan9" class="section">
+                    <h2><i class="fas fa-filter"></i> PHẦN 9. LIKE – Tìm kiếm theo mẫu</h2>
+                    
+                    <p><strong>Mục đích:</strong> LIKE dùng để tìm kiếm dữ liệu theo một mẫu ký tự thay vì phải khớp chính xác toàn bộ giá trị. Thường dùng trong tìm kiếm tên, email, địa chỉ hoặc dữ liệu dạng chuỗi. Có thể kết hợp với ký tự đại diện (%, _) để linh hoạt hơn.</p>
+
+                    <h4>Cú pháp</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>LIKE Syntax</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> cột1, cột2, ...<br>
+                        <span class="keyword">FROM</span> tên_bảng<br>
+                        <span class="keyword">WHERE</span> cột <span class="keyword">LIKE</span> 'mẫu_tìm_kiếm';
+                    </div>
+
+                    <p><strong>Giải thích:</strong> LIKE → So sánh dữ liệu theo mẫu ký tự.</p>
+                    <p><strong>Ký tự đại diện:</strong></p>
+                    <ul>
+                        <li><strong>%</strong> → Đại diện cho 0 hoặc nhiều ký tự bất kỳ.
+                            <ul>
+                                <li>'A%' → Bắt đầu bằng chữ "A".</li>
+                                <li>'%A' → Kết thúc bằng chữ "A".</li>
+                                <li>'%A%' → Chứa chữ "A" ở bất kỳ vị trí nào.</li>
+                            </ul>
+                        </li>
+                        <li><strong>_</strong> → Đại diện cho một ký tự bất kỳ.
+                            <ul>
+                                <li>'A_' → "A" + một ký tự bất kỳ (ví dụ: "An", "Ab").</li>
+                                <li>'A__' → "A" + hai ký tự bất kỳ (ví dụ: "Anh", "Abe").</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h4>Ví dụ</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>LIKE Examples</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">-- 1. Tìm user có tên bắt đầu bằng 'Nguyen'</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users<br>
+                        <span class="keyword">WHERE</span> name <span class="keyword">LIKE</span> 'Nguyen%';<br>
+                        <br>
+                        <span class="comment">-- 2. Tìm user có email kết thúc bằng '@example.com'</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users<br>
+                        <span class="keyword">WHERE</span> email <span class="keyword">LIKE</span> '%@example.com';<br>
+                        <br>
+                        <span class="comment">-- 3. Tìm user có tên chứa chữ 'Thi'</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users<br>
+                        <span class="keyword">WHERE</span> name <span class="keyword">LIKE</span> '%Thi%';<br>
+                        <br>
+                        <span class="comment">-- 4. Tìm user có tên bắt đầu bằng 'T' và có đúng 3 ký tự</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users<br>
+                        <span class="keyword">WHERE</span> name <span class="keyword">LIKE</span> 'T__';
+                    </div>
+
+                    <div class="note">
+                        <p><strong>Lưu ý:</strong> LIKE không phân biệt hoa thường trong MySQL (trừ khi dùng collation phân biệt). Nếu cần tìm chính xác ký tự % hoặc _, phải dùng ESCAPE. Với dữ liệu lớn, LIKE '%...%' sẽ chậm hơn vì phải quét toàn bộ bảng.</p>
+                    </div>
+                </section>
+
+                <!-- PHẦN 10: IN -->
+                <section id="phan10" class="section">
+                    <h2><i class="fas fa-list"></i> PHẦN 10. IN – Lọc theo danh sách</h2>
+                    
+                    <p><strong>Mục đích:</strong> IN dùng để lọc dữ liệu theo một tập hợp giá trị cụ thể thay vì phải viết nhiều điều kiện OR. Giúp câu lệnh ngắn gọn, dễ đọc. Dùng tốt khi biết trước danh sách giá trị cần tìm.</p>
+
+                    <h4>Cú pháp</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>IN Syntax</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> cột1, cột2, ...<br>
+                        <span class="keyword">FROM</span> tên_bảng<br>
+                        <span class="keyword">WHERE</span> cột <span class="keyword">IN</span> (giá_trị1, giá_trị2, ...);
+                    </div>
+
+                    <p><strong>Giải thích:</strong> IN → Chỉ chọn những bản ghi mà giá trị của cột nằm trong danh sách cho sẵn. Có thể dùng số, chuỗi hoặc kết quả của subquery. Tương đương với: cột = giá_trị1 OR cột = giá_trị2 OR ...</p>
+
+                    <h4>Ví dụ</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>IN Examples</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">-- 1. Tìm user có tuổi 22, 25 hoặc 30</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users<br>
+                        <span class="keyword">WHERE</span> age <span class="keyword">IN</span> (22, 25, 30);<br>
+                        <br>
+                        <span class="comment">-- 2. Tìm user có trạng thái 'active' hoặc 'pending'</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users<br>
+                        <span class="keyword">WHERE</span> status <span class="keyword">IN</span> ('active', 'pending');<br>
+                        <br>
+                        <span class="comment">-- 3. Dùng IN với subquery: Lấy user có ID nằm trong danh sách từ bảng khác</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users<br>
+                        <span class="keyword">WHERE</span> id <span class="keyword">IN</span> (<span class="keyword">SELECT</span> user_id <span class="keyword">FROM</span> orders);
+                    </div>
+
+                    <div class="note">
+                        <p><strong>Lưu ý:</strong> Có thể dùng NOT IN để lọc những giá trị không nằm trong danh sách. Khi danh sách dài, IN gọn hơn nhiều so với dùng OR liên tục. Với bảng lớn, IN có thể chậm hơn JOIN hoặc EXISTS nếu subquery phức tạp.</p>
+                    </div>
+
+                    <h4>Ví dụ tổng hợp</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>IN Combined Example</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy user có tuổi là 22, 28 hoặc 35 và trạng thái 'active'</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users<br>
+                        <span class="keyword">WHERE</span> age <span class="keyword">IN</span> (22, 28, 35)<br>
+                        <span class="keyword">AND</span> status = 'active'<br>
+                        <span class="keyword">ORDER BY</span> age <span class="keyword">ASC</span>;
+                    </div>
+                </section>
+
+                <!-- PHẦN 11: BETWEEN -->
+                <section id="phan11" class="section">
+                    <h2><i class="fas fa-arrows-alt-h"></i> PHẦN 11. BETWEEN – Lọc theo khoảng</h2>
+                    
+                    <p><strong>Mục đích:</strong> BETWEEN dùng để lọc dữ liệu nằm trong một khoảng giá trị nhất định (bao gồm cả giá trị đầu và cuối). Dùng được cho số, ngày tháng, ký tự. Giúp câu lệnh ngắn gọn thay vì dùng nhiều điều kiện >= và <=.</p>
+
+                    <h4>Cú pháp</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>BETWEEN Syntax</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">SELECT</span> cột1, cột2, ...<br>
+                        <span class="keyword">FROM</span> tên_bảng<br>
+                        <span class="keyword">WHERE</span> cột <span class="keyword">BETWEEN</span> giá_trị_đầu <span class="keyword">AND</span> giá_trị_cuối;
+                    </div>
+
+                    <p><strong>Giải thích:</strong> BETWEEN → Chỉ lấy những bản ghi mà giá trị nằm trong khoảng từ giá_trị_đầu đến giá_trị_cuối. Bao gồm cả giá trị biên (>= giá trị đầu và <= giá trị cuối). NOT BETWEEN → Lấy những giá trị nằm ngoài khoảng.</p>
+
+                    <h4>Ví dụ</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>BETWEEN Examples</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">-- 1. Tìm user có tuổi từ 25 đến 30</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users<br>
+                        <span class="keyword">WHERE</span> age <span class="keyword">BETWEEN</span> 25 <span class="keyword">AND</span> 30;<br>
+                        <br>
+                        <span class="comment">-- 2. Tìm user có ngày tạo trong tháng 8/2025</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users<br>
+                        <span class="keyword">WHERE</span> created_date <span class="keyword">BETWEEN</span> '2025-08-01' <span class="keyword">AND</span> '2025-08-31';<br>
+                        <br>
+                        <span class="comment">-- 3. Tìm user có tên theo bảng chữ cái từ 'H' đến 'T'</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users<br>
+                        <span class="keyword">WHERE</span> name <span class="keyword">BETWEEN</span> 'H' <span class="keyword">AND</span> 'T';
+                    </div>
+
+                    <div class="note">
+                        <p><strong>Lưu ý:</strong> Với dữ liệu ngày, nên đảm bảo định dạng YYYY-MM-DD hoặc chuẩn ISO. Khi lọc ngày theo giờ phút giây, cần chú ý thời điểm kết thúc để không bị thiếu dữ liệu. BETWEEN bao gồm cả giá trị đầu và cuối.</p>
+                    </div>
+
+                    <h4>Ví dụ tổng hợp</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>BETWEEN Combined Example</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">-- Lấy user có tuổi từ 22 đến 30 và trạng thái 'active'</span><br>
+                        <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users<br>
+                        <span class="keyword">WHERE</span> age <span class="keyword">BETWEEN</span> 22 <span class="keyword">AND</span> 30<br>
+                        <span class="keyword">AND</span> status = 'active'<br>
+                        <span class="keyword">ORDER BY</span> age <span class="keyword">ASC</span>;
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>Giáo trình SQL - BUỔI 1: GIỚI THIỆU MYSQL &copy; GV: Nguyễn Đình Mạnh</p>
+        </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    this.classList.add('active');
+
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+        });
+
+        // Hàm copy code
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Đã copy!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+
+</html>
