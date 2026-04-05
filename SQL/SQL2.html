@@ -949,7 +949,12 @@
                             <span class="keyword">FROM</span> table1  <span class="comment">-- Bảng bên trái</span><br>
                             <span class="keyword">LEFT JOIN</span> table2 <span class="keyword">ON</span> table1.key = table2.key;
                         </div>
-                        <p><strong>Giải thích:</strong> Bảng bên trái: Tất cả dòng đều được lấy. Bảng bên phải: Chỉ lấy dòng khớp, nếu không khớp thì giá trị là NULL.</p>
+<ul><li>table1: bảng bên trái (bảng chính, luôn được giữ lại toàn bộ dữ liệu)</li>
+
+<li>table2: bảng bên phải</li>
+
+<li>ON table1.key = table2.key: điều kiện nối</li>
+</ul>                        <p><strong>Giải thích:</strong> Bảng bên trái: Tất cả dòng đều được lấy. Bảng bên phải: Chỉ lấy dòng khớp, nếu không khớp thì giá trị là NULL.</p>
 
                         <h4>2.3.3. Ví dụ chi tiết</h4>
                         <div class="code-block">
@@ -1110,7 +1115,7 @@
                         </div>
 
                         <div class="table-container">
-                            </table>
+                            <table>
                                 <thead>
                                     <tr>
                                         <th>student_id</th>
