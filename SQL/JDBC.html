@@ -163,26 +163,50 @@ JDBC Driver Manager
                     </ol>
 
                     <h4>Cách 2: Dùng Maven (khuyên dùng)</h4>
-                    <div class="code-block">
-                        <div class="code-header">
-                            <span><i class="fas fa-code"></i> pom.xml</span>
-                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
-                        </div>
-                        &lt;dependency&gt;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;groupId&gt;mysql&lt;/groupId&gt;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;version&gt;8.0.33&lt;/version&gt;<br>
-                        &lt;/dependency&gt;
-                    </div>
+                    <!DOCTYPE html>
 
-                    <h4>Cách 3: Dùng Gradle</h4>
-                    <div class="code-block">
-                        <div class="code-header">
-                            <span><i class="fas fa-code"></i> build.gradle</span>
-                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
-                        </div>
-                        implementation <span class="string">'mysql:mysql-connector-java:8.0.33'</span>
-                    </div>
+
+    <h5>BƯỚC 1: Tạo Maven Project trong Eclipse</h5>
+    <ul>
+        <li>Mở Eclipse</li>
+        <li>Chọn: <b>File → New → Maven Project</b></li>
+        <li>Tick chọn: <br> ☑ Create a simple project (skip archetype selection)</li>
+        <li>Nhấn <b>Next</b></li>
+    </ul>
+
+    <h5>BƯỚC 2: Cấu hình Project</h5>
+    <p>Nhập thông tin:</p>
+    <ul>
+        <li>Group Id: <b>com.example</b></li>
+        <li>Artifact Id: <b>DemoMySQL</b></li>
+        <li>Packaging: <b>jar</b></li>
+        <li>Java version: <b>8 hoặc 11</b></li>
+    </ul>
+    <p>Nhấn <b>Finish</b></p>
+
+    <h5>BƯỚC 3: Thêm thư viện MySQL (quan trọng nhất)</h5>
+    <p>Mở file <b>pom.xml</b> → thêm dependency:</p>
+
+<div style="background: #1e1e1e; color: white; border-radius: 5px; padding: 20px;">
+        <pre>
+&lt;dependencies&gt;
+   &lt;!-- MySQL Connector --&gt;
+   &lt;dependency&gt;
+       &lt;groupId&gt;com.mysql&lt;/groupId&gt;
+       &lt;artifactId&gt;mysql-connector-j&lt;/artifactId&gt;
+       &lt;version&gt;8.3.0&lt;/version&gt;
+   &lt;/dependency&gt;
+&lt;/dependencies&gt;
+    </pre>
+</div>
+
+    <h5>Sửa lỗi validate XML (Nếu có)</h5>
+    <ul>
+        <li>Vào: <b>Window → Preferences → Validation</b></li>
+        <li>Tìm: <b>XML Validator</b></li>
+        <li>Sau đó:</li>
+        <li>Chuột phải project → <b>Maven → Update Project (Alt + F5)</b></li>
+    </ul>
 
                     <h3>0.5 CHUẨN BỊ DATABASE</h3>
                     
